@@ -14,12 +14,13 @@ class ReminderEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $event;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($event)
     {
-        //
+        $this->event = $event;
     }
 
     /**
@@ -28,24 +29,23 @@ class ReminderEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reminder Email',
+            subject: 'تذكير لديك موعد',
         );
     }
 
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
+//    public function content(): Content
+//    {
+//        return new Content(
+//            view: 'view.name',
+//        );
+//    }
     public function build()
     {
-        return $this->view('emails.reminder-digest.blade')
+        return $this->view('emails.reminder')
             ->with([
-                'user' => $this->user,
                 'event' => $this->event,
             ]);
     }

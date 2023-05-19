@@ -17,7 +17,7 @@ class SendReminderEmail extends Command
      *
      * @var string
      */
-   // protected $signature = 'app:send-reminder-email';
+    // protected $signature = 'app:send-reminder-email';
     protected $signature = 'reminders:send';
     protected $description = 'Send email reminders for upcoming events.';
 
@@ -26,19 +26,16 @@ class SendReminderEmail extends Command
      *
      * @var string
      */
-//    protected $description = 'Command description';
     /**
      * Execute the console command.
      */
     public function handle()
     {
         $events = Event::where('dateFrom', '<=', Carbon::now()->addDays(3))->get();
-        $user = User::find(Auth::id());
-
         foreach ($events as $event) {
+            $user = User::find($event->userId);
             // Send reminder email for this event
-            Mail::to('jaafarosama75@gmail.com')->send(new ReminderEmail());
+            Mail::to($user->email)->send(new ReminderEmail($event));
         }
     }
-
 }

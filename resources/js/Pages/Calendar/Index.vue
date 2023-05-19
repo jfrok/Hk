@@ -227,7 +227,17 @@ export default defineComponent({
     },
 
     methods: {
+        openAddEventModal() {
+            // Reset the form data
+            this.form.title = '';
+            this.form.timeFrom = '';
+            this.form.timeTo = '';
+            this.form.dateFrom = eventDetails.value[0];
+            this.form.dateTo = eventDetails.value[1];
 
+            // Open the add event modal
+            $('#con-close-modal').modal('show');
+        },
         handleWeekendsToggle() {
             this.calendarOptions.weekends = !this.calendarOptions.weekends // update a property
         },
@@ -259,6 +269,7 @@ export default defineComponent({
 
 </script>
 <template>
+    <button @click="openAddEventModal" type="button" class="btn btn-success waves-effect waves-light mt-1" data-bs-toggle="modal" data-bs-target="#con-close-modal">Add Event</button>
 
     <!--<Modal dialog="true"/>-->
     <!--    <button @click="">OpenModal</button>-->
@@ -437,7 +448,7 @@ export default defineComponent({
             <div class="card">
                 <div class="card-body">
                     <div class='demo-app-main'>
-                        <FullCalendar ref="calendar" v-on:update-calendar="updateCalendar" :options="calendarOptions"/>
+                        <FullCalendar id="calendar" ref="calendar" v-on:update-calendar="updateCalendar" :options="calendarOptions"/>
                     </div>
                 </div>
             </div>

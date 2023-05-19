@@ -34,7 +34,7 @@ class SendReminderEmail implements ShouldQueue
     {
         $user = User::find(Auth::id());
         $event = Event::where('dateFrom','>',Carbon::now());
-
+dd($event);
         Mail::to($user->email)
             ->send(new ReminderEmail($user, $event));
     }

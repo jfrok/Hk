@@ -11,14 +11,16 @@ use Illuminate\Support\Facades\Auth;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commands = [
+        \App\Console\Commands\SendReminderEmail::class,
+    ];
+
     /**
      * Define the application's command schedule.
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('reminders:send')->dailyAt('9:00');
-
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('reminders:send')->dailyAt('07:25');
     }
 
     /**

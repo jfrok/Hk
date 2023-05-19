@@ -134,9 +134,7 @@ defineProps({
                                             <a class="edit-link" href="#"><i class="far fa-edit me-1"></i> Edit</a>
                                         </h5>
                                         <div class="skill-tags">
-                                             <span>
-                                            <input type="text" readonly value="Html5"/>
-                                             </span>
+                                             <span>Html5</span>
                                             <span>CSS3</span>
                                             <span>WordPress</span>
                                             <span>Javascript</span>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -26,6 +27,7 @@ class EventController extends Controller
     {
        //  dd($request->all());
         $new = new Event();
+        $new->userId = Auth::id();
         $new->title = $request->title;
         $new->dateFrom = $request->dateFrom;
         $new->dateTo = $request->dateTo;

@@ -4022,7 +4022,6 @@ table.table-inbox tbody tr.checked {
     color: #66676b;
     display: inline-block;
     font-size: 15px;
-    width: auto;
     line-height: 22px;
     margin: 2px 0;
     padding: 5px 15px
@@ -10850,3 +10849,12 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
         height: 355px
     }
 }
+/*Calendar*/
+#calendar {
+    max-width: 900px;
+    margin: 40px auto;
+}
+/*.fc-header-toolbar .fc-toolbar .fc-toolbar-ltr .fc-toolbar-chunk{*/
+/*    font-size: 10px;*/
+/*    width: 30px;*/
+/*}*/
