@@ -1,24 +1,7 @@
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import DeleteUserForm from './Partials/DeleteUserForm.vue';
-import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import { Head } from '@inertiajs/vue3';
-
-defineProps({
-    mustVerifyEmail: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-});
-</script>
 
 <template>
     <Head title="Profile" />
 
-    <AuthenticatedLayout>
 <!--        <template #header>-->
 <!--            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>-->
 <!--        </template>-->
@@ -53,7 +36,7 @@ defineProps({
                             </a>
                         </div>
                         <div class="col ms-md-n2 profile-user-info">
-                            <h4 class="user-name mb-0">John Doe</h4>
+                            <h4 class="user-name mb-0">{{$page.props.auth.user.name}}</h4>
                             <h6 class="text-muted">UI/UX Design Team</h6>
                             <div class="user-Location"><i class="fas fa-map-marker-alt"></i> Florida, United States
                             </div>
@@ -112,6 +95,63 @@ defineProps({
                                 </div>
                             </div>
 
+                            <div class="modal custom-modal fade bank-details" id="bank_details" role="dialog">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <div class="form-header text-start mb-0">
+                                                <h4 class="mb-0">Add Skill</h4>
+                                            </div>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="bank-inner-details">
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Add skill</label>
+                                                            <input type="text" class="form-control" placeholder="Add Name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6" v-for="i in numberOfInputs" :key="i">
+                                                        <label>New skill</label>
+                                                    <input type="text" class="form-control"  placeholder="Add Name"/>
+                                                    </div>
+
+
+<!--                                                    <div class="col-lg-6 col-md-6">-->
+<!--                                                        <div class="form-group">-->
+<!--                                                            <label>Bank name</label>-->
+<!--                                                            <input type="text" class="form-control" placeholder="Add Bank name">-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="col-lg-6 col-md-6">-->
+<!--                                                        <div class="form-group">-->
+<!--                                                            <label>IFSC Code</label>-->
+<!--                                                            <input type="text" class="form-control">-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="col-lg-6 col-md-6">-->
+<!--                                                        <div class="form-group">-->
+<!--                                                            <label>Account Number</label>-->
+<!--                                                            <input type="text" class="form-control">-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="bank-details-btn">
+                                                <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn bank-cancel-btn me-2">Cancel</a>
+                                                <a href="javascript:void(0);" class="btn bank-cancel-btn me-2" @click="addInput">Add input</a>
+                                                <a href="javascript:void(0);" class="btn bank-save-btn">Save</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-lg-3">
 
 <!--                                <div class="card">-->
@@ -131,17 +171,23 @@ defineProps({
                                     <div class="card-body">
                                         <h5 class="card-title d-flex justify-content-between">
                                             <span>Skills </span>
-                                            <a class="edit-link" href="#"><i class="far fa-edit me-1"></i> Edit</a>
+
+<!--                                            <a class="edit-link" href="#"><i class="far fa-edit me-1"></i> Edit</a>-->
+
                                         </h5>
-                                        <div class="skill-tags">
-                                             <span>Html5</span>
-                                            <span>CSS3</span>
-                                            <span>WordPress</span>
-                                            <span>Javascript</span>
-                                            <span>Android</span>
-                                            <span>iOS</span>
-                                            <span>Angular</span>
-                                            <span>PHP</span>
+                                        <div style="margin-bottom: 55px">
+                                        <Chip/>
+                                        </div>
+                                        <div class="skill-tags" >
+                                            <v-hover v-slot:default="{ hover }">
+
+                                                    <v-icon>mdi-fountain-pen-tip</v-icon>
+                                                <span v-for="skill in skills.data" :key="skill.id">{{ skill.name }}</span>
+
+                                            </v-hover>
+
+<!--                                            <a class="edit-link" href="#" data-bs-toggle="modal" data-bs-target="#bank_details"><i class="fas fa-plus-circle me-2"></i>Add</a>-->
+
                                         </div>
                                     </div>
                                 </div>
@@ -184,5 +230,39 @@ defineProps({
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>
+<script>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import DeleteUserForm from './Partials/DeleteUserForm.vue';
+import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
+import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
+import { Head } from '@inertiajs/vue3';
+import Chip from "@/Components/Chip.vue";
+export default {
+    layout:AuthenticatedLayout,
+    components:{
+        Head,
+        UpdateProfileInformationForm,
+        UpdatePasswordForm,
+        DeleteUserForm,
+        Chip
+    },
+    props:{
+        skills:Array,
+        mustVerifyEmail: {
+            type: Boolean,
+        },
+        status: {
+            type: String,
+        },
+    },
+    data: () => ({
+        numberOfInputs: 0,
+    }),
+    methods: {
+        addInput: function () {
+            this.numberOfInputs++;
+        },
+    },
+};
+</script>

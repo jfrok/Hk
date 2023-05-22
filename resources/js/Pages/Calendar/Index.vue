@@ -1,7 +1,6 @@
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {defineComponent, ref, watch, getCurrentInstance} from "vue";
-import eventModal from "@/Components/EventModal.vue";
 import FullCalendar from "@fullcalendar/vue3";
 import {useForm} from "@inertiajs/vue3";
 import EventModal from "@/Components/EventModal.vue";
@@ -10,9 +9,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import {eventDetails} from "@/Pages/Calendar/TestCalendar";
 import {eventEditDetails} from "@/Pages/Calendar/EditCalendar";
-import {data} from "autoprefixer";
-import esLocale from '@fullcalendar/core/locales/ar';
-
 import Modal from "@/Components/Modal.vue";
 import moment from 'moment';
 
@@ -83,7 +79,6 @@ export default defineComponent({
                     }
                     return x;
                 });
-
                 // Call success() to pass updated events data to the calendar
                 internalInstance.proxy.calendarOptions.events = (info, success, fail) => {
                     success(dataToRender);
@@ -269,7 +264,7 @@ export default defineComponent({
 
 </script>
 <template>
-    <button @click="openAddEventModal" type="button" class="btn btn-success waves-effect waves-light mt-1" data-bs-toggle="modal" data-bs-target="#con-close-modal">Add Event</button>
+    <button @click="openAddEventModal" type="button" class="btn btn-info waves-effect waves-light mt-1" data-bs-toggle="modal" data-bs-target="#con-close-modal">Add Event</button>
 
     <!--<Modal dialog="true"/>-->
     <!--    <button @click="">OpenModal</button>-->
