@@ -176,8 +176,7 @@ uniqueMonths.forEach(month => {
                                         <ul class="chart-list-out">
                                             <li><span class="circle-blue"></span>Teacher</li>
                                             <li><span class="circle-green"></span>Students</li>
-                                            <li class="star-menus"><a href="javascript:;"><i
-                                                class="fas fa-ellipsis-v"></i></a></li>
+                                           
                                         </ul>
                                     </div>
                                 </div>

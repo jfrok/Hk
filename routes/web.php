@@ -35,7 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/updateProfileSkills', [\App\Http\Controllers\UserController::class, 'updateProfileSkills'])->name('updateProfileSkills');
     Route::post('/updateProfile', [\App\Http\Controllers\UserController::class, 'updateProfile'])->name('updateProfile');
+    Route::post('removeSkill/{skillId}',[\App\Http\Controllers\UserController::class,'removeSkill'])->name('removeSkill');
     /// Projects
     Route::prefix('projects')->group(function () {
         Route::get('overview', [ProjectController::class, 'index'])->name('project.overview');

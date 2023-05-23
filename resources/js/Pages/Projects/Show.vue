@@ -11,9 +11,7 @@ export default {
         show: Array,
     },
     components: {AuthenticatedLayout,Head},
-    methods:{
 
-    }
 }
 
 </script>

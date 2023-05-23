@@ -44,7 +44,7 @@ export default {
             chips:null
         })
         let submit = async () => {
-            await form.post(route('updateProfile'), {
+            await form.post(route('updateProfileSkills'), {
                 onSuccess: () => {
                    form.chips = null
                 },

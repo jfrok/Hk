@@ -19,28 +19,7 @@ export default {
         // contents: Array,
     },
     components: {EditContentModal, Head, Link,draggable},
-    methods: {
-    //     handleChange() {
-    //         console.log('changed');
-    //     },
-    //     inputChanged(value) {
-    //         this.activeNames = value;
-    //     },
-    //     getComponentData() {
-    //         return {
-    //             on: {
-    //                 change: this.handleChange,
-    //                 input: this.inputChanged
-    //             },
-    //             attrs:{
-    //                 wrap: true
-    //             },
-    //             props: {
-    //                 value: this.activeNames
-    //             }
-    //         };
-    //     }
-     }
+
 }
 
 </script>
@@ -252,48 +231,6 @@ let props = defineProps({
     show:Array,
     contents: Array,
 })
-function openEditModal() {
-    //do something here
-    console.log('test');
-    $('#EditContentmodal').modal('show')
-}
-// var el = document.getElementById('item');
-// var sortable = Sortable.create(el);
-
-// $(function (e){
-//     $('#checkAll').on('change',function (){
-//         $('.form-check-input').prop('checked',$(this)).prop('checked')
-//         let allCids = []
-//         $('input:checkbox[name=cIds]:checked').each(function (){
-//             allCids.push($(this).val())
-//         })
-//         console.log(allCids)
-//
-//     })
-// })
-// let saveContent = () => {
-//     form.post(route('content.edit',props.pId.id))
-// }
-// $('#editContentFrom').on('submit', function (e) {
-//     const cId =  document.getElementById('cId').value
-//     e.preventDefault();
-//     let formData = new FormData(this);
-//     $.ajaxSetup({
-//     });
-//
-//     $.ajax({
-//         url: "/projects/content/save-text/"+cId,
-//         method: "POST",
-//         contentType: false,
-//         processData: false,
-//         data: formData,
-//         success: function (data) {
-//            // $('#editMediaModal').modal('toggle')
-//             console.log('succss')
-//
-//         }
-//     })
-// });
 $( function() {
     $( "#sortable" ).sortable({
         placeholder: "ui-state-highlight",
@@ -308,29 +245,6 @@ $( function() {
     });
 
 });
-
-
-// function selectAll() {
-//     if ($('#checkAll').is(':checked')) {
-//         $('.form-check-input').each(function (){
-//             $(this).prop('checked', true);
-//             if (!allCids.value.includes(parseInt($(this).val()))) {
-//                 allCids.value.push(parseInt($(this).val()));
-//             }
-//         });
-//         console.log(allCids.value);
-//     } else {
-//         $('.form-check-input').each(function (){
-//             $(this).prop('checked', false);
-//         });
-//         allCids.value = [];
-//         console.log(allCids.value);
-//     }
-// }
-// let form = useForm({
-//     title: '',
-//     description: '',
-// })
 
 let selectedContentIds = [];
 
@@ -360,13 +274,7 @@ function selectAll(event) {
         });
         // selectedContentIds = [];
     }
-   // console.log(selectedContentIds);
 }
-
-// function groupDelete() {
-//     // استخدم selectedContentIds هنا للحذف
-//     console.log(selectedContentIds);
-// }
 let save = () => {
 
     const cId = document.getElementById('cId').value
