@@ -18,6 +18,7 @@ class UserController extends Controller
         $user->job = $request->input('job');
         $user->city = $request->input('city');
         $user->address = $request->input('address');
+        $user->description = $request->input('description');
         $user->save();
 
         return redirect()->back()->with('success', 'Profile updated successfully.');

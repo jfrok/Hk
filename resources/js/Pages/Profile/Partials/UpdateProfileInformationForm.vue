@@ -84,7 +84,6 @@ const form = useForm({
                         type="text"
                         class="form-control"
                         v-model="form.job"
-                        required
                         autocomplete="job"
                     />
                 </p>
@@ -102,7 +101,6 @@ const form = useForm({
                         type="text"
                         class="form-control"
                         v-model="form.city"
-                        required
                         autocomplete="city"
                     />
                 </p>
@@ -120,7 +118,6 @@ const form = useForm({
                         type="text"
                         class="form-control"
                         v-model="form.address"
-                        required
                         autocomplete="address"
                     />
                 </p>
@@ -133,13 +130,13 @@ const form = useForm({
                 <p class="col-sm-9">
                     <!--                <InputLabel for="email" value="Email" />-->
 
-                    <ATextarea
-                        id="address"
+                    <textarea
+                        id="description"
                         type="text"
+                        class="form-control"
                         v-model="form.description"
-                        required
                         autocomplete="description"
-                    />
+                    ></textarea>
                 </p>
                 <InputError class="mt-2" :message="form.errors.description" />
             </div>
