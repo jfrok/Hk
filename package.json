@@ -24,6 +24,7 @@
         "@fullcalendar/list": "^6.1.5",
         "@fullcalendar/timegrid": "^6.1.5",
         "@fullcalendar/vue3": "^6.1.5",
+        "@mdi/font": "^7.2.96",
         "@popperjs/core": "^2.11.7",
         "ant-design-vue": "^3.2.20",
         "apexcharts": "^3.39.0",

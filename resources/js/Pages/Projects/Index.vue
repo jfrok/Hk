@@ -54,7 +54,7 @@ const destroy = (pId) => {
                         </div>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body" >
                         <div class="table-responsive">
                             <table class="datatable table table-stripped">
                                 <thead>
@@ -82,7 +82,9 @@ const destroy = (pId) => {
                             <Pagination :links="projects.links"/>
                             </div>
 
+
                         </div>
+
                     </div>
                 </div>
             </div>

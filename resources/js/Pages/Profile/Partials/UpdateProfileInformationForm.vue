@@ -19,6 +19,10 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
+    job: user.job,
+    city: user.city,
+    address: user.address,
+    description: user.description,
 });
 </script>
 
@@ -32,7 +36,7 @@ const form = useForm({
 <!--            </p>-->
 <!--        </header>-->
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="form.post(route('updateProfile'))" class="mt-6 space-y-6">
             <div class="row">
 
                 <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Name</p>
@@ -67,6 +71,77 @@ const form = useForm({
                 />
                 </p>
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div class="row">
+
+                <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Occupation</p>
+                <p class="col-sm-9">
+                    <!--                <InputLabel for="email" value="Email" />-->
+
+                    <TextInput
+                        id="job"
+                        type="text"
+                        class="form-control"
+                        v-model="form.job"
+                        required
+                        autocomplete="job"
+                    />
+                </p>
+                <InputError class="mt-2" :message="form.errors.job" />
+            </div>
+
+            <div class="row">
+
+                <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Land</p>
+                <p class="col-sm-9">
+                    <!--                <InputLabel for="email" value="Email" />-->
+
+                    <TextInput
+                        id="city"
+                        type="text"
+                        class="form-control"
+                        v-model="form.city"
+                        required
+                        autocomplete="city"
+                    />
+                </p>
+                <InputError class="mt-2" :message="form.errors.city" />
+            </div>
+
+            <div class="row">
+
+                <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">City</p>
+                <p class="col-sm-9">
+                    <!--                <InputLabel for="email" value="Email" />-->
+
+                    <TextInput
+                        id="address"
+                        type="text"
+                        class="form-control"
+                        v-model="form.address"
+                        required
+                        autocomplete="address"
+                    />
+                </p>
+                <InputError class="mt-2" :message="form.errors.address" />
+            </div>
+
+            <div class="row">
+
+                <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Description</p>
+                <p class="col-sm-9">
+                    <!--                <InputLabel for="email" value="Email" />-->
+
+                    <ATextarea
+                        id="address"
+                        type="text"
+                        v-model="form.description"
+                        required
+                        autocomplete="description"
+                    />
+                </p>
+                <InputError class="mt-2" :message="form.errors.description" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
