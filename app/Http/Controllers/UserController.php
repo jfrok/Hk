@@ -12,6 +12,12 @@ class UserController extends Controller
     //
     public function updateProfile(ProfileUpdateRequest $request)
     {
+       // dd($request->all());
+        if ($request->file('img') != null){
+
+            $imageName = $request->file('img')->getClientOriginalName();
+        }
+
         $user = Auth::user();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
@@ -19,7 +25,13 @@ class UserController extends Controller
         $user->city = $request->input('city');
         $user->address = $request->input('address');
         $user->description = $request->input('description');
+        if ($request->file('img') != null) {
+            $user->avatar = '/img/cases/' . $imageName ?? $request->img;
+        }
         $user->save();
+        if ($request->file('img') != null) {
+            $request->img->move(public_path('/img/avatar'), $imageName);
+        }
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }

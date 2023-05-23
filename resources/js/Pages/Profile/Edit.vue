@@ -6,9 +6,10 @@
             <div class="profile-header">
                 <div class="row align-items-center">
                     <div class="col-auto profile-image">
-                        <a href="#">
-                            <img class="rounded-circle" alt="User Image"
-                                 src="assets/img/profiles/avatar-02.jpg">
+                        <a href="#" @click="openModal">
+
+                            <img class="rounded-circle" alt="User Image" style="height: 100px"
+                                 :src="$page.props.auth.user.avatar ?? 'https://imgv3.fotor.com/images/homepage-feature-card/Upload-an-image.jpg'" />
                         </a>
                     </div>
                     <div class="col ms-md-n2 profile-user-info">
@@ -46,9 +47,9 @@
                                 <div class="card-body">
                                     <h5 class="card-title d-flex justify-content-between">
                                         <span>Personal Details</span>
-<!--                                        <a class="edit-link" data-bs-toggle="modal"-->
-<!--                                           href="#edit_personal_details"><i-->
-<!--                                            class="far fa-edit me-1"></i>Edit</a>-->
+                                        <!--                                        <a class="edit-link" data-bs-toggle="modal"-->
+                                        <!--                                           href="#edit_personal_details"><i-->
+                                        <!--                                            class="far fa-edit me-1"></i>Edit</a>-->
                                     </h5>
                                     <div class="row">
                                         <UpdateProfileInformationForm
@@ -72,65 +73,10 @@
                             </div>
                         </div>
 
-                        <div class="modal custom-modal fade bank-details" id="bank_details" role="dialog">
-                            <div class="modal-dialog modal-dialog-centered modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <div class="form-header text-start mb-0">
-                                            <h4 class="mb-0">Add Skill</h4>
-                                        </div>
-                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="bank-inner-details">
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Add skill</label>
-                                                        <input type="text" class="form-control" placeholder="Add Name">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6" v-for="i in numberOfInputs" :key="i">
-                                                    <label>New skill</label>
-                                                    <input type="text" class="form-control" placeholder="Add Name"/>
-                                                </div>
+                        <div class="modal custom-modal fade bank-details" id="test" role="dialog">
 
-
-                                                <!--                                                    <div class="col-lg-6 col-md-6">-->
-                                                <!--                                                        <div class="form-group">-->
-                                                <!--                                                            <label>Bank name</label>-->
-                                                <!--                                                            <input type="text" class="form-control" placeholder="Add Bank name">-->
-                                                <!--                                                        </div>-->
-                                                <!--                                                    </div>-->
-                                                <!--                                                    <div class="col-lg-6 col-md-6">-->
-                                                <!--                                                        <div class="form-group">-->
-                                                <!--                                                            <label>IFSC Code</label>-->
-                                                <!--                                                            <input type="text" class="form-control">-->
-                                                <!--                                                        </div>-->
-                                                <!--                                                    </div>-->
-                                                <!--                                                    <div class="col-lg-6 col-md-6">-->
-                                                <!--                                                        <div class="form-group">-->
-                                                <!--                                                            <label>Account Number</label>-->
-                                                <!--                                                            <input type="text" class="form-control">-->
-                                                <!--                                                        </div>-->
-                                                <!--                                                    </div>-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div class="bank-details-btn">
-                                            <a href="javascript:void(0);" data-bs-dismiss="modal"
-                                               class="btn bank-cancel-btn me-2">Cancel</a>
-                                            <a href="javascript:void(0);" class="btn bank-cancel-btn me-2"
-                                               @click="addInput">Add input</a>
-                                            <a href="javascript:void(0);" class="btn bank-save-btn">Save</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+
                         <div class="col-lg-3">
 
                             <!--                                <div class="card">-->
@@ -164,13 +110,13 @@
         class="skill-tag"
     >
       {{ skill.name }}
-<!--      <v-icon-->
-<!--          v-if="hoveredSkill === skill.id"-->
-<!--          class="remove-icon"-->
-<!--          @click="removeSkill(skill)"-->
-<!--      >-->
-          <i  @click="removeSkill(skill.id)" class="feather-trash remove-icon"></i>
-<!--      </v-icon>-->
+        <!--      <v-icon-->
+        <!--          v-if="hoveredSkill === skill.id"-->
+        <!--          class="remove-icon"-->
+        <!--          @click="removeSkill(skill)"-->
+        <!--      >-->
+          <i @click="removeSkill(skill.id)" class="feather-trash remove-icon"></i>
+        <!--      </v-icon>-->
     </span>
                                     </div>
                                 </div>
@@ -222,7 +168,10 @@ import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import {Head, router, useForm} from '@inertiajs/vue3';
 import Chip from "@/Components/Chip.vue";
-import { usePage } from '@inertiajs/vue3'
+import {usePage} from '@inertiajs/vue3'
+import {useDropzone} from "vue3-dropzone";
+import {reactive, watch} from "vue";
+
 export default {
     layout: AuthenticatedLayout,
     components: {
@@ -242,22 +191,23 @@ export default {
         },
     },
     setup() {
-        const { skills } = usePage().props
+        const {skills} = usePage().props
 
         const removeSkill = async (skillId) => {
-        router.post(route('removeSkill',skillId),{
+            router.post(route('removeSkill', skillId), {
                 preserveScroll: true
-        })
-
+            })
         }
 
         return {
-            // skills,
             removeSkill
         }
     },
     data: () => ({
         numberOfInputs: 0,
+        openModal() {
+            $('#uploadAvatar').modal('show')
+        }
 
     }),
 
@@ -266,10 +216,11 @@ export default {
             this.numberOfInputs++;
         },
     },
-};
+
+}
 </script>
 
-<style>
+<style lang="scss" scoped>
 .remove-icon {
     margin-left: 4px;
     cursor: pointer;
@@ -279,9 +230,8 @@ export default {
 .skill-tag:hover .remove-icon {
     display: inline-block;
 }
+
 </style>
-
-
 
 
 
