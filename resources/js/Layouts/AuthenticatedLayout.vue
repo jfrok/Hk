@@ -84,8 +84,12 @@ const showingNavigationDropdown = ref(false);
                     <li class="nav-item dropdown has-arrow new-user-menus">
                         <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <span class="user-img">
-                            <img class="rounded-circle" src="assets/img/profiles/avatar-01.jpg" width="31"
-                                 alt="Soeng Souy">
+
+                            <img alt="User Image" class="rounded-circle"
+                                   :src="$page.props.auth.user.avatar ?? 'https://imgv3.fotor.com/images/homepage-feature-card/Upload-an-image.jpg'" />
+
+<!--                            <img class="rounded-circle" src="assets/img/profiles/avatar-01.jpg" width="31"-->
+<!--                                 alt="Soeng Souy">-->
                             <div class="user-text">
                                 <h6>{{ $page.props.auth.user.name }}</h6>
                                 <p class="text-muted mb-0">{{ $page.props.auth.user.job }}</p>
@@ -95,7 +99,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="dropdown-menu">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
-                                    <img src="assets/img/profiles/avatar-01.jpg" alt="User Image"
+                                    <img  :src="$page.props.auth.user.avatar ?? 'https://imgv3.fotor.com/images/homepage-feature-card/Upload-an-image.jpg'" alt="User Image"
                                          class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
