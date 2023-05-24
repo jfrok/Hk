@@ -94,40 +94,43 @@ export default defineComponent({
             await form.post(route('calendar.add'), {
                 onSuccess: () => {
                     $('#con-close-modal').modal('toggle')
+                    form.reset('title')
 
                     // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
                     updateCalendar();
                     // تحديث dataToRender بعد إضافة حدث جديد
-                    let newData = form.data();
-                    let newEvent = {
-                        title: newData.title,
-                        start: newData.dateFrom,
-                        end: newData.dateTo,
-                        allDay: true,
-                    };
-                    // إضافة newEvent إلى dataToRender
-                    dataToRender.push(newEvent);
+                    // let newData = form.data();
+                    // let newEvent = {
+                    //     title: newData.title,
+                    //     start: newData.dateFrom,
+                    //     end: newData.dateTo,
+                    //     allDay: true,
+                    // };
+                    // // إضافة newEvent إلى dataToRender
+                    // dataToRender.push(newEvent);
                 },
             });
         };
         let update = async () => {
             console.log(editForm.data().eId)
             await editForm.post(route('calendar.update', editForm.data().eId), {
+                preserveScroll: true,
+                // onStart: () => Spinner.content({content:"Saving Settings..."}),
                 onSuccess: () => {
                     // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
                     $('#editEventModal').modal('toggle')
 
                     updateCalendar();
                     // تحديث dataToRender بعد إضافة حدث جديد
-                    let newData = form.data();
-                    let newEvent = {
-                        title: newData.title,
-                        start: newData.dateFrom,
-                        end: newData.dateTo,
-                        allDay: true,
-                    };
-                    // إضافة newEvent إلى dataToRender
-                    dataToRender.push(newEvent);
+                    // let newData = form.data();
+                    // let newEvent = {
+                    //     title: newData.title,
+                    //     start: newData.dateFrom,
+                    //     end: newData.dateTo,
+                    //     allDay: true,
+                    // };
+                    // // إضافة newEvent إلى dataToRender
+                    // dataToRender.push(newEvent);
                 },
             });
 
@@ -138,6 +141,7 @@ export default defineComponent({
                 onSuccess: () => {
                     // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
                     updateCalendar();
+
                     $('#editEventModal').modal('close')
 
                 },
@@ -160,7 +164,7 @@ export default defineComponent({
                     //  }
                     return x;
                 });
-                console.log(dataToRender)
+                // console.log(dataToRender)
                 // success(dataToRender);
             })
         ]

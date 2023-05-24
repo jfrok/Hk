@@ -60,6 +60,8 @@ let submit = () => {
     form.post(route('updateProfile'),{
         onSuccess: () =>{
             $('#uploadAvatar').modal('toggle')
+            // form.reset('img')
+            handleClickDeleteFile(0)
         }
     })
 }
