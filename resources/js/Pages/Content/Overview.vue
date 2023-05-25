@@ -5,7 +5,8 @@ import {Link} from "@inertiajs/vue3";
 import draggable from "vuedraggable";
 import format from "@popperjs/core/lib/utils/format";
 import EditContentModal from "@/Components/EditContentModal.vue";
-
+import {ref} from "vue";
+const showSpinner = ref(false);
 function alert(mesg) {
     toastr.success(mesg)
 }
@@ -32,24 +33,20 @@ export default {
         {{ alertError($page.props.ziggy.flash.error) }}
     </div>
     <div class="content container-fluid">
-
+        <Loader :show="showSpinner" color="blue"  />
 
         <div class="blog-view">
             <div class="blog-single-post">
                 <a href="blog.html" class="back-btn"><i class="feather-chevron-left"></i> Back</a>
-                <div class="blog-image">
-                    <a href="javascript:void(0);"><img alt=""
+                <div class="blog-image" >
+                    <a href="javascript:void(0);">
+                        <img alt=""
                                                        :src="show.path"
-                                                       class="img-fluid"></a>
+                                                       class="img-fluid" style="height:430px" ></a>
                 </div>
             </div>
         </div>
 
-<!--        <draggable tag="el-collapse" :list="list" :component-data="getComponentData()">-->
-<!--            <el-collapse-item v-for="e in list" :title="e.title" :name="e.name" :key="e.name">-->
-<!--                <div>{{e.description}}</div>-->
-<!--            </el-collapse-item>-->
-<!--        </draggable>-->
         <div class="student-group-form">
             <div class="row">
                 <div class="col-lg-3 col-md-6">
@@ -92,67 +89,16 @@ export default {
                                 </div>
                             </div>
                         </div>
-                        <!--                        <EditContentModal/>-->
-<!--                        <div id="EditContentmodal" class="modal fade" role="dialog" aria-labelledby="myModalLabel"-->
-<!--                             aria-hidden="true">-->
-<!--                            <div class="modal-dialog">-->
-<!--                                <div class="modal-content">-->
-<!--                                    <div class="modal-header">-->
-<!--                                        <h4 class="modal-title">Edit Content</h4>-->
-<!--                                        <button type="button" class="btn-close" data-bs-dismiss="modal"-->
-<!--                                                aria-label="Close"></button>-->
-<!--                                    </div>-->
-<!--                                    <form method="post" @submit.prevent="save" id="editContentFrom">-->
-<!--                                        <div class="modal-body p-4">-->
-<!--                                            <div class="row">-->
-<!--                                                <div class="col-md-12">-->
-<!--                                                    <div class="mb-3">-->
-<!--                                                        <label for="field-1" class="form-label">Title</label>-->
-<!--                                                        <input type="hidden" name="cId" id="cId" class="form-control">-->
-<!--                                                        <input type="text" v-model="form.title" name="title" id="title"-->
-<!--                                                               class="form-control">-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
 
-<!--                                            </div>-->
-
-<!--                                            <div class="row">-->
-<!--                                                <div class="col-md-12">-->
-<!--                                                    <div class="mb-3">-->
-<!--                                                        <label for="field-4" class="form-label">Date from</label>-->
-<!--                                                        <textarea v-model="form.description" name="description"-->
-<!--                                                                  id="description" class="form-control"></textarea>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            &lt;!&ndash;                    <div class="row">&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                        <div class="col-md-12">&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                            <div class="">&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                                <label for="field-7" class="form-label">Personal Info</label>&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                                <textarea class="form-control" id="field-7" placeholder="Write something about yourself"></textarea>&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                        </div>&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--                                        </div>-->
-<!--                                        <div class="modal-footer">-->
-<!--                                            <button type="button" class="btn btn-secondary waves-effect"-->
-<!--                                                    data-bs-dismiss="modal">Close-->
-<!--                                            </button>-->
-<!--                                            <button type="submit" class="btn btn-info waves-effect waves-light">Save-->
-<!--                                                changes-->
-<!--                                            </button>-->
-<!--                                        </div>-->
-<!--                                    </form>-->
-<!--                                </div>-->
-
-<!--                            </div>-->
-<!--                        </div>-->
-
-                        <!--                        <EditContentModal/>-->
                         <div class="table-responsive">
 <!--                            <form @submit.prevent="groupDelete">-->
-
-                            <table
+                            <v-alert v-if="contents.length < 1"
+                                     type="info"
+                                     title="No data founded"
+                                     text="There are is no data"
+                                     variant="tonal"
+                            ></v-alert>
+                            <table v-else
                                 class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
                                 <thead class="student-thread blue-background-class">
                                 <tr>
@@ -227,6 +173,7 @@ export default {
 <script setup>
 import {router, useForm} from "@inertiajs/vue3";
 import {allCids} from "@/Pages/Content/allCids";
+import Loader from "@/Components/Loader.vue";
 let props = defineProps({
     show:Array,
     contents: Array,
@@ -281,11 +228,11 @@ let save = () => {
 
     form.post(route('content.save', cId),{
         preserveScroll: true
+
     })
     // $('#EditContentmodal').modal('show');
 }
 let groupDeleteForm = useForm({
-
     checkIfAllSelected: Boolean,
      pId: props.show.id,
     selectedContentIds: selectedContentIds,
@@ -293,7 +240,13 @@ let groupDeleteForm = useForm({
 
 let groupDelete = () => {
     groupDeleteForm.post(route('content.groupDelete'),{
-        preserveScroll: true
+        preserveScroll: true,
+        onStart: () => {
+            showSpinner.value = true;
+        },
+        onFinish: () => {
+            showSpinner.value = false;
+        },
     })
 }
 
