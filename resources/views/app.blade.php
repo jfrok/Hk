@@ -41,20 +41,20 @@
 {{--        <link rel="stylesheet" href="{{asset('assets/plugins/icons/flags/flags.css')}}">--}}
         <link rel="stylesheet" href="{{asset('assets/plugins/fontawesome/css/fontawesome.min.css')}}">
         <link rel="stylesheet" href="{{asset('assets/plugins/fontawesome/css/all.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/plugins/datatables/datatables.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
+{{--        <link rel="stylesheet" href="{{asset('assets/plugins/datatables/datatables.min.css')}}">--}}
+{{--        <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">--}}
         <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
         <script src="sweetalert2.min.js"></script>
         <link rel="stylesheet" href="sweetalert2.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css">
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.2.1/dist/vuetify.min.css">
+{{--        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.2.1/dist/vuetify.min.css">--}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 {{--        <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">--}}
         <!-- Scripts -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css" integrity="sha512-7uSoC3grlnRktCWoO4LjHMjotq8gf9XDFQerPuaph+cqR7JC9XKGdvN+UwZMC14aAaBDItdRj3DcSDs4kMWUgg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js" integrity="sha512-U2WE1ktpMTuRBPoCFDzomoIorbOyUv0sP8B+INA3EzNAhehbzED1rOJg6bCqPf/Tuposxb5ja/MAUnC8THSbLQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{{--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css" integrity="sha512-7uSoC3grlnRktCWoO4LjHMjotq8gf9XDFQerPuaph+cqR7JC9XKGdvN+UwZMC14aAaBDItdRj3DcSDs4kMWUgg==" crossorigin="anonymous" referrerpolicy="no-referrer" />--}}
+{{--        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js" integrity="sha512-U2WE1ktpMTuRBPoCFDzomoIorbOyUv0sP8B+INA3EzNAhehbzED1rOJg6bCqPf/Tuposxb5ja/MAUnC8THSbLQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>--}}
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
@@ -89,21 +89,21 @@
         <script src="{{asset('assets/js/jquery-3.6.0.min.js')}}"></script>
         <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <script src="{{asset('assets/js/feather.min.js')}}"></script>
-        <script src="{{asset('assets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+{{--        <script src="{{asset('assets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>--}}
         <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-        <script src="{{asset('assets/plugins/datatables/datatables.min.js')}}"></script>
-        <script src="{{asset('assets/js/circle-progress.min.js')}}"></script>
-        <script src="{{asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js')}}"></script>
+{{--        <script src="{{asset('assets/plugins/datatables/datatables.min.js')}}"></script>--}}
+{{--        <script src="{{asset('assets/js/circle-progress.min.js')}}"></script>--}}
+{{--        <script src="{{asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js')}}"></script>--}}
 {{--        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.6.0/bootstrap-tagsinput.min.js"></script>--}}
-        <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.min.js"></script>
+{{--        <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.5.2/vue.min.js"></script>--}}
         <!-- CDNJS :: Sortable (https://cdnjs.com/) -->
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-        <script src="{{asset('assets/plugins/select2/js/select2.min.js')}}"></script>
+{{--        <script src="{{asset('assets/plugins/select2/js/select2.min.js')}}"></script>--}}
         <script src="{{asset('assets/js/script.js')}}"></script>
         <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vuetify@3.2.1/dist/vuetify.min.js"></script>
+{{--        <script src="https://cdn.jsdelivr.net/npm/vuetify@3.2.1/dist/vuetify.min.js"></script>--}}
         <script>
             const card = document.querySelector(".card");
             const customContextMenu = document.querySelector(".custom-context-menu");

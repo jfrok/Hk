@@ -2,6 +2,10 @@
 import VueApexCharts from 'vue-apexcharts'
 
 export default {
+    props:{
+        p:Array,
+        count:Array,
+    },
     data: function() {
         return {
             options: {
@@ -9,12 +13,12 @@ export default {
                     id: 'vuechart-example'
                 },
                 xaxis: {
-                    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+                    categories: this.p
                 }
             },
             series: [{
                 name: 'series-1',
-                data: [30, 40, 45, 50, 49, 60, 70, 91]
+                data: this.count
             }]
         }
     }

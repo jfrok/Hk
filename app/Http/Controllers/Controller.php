@@ -16,17 +16,31 @@ class Controller extends BaseController
 {
     public function dashboard()
     {
-       $projects = Project::orderBy('created_at', 'DESC')->paginate(10);
-       $events = Event::orderBy('dateFrom', 'DESC')->where('dateFrom','>=',Carbon::now()->format('Y-m-d'))->paginate(10);
-       $totalEvents = Event::count();
-       $totalProjects = Project::count();
-        $month = [];
+        $projects = Project::orderBy('created_at', 'DESC')->paginate(10);
+        $events = Event::orderBy('dateFrom', 'DESC')->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))->paginate(10);
+        $totalEvents = Event::count();
+        $totalProjects = Project::count();
+        $period = \Carbon\CarbonPeriod::create('2023-05-09', Carbon::today());
 
-        for ($m=1; $m<=12; $m++) {
-            $month[] = date('m', mktime(0,0,0,$m, 1, date('Y')));
+        $p = [];
+        $count = [];
+        // If you want just dates
+        // Iterate over the period and create push to array
+        foreach ($period as $date) {
+            array_push($p, $date->format('Y-m-d'));
         }
 
+        foreach ($p as $pd){
+            if (Project::whereDate('created_at', \Carbon\Carbon::parse($pd))->count() > 0 || !\Carbon\Carbon::parse($pd)->isFuture()){
+                array_push($count,  Project::whereDate('created_at', \Carbon\Carbon::parse($pd))->count());
+            }else{
+                array_push($count,  0);
+            }
+}
+
         return inertia('Dashboard', [
+            'p' => $p,
+            'count' => $count,
             'projects' => $projects,
             'events' => $events,
             'totalEvents' => $totalEvents,

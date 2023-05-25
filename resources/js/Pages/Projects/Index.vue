@@ -53,9 +53,15 @@ const destroy = (pId) => {
                             <span><Link :href="route('project.add')"><i class="feather-plus"></i></Link></span>
                         </div>
                     </div>
-
-                    <div class="card-body" >
+                    <v-alert v-if="projects.data.length < 1"
+                             type="info"
+                             title="No data founded"
+                             text="There are is no data"
+                             variant="tonal"
+                    ></v-alert>
+                    <div class="card-body" v-else>
                         <div class="table-responsive">
+
                             <table class="datatable table table-stripped">
                                 <thead>
                                 <tr>

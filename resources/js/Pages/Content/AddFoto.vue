@@ -4,6 +4,7 @@ import {useForm} from "@inertiajs/vue3";
 import DropZoneVue from "@/Components/DropZoneVue.vue";
 import {reactive, watch} from "vue";
 import {useDropzone} from "vue3-dropzone";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 let props = defineProps(
     {
@@ -56,7 +57,9 @@ let addFoto = () => {
 </script>
 
 <template>
+    <AuthenticatedLayout>
     <div class="row">
+
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
@@ -109,30 +112,15 @@ let addFoto = () => {
                         </div>
                     </div>
                     </form>
-                    <!--                    <form action="/target" class="dropzone" id="my-dropzone"></form>-->
                 </div>
             </div>
         </div>
     </div>
+    </AuthenticatedLayout>
 </template>
-<script>
-
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {ref} from "vue";
-
-export default {
-    layout: AuthenticatedLayout,
-    // setup() {
-    //
-    // },
-}
-
-
-</script>
-
 <style lang="scss" scoped>
 .dropzone {
-    width: 400px;
+    width: 900px;
     height: 200px;
     display: flex;
     flex-direction: column;

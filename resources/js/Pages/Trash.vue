@@ -5,10 +5,15 @@ import moment from 'moment';
 import {allPids} from "@/Pages/allPids";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {watch} from "vue";
+import Loader from "@/Components/Loader.vue";
+import { ref } from 'vue';
+
 let props = defineProps({
     trashed: Array,
 
 })
+
+const showSpinner = ref(false);
 
 function alert(mesg) {
     toastr.success(mesg)
@@ -80,11 +85,18 @@ watch( () => allPids,($allPids) =>{
     console.log($allPids.value)
     groupDeleteForm.allpIds = $allPids.value
 })
-let groupDelete = () => {
-    // const cId = document.getElementById('cId').value
+const groupDelete = () => {
+    showSpinner.value = true;
+    groupDeleteForm.post(route('trash.groupDelete'), {
+        onStart: () => {
+            showSpinner.value = true;
+        },
+        onFinish: () => {
+            showSpinner.value = false;
+        },
+    });
+};
 
-    groupDeleteForm.post(route('trash.groupDelete'))
-}
 </script>
 
 <template>
@@ -92,6 +104,8 @@ let groupDelete = () => {
     <Head title="Projects"/>
     <div class="row">
         <div class="col-sm-12">
+            <Loader :show="showSpinner" color="blue"  />
+
             <div v-if="$page.props.ziggy.flash.message">
                 {{ alert($page.props.ziggy.flash.message) }}
             </div>
@@ -108,6 +122,7 @@ let groupDelete = () => {
 
                 <div class="card-body" v-if="trashed.length > 0">
                     <div class="table-responsive">
+
                         <form @submit.prevent="groupDelete">
 
                         <table class="datatable table table-stripped">
@@ -158,11 +173,10 @@ let groupDelete = () => {
                 </div>
                 <template v-else>
                     <v-alert
-                        density="compact"
                         type="info"
-                        title="No information founded"
-                        text="There is no trashed projects"
-                        icon="mdi-material-design"
+                        title="No data founded"
+                        text="There are is no data"
+                        variant="tonal"
                     ></v-alert>
                 </template>
             </div>

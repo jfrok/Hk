@@ -9,6 +9,8 @@ import {Link} from "@inertiajs/vue3";
 let props = defineProps({
     projects: Object,
     events: Array,
+    p:Array,
+    count:Array,
     totalEvents: Number,
     totalProjects: Number,
 })
@@ -51,36 +53,6 @@ uniqueMonths.forEach(month => {
                     </div>
                 </div>
             </div>
-<!--            <div class="col-xl-3 col-sm-6 col-12 d-flex">-->
-<!--                <div class="card bg-comman w-100">-->
-<!--                    <div class="card-body">-->
-<!--                        <div class="db-widgets d-flex justify-content-between align-items-center">-->
-<!--                            <div class="db-info">-->
-<!--                                <h6>Total Students</h6>-->
-<!--                                <h3>40/60</h3>-->
-<!--                            </div>-->
-<!--                            <div class="db-icon">-->
-<!--                                <img src="assets/img/icons/dash-icon-01.svg" alt="Dashboard Icon">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-xl-3 col-sm-6 col-12 d-flex">-->
-<!--                <div class="card bg-comman w-100">-->
-<!--                    <div class="card-body">-->
-<!--                        <div class="db-widgets d-flex justify-content-between align-items-center">-->
-<!--                            <div class="db-info">-->
-<!--                                <h6>Total Lessons</h6>-->
-<!--                                <h3>30/50</h3>-->
-<!--                            </div>-->
-<!--                            <div class="db-icon">-->
-<!--                                <img src="assets/img/icons/teacher-icon-02.svg" alt="Dashboard Icon">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
             <div class="col-xl-3 col-sm-6 col-12 d-flex">
                 <div class="card bg-comman w-100">
                     <div class="card-body">
@@ -101,69 +73,7 @@ uniqueMonths.forEach(month => {
 
         <div class="row">
             <div class="col-12 col-lg-12 col-xl-8">
-                <div class="row">
-                    <!--                    <div class="col-12 col-lg-8 col-xl-8 d-flex">-->
-                    <!--                        <div class="card flex-fill comman-shadow">-->
-                    <!--                            <div class="card-header">-->
-                    <!--                                <div class="row align-items-center">-->
-                    <!--                                    <div class="col-6">-->
-                    <!--                                        <h5 class="card-title">Upcoming Lesson</h5>-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="col-6">-->
-                    <!--                                        <span class="float-end view-link"><a href="#">View All Courses</a></span>-->
-                    <!--                                    </div>-->
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                            <div class="pt-3 pb-3">-->
-                    <!--                                <div class="table-responsive lesson">-->
-                    <!--                                    <table class="table table-center">-->
-                    <!--                                        <tbody>-->
-                    <!--                                        <tr>-->
-                    <!--                                            <td>-->
-                    <!--                                                <div class="date">-->
-                    <!--                                                    <b>Lessons 30</b>-->
-                    <!--                                                    <p>3.1 Ipsuum dolor</p>-->
-                    <!--                                                    <ul class="teacher-date-list">-->
-                    <!--                                                        <li><i class="fas fa-calendar-alt me-2"></i>Sep 5, 2022</li>-->
-                    <!--                                                        <li>|</li>-->
-                    <!--                                                        <li><i class="fas fa-clock me-2"></i>09:00 - 10:00 am</li>-->
-                    <!--                                                    </ul>-->
-                    <!--                                                </div>-->
-                    <!--                                            </td>-->
-                    <!--                                            <td>-->
-                    <!--                                                <div class="lesson-confirm">-->
-                    <!--                                                    <a href="#">Confirmed</a>-->
-                    <!--                                                </div>-->
-                    <!--                                                <button type="submit" class="btn btn-info">Reschedule</button>-->
-                    <!--                                            </td>-->
-                    <!--                                        </tr>-->
-                    <!--                                        <tr>-->
-                    <!--                                            <td>-->
-                    <!--                                                <div class="date">-->
-                    <!--                                                    <b>Lessons 30</b>-->
-                    <!--                                                    <p>3.1 Ipsuum dolor</p>-->
-                    <!--                                                    <ul class="teacher-date-list">-->
-                    <!--                                                        <li><i class="fas fa-calendar-alt me-2"></i>Sep 5, 2022</li>-->
-                    <!--                                                        <li>|</li>-->
-                    <!--                                                        <li><i class="fas fa-clock me-2"></i>09:00 - 10:00 am</li>-->
-                    <!--                                                    </ul>-->
-                    <!--                                                </div>-->
-                    <!--                                            </td>-->
-                    <!--                                            <td>-->
-                    <!--                                                <div class="lesson-confirm">-->
-                    <!--                                                    <a href="#">Confirmed</a>-->
-                    <!--                                                </div>-->
-                    <!--                                                <button type="submit" class="btn btn-info">Reschedule</button>-->
-                    <!--                                            </td>-->
-                    <!--                                        </tr>-->
-                    <!--                                        </tbody>-->
-                    <!--                                    </table>-->
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
 
-                </div>
                 <div class="row">
                     <div class="col-12 col-lg-12 col-xl-12 d-flex">
                         <div class="card flex-fill comman-shadow">
@@ -176,14 +86,14 @@ uniqueMonths.forEach(month => {
                                         <ul class="chart-list-out">
                                             <li><span class="circle-blue"></span>Teacher</li>
                                             <li><span class="circle-green"></span>Students</li>
-                                           
+
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <!--                                <div id="school-area"></div>-->
-                                <Chart/>
+                                <Chart :p="$page.props.p" :count="$page.props.count"/>
                             </div>
                         </div>
                     </div>
@@ -195,7 +105,13 @@ uniqueMonths.forEach(month => {
 
                             </div>
                             <div class="card-body">
-                                <div class="teaching-card" v-for="project in projects.data"
+                                <v-alert v-if="projects.data.length < 1"
+                                         type="info"
+                                         title="No data founded"
+                                         text="There are is no data"
+                                         variant="tonal"
+                                ></v-alert>
+                                <div class="teaching-card" v-else v-for="project in projects.data"
                                      :key="project.id">
                                     <ul class="steps-history">
                                         <!--                                        <li>Sep22</li>-->

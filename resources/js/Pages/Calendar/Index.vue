@@ -2,7 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {defineComponent, ref, watch, getCurrentInstance} from "vue";
 import FullCalendar from "@fullcalendar/vue3";
-import {useForm} from "@inertiajs/vue3";
+import {useForm, usePage} from "@inertiajs/vue3";
 import EventModal from "@/Components/EventModal.vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -11,6 +11,7 @@ import {eventDetails} from "@/Pages/Calendar/TestCalendar";
 import {eventEditDetails} from "@/Pages/Calendar/EditCalendar";
 import Modal from "@/Components/Modal.vue";
 import moment from 'moment';
+import {console} from "vuedraggable/src/util/helper";
 
 let allEvents = []
 let dataToRender = []
@@ -29,6 +30,30 @@ export default defineComponent({
     setup(_, {emit}) {
         allEvents = ref([])
         const internalInstance = getCurrentInstance();
+
+        const { page } = usePage();
+        const calendarRef = ref(null);
+
+        const handleEventDrop = (eventDropInfo) => {
+            // console.log(eventDropInfo.event)
+            // console.log(eventDropInfo.event.end)
+            const eventId = eventDropInfo.event.id;
+            const newStart = moment(eventDropInfo.event.start).format('YYYY-MM-DD')
+            const newEnd = moment(eventDropInfo.event.end.toISOString()).format('YYYY-MM-DD')
+                ? eventDropInfo.event.end.toISOString()
+                : null;
+            // Send the data to the server using Inertia.js
+            let dropForm = useForm({
+               title:eventDropInfo.event.title,
+                timeFrom:eventDropInfo.event.extendedProps.timeFrom,
+                timeTo:eventDropInfo.event.extendedProps.timeTo,
+                dateFrom: newStart,
+                dateTo: newEnd,
+            })
+            dropForm.post(route('calendar.update', eventId),)
+        };
+
+        // Rest of the component setup...
         let form = useForm({
             title: '',
             timeFrom: '',
@@ -94,40 +119,45 @@ export default defineComponent({
             await form.post(route('calendar.add'), {
                 onSuccess: () => {
                     $('#con-close-modal').modal('toggle')
+                    form.reset('title')
 
                     // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
                     updateCalendar();
                     // تحديث dataToRender بعد إضافة حدث جديد
-                    let newData = form.data();
-                    let newEvent = {
-                        title: newData.title,
-                        start: newData.dateFrom,
-                        end: newData.dateTo,
-                        allDay: true,
-                    };
-                    // إضافة newEvent إلى dataToRender
-                    dataToRender.push(newEvent);
+                    // let newData = form.data();
+                    // let newEvent = {
+                    //     title: newData.title,
+                    //     start: newData.dateFrom,
+                    //     end: newData.dateTo,
+                    //     allDay: true,
+                    // };
+                    // // إضافة newEvent إلى dataToRender
+                    // dataToRender.push(newEvent);
                 },
             });
         };
+
         let update = async () => {
             console.log(editForm.data().eId)
             await editForm.post(route('calendar.update', editForm.data().eId), {
+                preserveScroll: true,
+                // onStart: () => Spinner.content({content:"Saving Settings..."}),
+
                 onSuccess: () => {
                     // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
                     $('#editEventModal').modal('toggle')
 
                     updateCalendar();
                     // تحديث dataToRender بعد إضافة حدث جديد
-                    let newData = form.data();
-                    let newEvent = {
-                        title: newData.title,
-                        start: newData.dateFrom,
-                        end: newData.dateTo,
-                        allDay: true,
-                    };
-                    // إضافة newEvent إلى dataToRender
-                    dataToRender.push(newEvent);
+                    // let newData = form.data();
+                    // let newEvent = {
+                    //     title: newData.title,
+                    //     start: newData.dateFrom,
+                    //     end: newData.dateTo,
+                    //     allDay: true,
+                    // };
+                    // // إضافة newEvent إلى dataToRender
+                    // dataToRender.push(newEvent);
                 },
             });
 
@@ -138,20 +168,18 @@ export default defineComponent({
                 onSuccess: () => {
                     // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
                     updateCalendar();
+
                     $('#editEventModal').modal('close')
 
                 },
             });
         }
-        return {form, submit, update, remove, updateCalendar, editForm}
+        return {form, submit, update, remove, updateCalendar, editForm,handleEventDrop}
     },
     data() {
 
         let t = [
             $.get('/calendar/events', function (data) {
-                // console.log(data)
-                // ALL RIGHHTS RESEVED BY JAFAAAR!!!! 2023c
-
                 let dataToRender = data.events.map(x => {
                     x.start = x.dateFrom;
                     x.end = x.dateTo;
@@ -160,7 +188,7 @@ export default defineComponent({
                     //  }
                     return x;
                 });
-                console.log(dataToRender)
+                // console.log(dataToRender)
                 // success(dataToRender);
             })
         ]
@@ -189,6 +217,7 @@ export default defineComponent({
                 weekends: true,
                 select: this.handleDateSelect,
                 eventClick: this.handleEventClick,
+                eventDrop: this.handleEventDrop,
                 // eventsSet: this.handleEvents
                 /* you can update a remote database when these fire:
                 eventAdd:
@@ -222,6 +251,7 @@ export default defineComponent({
     },
 
     methods: {
+
         openAddEventModal() {
             // Reset the form data
             this.form.title = '';
@@ -264,6 +294,7 @@ export default defineComponent({
 
 </script>
 <template>
+
     <button @click="openAddEventModal" type="button" class="btn btn-info waves-effect waves-light mt-1" data-bs-toggle="modal" data-bs-target="#con-close-modal">Add Event</button>
 
     <!--<Modal dialog="true"/>-->
@@ -443,7 +474,7 @@ export default defineComponent({
             <div class="card">
                 <div class="card-body">
                     <div class='demo-app-main'>
-                        <FullCalendar id="calendar" ref="calendar" v-on:update-calendar="updateCalendar" :options="calendarOptions"/>
+                        <FullCalendar id="calendar" ref="calendar" v-on:update-calendar="updateCalendar"  @eventDrop="handleEventDrop" :options="calendarOptions"/>
                     </div>
                 </div>
             </div>
