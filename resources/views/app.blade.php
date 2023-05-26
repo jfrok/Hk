@@ -45,8 +45,8 @@
 {{--        <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">--}}
         <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
-        <script src="sweetalert2.min.js"></script>
-        <link rel="stylesheet" href="sweetalert2.min.css">
+{{--        <script src="sweetalert2.min.js"></script>--}}
+{{--        <link rel="stylesheet" href="sweetalert2.min.css">--}}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css">
 
 {{--        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.2.1/dist/vuetify.min.css">--}}
@@ -86,11 +86,11 @@
 {{--            </ul>--}}
 {{--        </div>--}}
         <!-- Vue  -->
-        <script src="{{asset('assets/js/jquery-3.6.0.min.js')}}"></script>
+{{--        <script src="{{asset('assets/js/jquery-3.6.0.min.js')}}"></script>--}}
         <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <script src="{{asset('assets/js/feather.min.js')}}"></script>
 {{--        <script src="{{asset('assets/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>--}}
-        <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+{{--        <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>--}}
 {{--        <script src="{{asset('assets/plugins/datatables/datatables.min.js')}}"></script>--}}
 {{--        <script src="{{asset('assets/js/circle-progress.min.js')}}"></script>--}}
 {{--        <script src="{{asset('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js')}}"></script>--}}
@@ -104,27 +104,27 @@
         <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {{--        <script src="https://cdn.jsdelivr.net/npm/vuetify@3.2.1/dist/vuetify.min.js"></script>--}}
-        <script>
-            const card = document.querySelector(".card");
-            const customContextMenu = document.querySelector(".custom-context-menu");
+{{--        <script>--}}
+{{--            const card = document.querySelector(".card");--}}
+{{--            const customContextMenu = document.querySelector(".custom-context-menu");--}}
 
-            card.addEventListener("contextmenu", (e) => {
-                e.preventDefault();
-                let topPosition = e.clientY;
-                let leftPosition = e.clientX;
-                customContextMenu.classList.add("active");
+{{--            card.addEventListener("contextmenu", (e) => {--}}
+{{--                e.preventDefault();--}}
+{{--                let topPosition = e.clientY;--}}
+{{--                let leftPosition = e.clientX;--}}
+{{--                customContextMenu.classList.add("active");--}}
 
-                customContextMenu.style.left = leftPosition + "px";
-                customContextMenu.style.top = topPosition + "px";
-            });
+{{--                customContextMenu.style.left = leftPosition + "px";--}}
+{{--                customContextMenu.style.top = topPosition + "px";--}}
+{{--            });--}}
 
-            window.addEventListener("click", () => {
-                customContextMenu.classList.remove("active");
-            });
+{{--            window.addEventListener("click", () => {--}}
+{{--                customContextMenu.classList.remove("active");--}}
+{{--            });--}}
 
 
 
-        </script>
+{{--        </script>--}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </body>
 </html>

@@ -4,6 +4,25 @@ html {
 /*[data-page] {*/
 /*    display: none;*/
 /*}*/
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
 body {
     background-color: #f7f7fa;
     color: #333;
@@ -10837,7 +10856,7 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 
 @media (max-width: 479px) {
     .dropdown-menu.notifications.show {
-        transform: translate3d(-190px, 60px, 0px) !important
+        transform: translate3d(-10px, 60px, 0px) !important
     }
 
     .user-menu .dropdown-menu {

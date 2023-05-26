@@ -1,12 +1,16 @@
 <script setup>
 import {computed, ref} from 'vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
-import {Link, router} from '@inertiajs/vue3';
+import {Link, router, usePage} from '@inertiajs/vue3';
 import Chart from "@/Components/Chart.vue";
 const showingNavigationDropdown = ref(false);
 // computed: {
 //     return $page.
 // }
+// let props = defineProps({
+//     notie:Array,
+// })
+let notifications = usePage().props.auth.notifications
 </script>
 <template>
     <div>
@@ -42,6 +46,7 @@ const showingNavigationDropdown = ref(false);
                     <li class="nav-item dropdown noti-dropdown me-2">
                         <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
 <!--                            <img src="assets/img/icons/header-icon-05.svg" alt="">-->
+                            <i class="feather-bell"></i>
                         </a>
                         <div class="dropdown-menu notifications">
                             <div class="topnav-dropdown-header">
@@ -54,12 +59,12 @@ const showingNavigationDropdown = ref(false);
                                         <a href="#">
                                             <div class="media d-flex">
                                             <span class="avatar avatar-sm flex-shrink-0">
-<!--                                                <img class="avatar-img rounded-circle" alt="User Image"-->
-<!--                                                     src="assets/img/profiles/avatar-02.jpg">-->
+                                                <img class="avatar-img rounded-circle" alt="User Image"
+                                                     src="img/system2.webp">
                                             </span>
-                                                <div class="media-body flex-grow-1">
-                                                    <p class="noti-details"><span class="noti-title">Carlson Tech</span> has
-                                                        approved <span class="noti-title">your estimate</span></p>
+                                                <div class="media-body flex-grow-1" v-for="notification in notifications" :key="notification.id">
+                                                    <p class="noti-details"><span class="noti-title">{{notification.title}}</span> has
+                                                        approved <span class="noti-title">{{ notification.message }}</span></p>
                                                     <p class="noti-time"><span class="notification-time">4 mins ago</span>
                                                     </p>
                                                 </div>
@@ -86,7 +91,7 @@ const showingNavigationDropdown = ref(false);
                         <span class="user-img">
 
                             <img alt="User Image" class="rounded-circle"
-                                   :src="$page.props.auth.user.avatar ?? 'https://imgv3.fotor.com/images/homepage-feature-card/Upload-an-image.jpg'" />
+                                   :src="$page.props.auth.user.avatar ?? 'img/non-user.png'" />
 
 <!--                            <img class="rounded-circle" src="assets/img/profiles/avatar-01.jpg" width="31"-->
 <!--                                 alt="Soeng Souy">-->
@@ -99,7 +104,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="dropdown-menu">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
-                                    <img  :src="$page.props.auth.user.avatar ?? 'https://imgv3.fotor.com/images/homepage-feature-card/Upload-an-image.jpg'" alt="User Image"
+                                    <img  :src="$page.props.auth.user.avatar ?? 'img/non-user.png'" alt="User Image"
                                          class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">

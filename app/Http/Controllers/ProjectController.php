@@ -6,13 +6,14 @@ use App\Models\Content;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
     public function index()
     {
         $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
-        return inertia('Projects/Index', [
+        return \inertia('Projects/Index', [
             'projects' => $projects
 
         ]);

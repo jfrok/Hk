@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Notifications;
 use App\Models\Skill;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -90,7 +91,9 @@ class UserController extends Controller
         if ($imageName !== null) {
             $user->avatar = '/img/avatar/' . $imageName;
         }
-        $user->save();
+        if($user->save()){
+            Notifications::pushNotifications($user->id,'System','Your subscription will expire in '.$user->subscription_end_date->format('Y M d').'.');
+        };
         return redirect()->route('dashboard')->with('success', 'Account created successfully.');
     }
 }

@@ -9,7 +9,7 @@
                         <a href="#" @click="openModal">
 
                             <img class="rounded-circle" alt="User Image" style="height: 100px"
-                                 :src="$page.props.auth.user.avatar ?? 'https://imgv3.fotor.com/images/homepage-feature-card/Upload-an-image.jpg'" />
+                                 :src="$page.props.auth.user.avatar ?? 'img/non-user-add.png'" />
                         </a>
                     </div>
                     <div class="col ms-md-n2 profile-user-info">

@@ -3,7 +3,6 @@ import {Head} from '@inertiajs/vue3';
 import Chart from "@/Components/Chart.vue";
 import moment from "moment";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {defineComponent, isProxy, toRaw} from 'vue';
 import {Link} from "@inertiajs/vue3";
 import CreateAccount from "@/Components/CreateAccount.vue";
 let props = defineProps({
@@ -26,10 +25,10 @@ let monthWords = dates.map(months => {
 }).map(item => {
     return months[parseInt(item) - 1]
 });
-console.log(monthWords);
+// console.log(monthWords);
 let uniqueMonths = [...new Set(monthWords)]; // Use Set to filter out duplicates
 uniqueMonths.forEach(month => {
-    console.log(month); // Print each unique month only once
+    // console.log(month); // Print each unique month only once
 });
 </script>
 <template>
@@ -69,8 +68,7 @@ uniqueMonths.forEach(month => {
                 </div>
             </div>
         </div>
-<CreateAccount />
-
+<!--<CreateAccount />-->
         <div class="row">
             <div class="col-12 col-lg-12 col-xl-8">
 
