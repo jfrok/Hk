@@ -39,8 +39,8 @@ export default defineComponent({
             // console.log(eventDropInfo.event.end)
             const eventId = eventDropInfo.event.id;
             const newStart = moment(eventDropInfo.event.start).format('YYYY-MM-DD')
-            const newEnd = moment(eventDropInfo.event.end.toISOString()).format('YYYY-MM-DD')
-                ? eventDropInfo.event.end.toISOString()
+            const newEnd = moment(eventDropInfo.event.end).format('YYYY-MM-DD')
+                ? moment(eventDropInfo.event.end).format('YYYY-MM-DD')
                 : null;
             // Send the data to the server using Inertia.js
             let dropForm = useForm({
@@ -50,7 +50,8 @@ export default defineComponent({
                 dateFrom: newStart,
                 dateTo: newEnd,
             })
-            dropForm.post(route('calendar.update', eventId),)
+            dropForm
+                .post(route('calendar.update', eventId),)
         };
 
         // Rest of the component setup...
@@ -84,13 +85,13 @@ export default defineComponent({
             dateTo: eventEditDetails.value[1],
         })
         watch(() => eventEditDetails, ($eventEditDetails) => {
-            // console.log($eventEditDetails.value[$eventEditDetails.value.length - 1])
-            editForm.eId = $eventEditDetails.value[$eventEditDetails.value.length - 1].id
-            editForm.title = $eventEditDetails.value[$eventEditDetails.value.length - 1].title
-            editForm.timeFrom = $eventEditDetails.value[$eventEditDetails.value.length - 1].extendedProps.timeFrom
-            editForm.timeTo = $eventEditDetails.value[$eventEditDetails.value.length - 1].extendedProps.timeTo
-            editForm.dateFrom = $eventEditDetails.value[$eventEditDetails.value.length - 1].extendedProps.dateFrom
-            editForm.dateTo = $eventEditDetails.value[$eventEditDetails.value.length - 1].extendedProps.dateTo
+             let lastArry = $eventEditDetails.value[$eventEditDetails.value.length - 1]
+            editForm.eId = lastArry.id
+            editForm.title = lastArry.title
+            editForm.timeFrom = lastArry.extendedProps.timeFrom
+            editForm.timeTo = lastArry.extendedProps.timeTo
+            editForm.dateFrom = lastArry.extendedProps.dateFrom
+            editForm.dateTo = lastArry.extendedProps.dateTo
         }, {deep: true})
 
         function updateCalendar() {
@@ -123,16 +124,7 @@ export default defineComponent({
 
                     // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
                     updateCalendar();
-                    // تحديث dataToRender بعد إضافة حدث جديد
-                    // let newData = form.data();
-                    // let newEvent = {
-                    //     title: newData.title,
-                    //     start: newData.dateFrom,
-                    //     end: newData.dateTo,
-                    //     allDay: true,
-                    // };
-                    // // إضافة newEvent إلى dataToRender
-                    // dataToRender.push(newEvent);
+
                 },
             });
         };
@@ -148,16 +140,6 @@ export default defineComponent({
                     $('#editEventModal').modal('toggle')
 
                     updateCalendar();
-                    // تحديث dataToRender بعد إضافة حدث جديد
-                    // let newData = form.data();
-                    // let newEvent = {
-                    //     title: newData.title,
-                    //     start: newData.dateFrom,
-                    //     end: newData.dateTo,
-                    //     allDay: true,
-                    // };
-                    // // إضافة newEvent إلى dataToRender
-                    // dataToRender.push(newEvent);
                 },
             });
 
@@ -277,10 +259,7 @@ export default defineComponent({
         handleEventClick(clickInfo) {
             // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
             $('#editEventModal').modal('show')
-
             eventEditDetails.value.push(clickInfo.event)
-
-
             // }
         },
         handleEvents(events) {
@@ -363,8 +342,7 @@ export default defineComponent({
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close
                         </button>
-                        <button type="submit" class="btn btn-info waves-effect waves-light" @click="updateCalendar">Save
-                            changes
+                        <button type="submit" class="btn btn-info waves-effect waves-light" @click="updateCalendar">Add
                         </button>
                     </div>
                 </form>

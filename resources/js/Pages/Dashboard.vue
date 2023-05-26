@@ -5,7 +5,7 @@ import moment from "moment";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {defineComponent, isProxy, toRaw} from 'vue';
 import {Link} from "@inertiajs/vue3";
-
+import CreateAccount from "@/Components/CreateAccount.vue";
 let props = defineProps({
     projects: Object,
     events: Array,
@@ -69,7 +69,7 @@ uniqueMonths.forEach(month => {
                 </div>
             </div>
         </div>
-
+<CreateAccount />
 
         <div class="row">
             <div class="col-12 col-lg-12 col-xl-8">

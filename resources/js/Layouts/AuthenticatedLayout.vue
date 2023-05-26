@@ -39,41 +39,41 @@ const showingNavigationDropdown = ref(false);
                 <ul class="nav user-menu">
 
 
-<!--                    <li class="nav-item dropdown noti-dropdown me-2">-->
-<!--                        <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">-->
-<!--&lt;!&ndash;                            <img src="assets/img/icons/header-icon-05.svg" alt="">&ndash;&gt;-->
-<!--                        </a>-->
-<!--                        <div class="dropdown-menu notifications">-->
-<!--                            <div class="topnav-dropdown-header">-->
-<!--                                <span class="notification-title">Notifications</span>-->
-<!--                                <a href="javascript:void(0)" class="clear-noti"> Clear All </a>-->
-<!--                            </div>-->
-<!--                            <div class="noti-content">-->
-<!--                                <ul class="notification-list">-->
-<!--                                    <li class="notification-message">-->
-<!--                                        <a href="#">-->
-<!--                                            <div class="media d-flex">-->
-<!--                                            <span class="avatar avatar-sm flex-shrink-0">-->
-<!--&lt;!&ndash;                                                <img class="avatar-img rounded-circle" alt="User Image"&ndash;&gt;-->
-<!--&lt;!&ndash;                                                     src="assets/img/profiles/avatar-02.jpg">&ndash;&gt;-->
-<!--                                            </span>-->
-<!--                                                <div class="media-body flex-grow-1">-->
-<!--                                                    <p class="noti-details"><span class="noti-title">Carlson Tech</span> has-->
-<!--                                                        approved <span class="noti-title">your estimate</span></p>-->
-<!--                                                    <p class="noti-time"><span class="notification-time">4 mins ago</span>-->
-<!--                                                    </p>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </a>-->
-<!--                                    </li>-->
-<!--                                    -->
-<!--                                  -->
-<!--                                  -->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                            -->
-<!--                        </div>-->
-<!--                    </li>-->
+                    <li class="nav-item dropdown noti-dropdown me-2">
+                        <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
+<!--                            <img src="assets/img/icons/header-icon-05.svg" alt="">-->
+                        </a>
+                        <div class="dropdown-menu notifications">
+                            <div class="topnav-dropdown-header">
+                                <span class="notification-title">Notifications</span>
+                                <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+                            </div>
+                            <div class="noti-content">
+                                <ul class="notification-list">
+                                    <li class="notification-message">
+                                        <a href="#">
+                                            <div class="media d-flex">
+                                            <span class="avatar avatar-sm flex-shrink-0">
+<!--                                                <img class="avatar-img rounded-circle" alt="User Image"-->
+<!--                                                     src="assets/img/profiles/avatar-02.jpg">-->
+                                            </span>
+                                                <div class="media-body flex-grow-1">
+                                                    <p class="noti-details"><span class="noti-title">Carlson Tech</span> has
+                                                        approved <span class="noti-title">your estimate</span></p>
+                                                    <p class="noti-time"><span class="notification-time">4 mins ago</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+
+
+
+                                </ul>
+                            </div>
+
+                        </div>
+                    </li>
 
 <!--                    <li class="nav-item zoom-screen me-2">-->
 <!--                        <a href="#" class="nav-link header-nav-list win-maximize">-->
@@ -129,6 +129,11 @@ const showingNavigationDropdown = ref(false);
                             <li class="submenu" :class="{'active':$page.component == 'Dashboard'}">
                                 <Link :href="route('dashboard')"><i class="feather-grid"></i> <span> Dashboard</span> </Link><span
                                     class="menu-arrow"></span>
+                            </li>
+
+                            <li v-if="$page.props.auth.user.role == 'Admin'" class="submenu" :class="{'active':$page.component == 'Accounts/Index'}">
+                                <Link :href="route('account.overview')"><i class="fas fa-users"></i> <span> Accounts</span> <span
+                                    class="menu-arrow"></span></Link>
                             </li>
                             <li class="submenu" :class="{'active':$page.component == 'Projects/Index'}">
                                 <Link :href="route('project.overview')"><i class="fas fa-graduation-cap"></i> <span> Projects</span> <span

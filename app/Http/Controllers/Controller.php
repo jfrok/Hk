@@ -20,7 +20,7 @@ class Controller extends BaseController
         $events = Event::orderBy('dateFrom', 'DESC')->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))->paginate(10);
         $totalEvents = Event::count();
         $totalProjects = Project::count();
-        $period = \Carbon\CarbonPeriod::create('2023-05-09', Carbon::today());
+        $period = \Carbon\CarbonPeriod::create('2023-05-25', Carbon::today());
 
         $p = [];
         $count = [];

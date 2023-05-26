@@ -38,11 +38,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/updateProfileSkills', [\App\Http\Controllers\UserController::class, 'updateProfileSkills'])->name('updateProfileSkills');
     Route::post('/updateProfile', [\App\Http\Controllers\UserController::class, 'updateProfile'])->name('updateProfile');
     Route::post('removeSkill/{skillId}',[\App\Http\Controllers\UserController::class,'removeSkill'])->name('removeSkill');
+    Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
+    Route::get('/account/overview', [\App\Http\Controllers\UserController::class, 'accounts'])->name('account.overview');
+
     /// Projects
     Route::prefix('projects')->group(function () {
         Route::get('overview', [ProjectController::class, 'index'])->name('project.overview');
-        Route::get('add', function () {
+        Route::get('add/{uId}', function ($uId) {
+            if ($uId != \Illuminate\Support\Facades\Auth::id()){
+                abort(404);
+
+            }else{
             return inertia::render('Projects/Add');
+            }
         })->name('project.add');
 //add
         Route::post('add', [ProjectController::class, 'add'])->name('project.addOne');
