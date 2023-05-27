@@ -10873,6 +10873,45 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
     max-width: 900px;
     margin: 40px auto;
 }
+#profileImage {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgb(57, 3, 122);
+    font-size: 1.1rem;
+    color: #fff;
+    text-align: center;
+    line-height: 2.5rem;
+    margin: 2rem 0;
+}
+#imageAvatar {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    background: rgb(57, 3, 122);
+    font-size: 3.5rem;
+    color: #fff;
+    text-align: center;
+    line-height: 7rem;
+    margin: 2rem 0;
+}
+.notification-badge {
+    position: relative !important;
+    display: inline-block !important;
+    background-color: red !important;
+    color: white !important;
+    font-size: 12px !important;
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 50% !important;
+    text-align: center !important;
+    line-height: 18px !important;
+    top: -8px !important;
+    left: 8px !important;
+}
+
 /*.fc-header-toolbar .fc-toolbar .fc-toolbar-ltr .fc-toolbar-chunk{*/
 /*    font-size: 10px;*/
 /*    width: 30px;*/

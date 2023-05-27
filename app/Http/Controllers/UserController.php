@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Notifications;
+use App\Models\Setting;
 use App\Models\Skill;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class UserController extends Controller
         $user->address = $request->input('address');
         $user->description = $request->input('description');
         if ($request->file('img') != null) {
-            $user->avatar = '/img/cases/' . $imageName ?? $request->img;
+            $user->avatar = '/img/avatar/' . $imageName ?? $request->img;
         }
         $user->save();
         if ($request->file('img') != null) {
@@ -92,6 +93,12 @@ class UserController extends Controller
             $user->avatar = '/img/avatar/' . $imageName;
         }
         if($user->save()){
+            $string = 'xSf1pvnMobVx15mjcCKS';
+            $shuffled = str_shuffle($string);
+            $setting = new Setting();
+            $setting->userId = $user->id;
+            $setting->api_token = $shuffled;
+            $setting->save();
             Notifications::pushNotifications($user->id,'System','Your subscription will expire in '.$user->subscription_end_date->format('Y M d').'.');
         };
         return redirect()->route('dashboard')->with('success', 'Account created successfully.');

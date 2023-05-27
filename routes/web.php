@@ -31,7 +31,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard',[\App\Http\Controllers\Controller::class,'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -82,12 +82,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/groupDelete', [\App\Http\Controllers\Controller::class, 'groupDelete'])->name('trash.groupDelete');
     Route::post('/restore/{pId}', [\App\Http\Controllers\Controller::class, 'restore'])->name('restore');
     Route::post('/force-delete/{pId}', [\App\Http\Controllers\Controller::class, 'forceDelete'])->name('forceDelete');
-});
+
 /// Settings
 //Route::prefix('settings')->group(function () {
     Route::get('settings',[SettingsController::class,'settings'])->name('settings.overview');
     Route::post('settings/update-token',[SettingsController::class,'changeToken'])->name('settings.updateToken');
 //});
+});
 Route::get('/test', function (){
     return view('test');
 });

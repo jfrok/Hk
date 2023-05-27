@@ -21,21 +21,37 @@ const form = useForm({
     password: '',
     remember: false,
 });
-
+function error(mesg) {
+    toastr.error(mesg)
+}
 const submit = () => {
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
     });
 };
 </script>
-
 <template>
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
         </div>
+
         <div class="main-wrapper login-body">
+
             <div class="login-wrapper">
                 <div class="container">
+<!--                    <div v-if="$page.props.ziggy.flash.error" class="mb-4 font-medium text-sm text-green-600">-->
+<!--                        {{ $page.props.ziggy.flash.error }}-->
+<!--                    </div>-->
+
+                    <v-alert
+                        v-if="$page.props.ziggy.flash.error"
+                        variant="outlined"
+                        type="warning"
+                        prominent
+                        border="top"
+                    >
+                        {{ $page.props.ziggy.flash.error }}
+                    </v-alert>
                     <div class="loginbox">
                         <div class="login-left">
                             <img class="img-fluid" src="assets/img/login.png" alt="Logo">
@@ -91,7 +107,7 @@ const submit = () => {
 <!--                                        <a href="forgot-password.html">Forgot Password?</a>-->
                                     </div>
                                     <div class="form-group">
-                                        <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                                        <PrimaryButton class="ml-4" style="background-color: #0a53be" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" >
                                             Log in
                                         </PrimaryButton>
 <!--                                        <button class="btn btn-primary btn-block" type="submit">Login</button>-->

@@ -13,11 +13,12 @@ class ApiController extends Controller
     public function projects($token)
     {
         $setting = Setting::where('api_token', $token)->first();
-        // dd($setting);
+        $check = Setting::where('api_token', $token)->first();
         if ($setting) {
-
-            $project = Project::all()->toArray();
-            return response()->json(['projects' => $project]);
+            $project = Project::where('userId',$check->userId)
+                ->select(['id', 'title', 'description','path','slug','sourceUrl','demoUrl','created_at','updated_at'])
+                ->get();
+          return response()->json(['projects' => $project]);
         } else {
             return response()->json(['error' => 'Invalid token'], 401); // HTTP status code 401: Unauthorized
         }
@@ -26,11 +27,12 @@ class ApiController extends Controller
     public function content($slug, $token)
     {
         $setting = Setting::where('api_token', $token)->first();
-        // dd($setting);
+        $check = Setting::where('api_token', $token)->first();
         if ($setting) {
             $content = Content::select('contents.*')
                 ->join('projects', 'contents.project_id', '=', 'projects.id')
                 ->where('projects.slug', $slug)
+                ->where('projects.userId',$check->userId)
                 ->orderBy('sort')->get()->toArray();
             return response()->json(['content' => $content]);
         } else {
@@ -41,9 +43,10 @@ class ApiController extends Controller
     public function personalDetails($token)
     {
         $setting = Setting::where('api_token', $token)->first();
+        $check = Setting::where('api_token', $token)->first();
 
         if ($setting) {
-            $user = User::find(20);
+            $user = User::find($check->userId);
             $userDetails = $user->only(['name', 'email', 'city', 'address', 'job', 'description']);
             $skills = $user->skills->pluck('name');
 
