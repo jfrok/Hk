@@ -30,6 +30,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard',[\App\Http\Controllers\Controller::class,'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
 
 Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,7 +39,7 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::post('/updateProfileSkills', [\App\Http\Controllers\UserController::class, 'updateProfileSkills'])->name('updateProfileSkills');
     Route::post('/updateProfile', [\App\Http\Controllers\UserController::class, 'updateProfile'])->name('updateProfile');
     Route::post('removeSkill/{skillId}',[\App\Http\Controllers\UserController::class,'removeSkill'])->name('removeSkill');
-    Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
+//    Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
     Route::get('/account/overview', [\App\Http\Controllers\UserController::class, 'accounts'])->name('account.overview');
 
     /// Projects

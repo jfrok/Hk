@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-use Inertia\Inertia;
 
 class SettingsController extends Controller
 {
@@ -24,7 +23,7 @@ class SettingsController extends Controller
         }
 
         $apiRoutesNames = array_filter($apiRoutesNames);
-        $apiToken = Setting::where('id',1)->first();
+        $apiToken = Setting::where('userId',Auth::id())->first();
         return inertia('Settings/Index',[
             'apiRoutes' => $apiRoutesNames,
             'apiToken' => $apiToken
@@ -32,7 +31,7 @@ class SettingsController extends Controller
     }
     public function changeToken(Request $request)
     {
-        $update = Setting::where('id',1)->first();
+        $update = Setting::where('userId',Auth::id())->first();
         $update->api_token = $request->token;
         $update->save();
     }

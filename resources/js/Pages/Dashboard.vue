@@ -79,7 +79,7 @@ export default {
                 </div>
             </div>
         </div>
-<CreateAccount />
+<!--<CreateAccount />-->
         <div class="row">
             <div class="col-12 col-lg-12 col-xl-8">
 
@@ -157,7 +157,7 @@ export default {
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-lg-12 col-xl-4 d-flex">
+            <div class="col-12 col-lg-12 col-xl-4 d-flex" v-if="events.data.length > 0">
                 <div class="card flex-fill comman-shadow">
                     <div class="card-body">
                         <div class="calendar-info1">
@@ -186,11 +186,18 @@ export default {
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <v-alert v-else
+                     type="info"
+                     variant="tonal"
+            >
+                <v-alert-title style="justify-content: center;display: flex">There is no Events</v-alert-title>
+            </v-alert>
         </div>
 <!--    </AuthenticatedLayout>-->
 </template>

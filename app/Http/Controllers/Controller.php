@@ -17,10 +17,11 @@ class Controller extends BaseController
 {
     public function dashboard()
     {
-        $projects = Project::orderBy('created_at', 'DESC')->paginate(10);
-        $events = Event::orderBy('dateFrom', 'DESC')->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))->paginate(10);
-        $totalEvents = Event::count();
-        $totalProjects = Project::count();
+        $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
+        $events = Event::orderBy('dateFrom', 'DESC')->where('userId',Auth::id())
+            ->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))->paginate(10);
+        $totalEvents = Event::where('userId',Auth::id())->count();
+        $totalProjects = Project::where('userId',Auth::id())->count();
         $period = \Carbon\CarbonPeriod::create('2023-05-25', Carbon::today());
 
         $p = [];
@@ -32,8 +33,8 @@ class Controller extends BaseController
         }
 
         foreach ($p as $pd){
-            if (Project::whereDate('created_at', \Carbon\Carbon::parse($pd))->count() > 0 || !\Carbon\Carbon::parse($pd)->isFuture()){
-                array_push($count,  Project::whereDate('created_at', \Carbon\Carbon::parse($pd))->count());
+            if (Project::where('userId',Auth::id())->whereDate('created_at', \Carbon\Carbon::parse($pd))->count() > 0 || !\Carbon\Carbon::parse($pd)->isFuture()){
+                array_push($count,  Project::where('userId',Auth::id())->whereDate('created_at', \Carbon\Carbon::parse($pd))->count());
             }else{
                 array_push($count,  0);
             }
@@ -100,11 +101,5 @@ class Controller extends BaseController
             return back()->with('error','No content selected');
 
         }
-    }
-    public function steamApiTest(Request $request){
-//        $request->steamKey = ;
-//        $request->steamId = ;
-//
-        return redirect('https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key='.$request->steamKey.'&steamid='.$request->steamId.'&format=json');
     }
 }
