@@ -2,10 +2,9 @@
 import {Head} from '@inertiajs/vue3';
 import Chart from "@/Components/Chart.vue";
 import moment from "moment";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {defineComponent, isProxy, toRaw} from 'vue';
 import {Link} from "@inertiajs/vue3";
-
+import CreateAccount from "@/Components/CreateAccount.vue";
+import {defineComponent} from "vue";
 let props = defineProps({
     projects: Object,
     events: Array,
@@ -14,7 +13,9 @@ let props = defineProps({
     totalEvents: Number,
     totalProjects: Number,
 })
-
+defineComponent({
+    layout:AuthenticatedLayout
+})
 let dates = props.events.data.map(event => event.dateFrom);
 let months = [
     'January', 'February', 'March', 'April', 'May',
@@ -26,14 +27,23 @@ let monthWords = dates.map(months => {
 }).map(item => {
     return months[parseInt(item) - 1]
 });
-console.log(monthWords);
+// console.log(monthWords);
 let uniqueMonths = [...new Set(monthWords)]; // Use Set to filter out duplicates
 uniqueMonths.forEach(month => {
-    console.log(month); // Print each unique month only once
+    // console.log(month); // Print each unique month only once
 });
+// Rest of your component's logic goes here
+
+</script>
+<script>
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+
+export default {
+    layout:AuthenticatedLayout
+}
 </script>
 <template>
-    <AuthenticatedLayout>
+<!--    <AuthenticatedLayout>-->
         <Head title="Dashboard"/>
 
 
@@ -69,8 +79,7 @@ uniqueMonths.forEach(month => {
                 </div>
             </div>
         </div>
-
-
+<CreateAccount />
         <div class="row">
             <div class="col-12 col-lg-12 col-xl-8">
 
@@ -183,5 +192,5 @@ uniqueMonths.forEach(month => {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+<!--    </AuthenticatedLayout>-->
 </template>

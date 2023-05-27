@@ -50,7 +50,7 @@ const destroy = (pId) => {
 <!--                        </p>-->
                         <div class="up-come-header">
                             <h2>Upcoming Projects</h2>
-                            <span><Link :href="route('project.add')"><i class="feather-plus"></i></Link></span>
+                            <span><Link :href="route('project.add',$page.props.auth.user.id)"><i class="feather-plus"></i></Link></span>
                         </div>
                     </div>
                     <v-alert v-if="projects.data.length < 1"

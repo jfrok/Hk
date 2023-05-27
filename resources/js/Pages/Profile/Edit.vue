@@ -8,8 +8,9 @@
                     <div class="col-auto profile-image">
                         <a href="#" @click="openModal">
 
-                            <img class="rounded-circle" alt="User Image" style="height: 100px"
-                                 :src="$page.props.auth.user.avatar ?? 'https://imgv3.fotor.com/images/homepage-feature-card/Upload-an-image.jpg'" />
+                            <img class="rounded-circle" v-if="$page.props.auth.user.avatar" alt="User Image" style="height: 100px"
+                            :src="$page.props.auth.user.avatar ?? 'img/non-user-add.png'" />
+                            <div id="imageAvatar" v-else>{{ initials }}</div>
                         </a>
                     </div>
                     <div class="col ms-md-n2 profile-user-info">
@@ -205,16 +206,27 @@ export default {
     },
     data: () => ({
         numberOfInputs: 0,
+        fullName: usePage().props.auth.user.name,
+        initials: '',
         openModal() {
             $('#uploadAvatar').modal('show')
         }
 
     }),
 
+    mounted() {
+        this.setInitials();
+    },
     methods: {
-        addInput: function () {
-            this.numberOfInputs++;
-        },
+        setInitials() {
+            const initials = this.fullName
+                .split(' ')
+                .map(name => name[0])
+                .join('')
+                .toUpperCase();
+
+            this.initials = initials;
+        }
     },
 
 }

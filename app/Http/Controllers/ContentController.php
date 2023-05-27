@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Content;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Console\Input\Input;
 
 class ContentController extends Controller
 {
     public function overview($pId)
     {
-        $project = Project::withTrashed()->where('id', $pId)->first();
+        $project = Project::withTrashed()->where('id', $pId)->where('userId',Auth::id())->first();
+        if ($project){
         $contents = Content::withTrashed()->where('project_id', $pId)->orderBy('sort')->get();
 
         return inertia('Content/Overview', [
@@ -26,6 +28,10 @@ class ContentController extends Controller
                 ];
             })
         ]);
+        }else{
+            abort(404);
+        }
+
     }
 
     public function add($pId)

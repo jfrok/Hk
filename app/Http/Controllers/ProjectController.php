@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Content;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::orderBy('created_at', 'DESC')->paginate(10);
-        return inertia('Projects/Index', [
+        $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
+        return \inertia('Projects/Index', [
             'projects' => $projects
 
         ]);
@@ -30,6 +32,7 @@ class ProjectController extends Controller
         // $image = $request->file('img')->store('cases','public');
         //  dd($image);
         $new = new Project();
+        $new->userId = Auth::id();
         $new->title = $request->title;
         $new->description = $request->description;
         $new->sourceUrl = $request->sourceUrl;
@@ -62,7 +65,7 @@ class ProjectController extends Controller
     }
     protected function getRelatedSlugs($slug, $id = 0)
     {
-        return Project::select('slug')->where('slug', 'like', $slug.'%')
+        return Project::select('slug')->where('slug', 'like', $slug.'%')->where('userId',Auth::id())
             ->where('id', '<>', $id)
             ->get();
     }

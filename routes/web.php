@@ -31,18 +31,26 @@ Route::get('/', function () {
 
 Route::get('/dashboard',[\App\Http\Controllers\Controller::class,'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/updateProfileSkills', [\App\Http\Controllers\UserController::class, 'updateProfileSkills'])->name('updateProfileSkills');
     Route::post('/updateProfile', [\App\Http\Controllers\UserController::class, 'updateProfile'])->name('updateProfile');
     Route::post('removeSkill/{skillId}',[\App\Http\Controllers\UserController::class,'removeSkill'])->name('removeSkill');
+    Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
+    Route::get('/account/overview', [\App\Http\Controllers\UserController::class, 'accounts'])->name('account.overview');
+
     /// Projects
     Route::prefix('projects')->group(function () {
         Route::get('overview', [ProjectController::class, 'index'])->name('project.overview');
-        Route::get('add', function () {
+        Route::get('add/{uId}', function ($uId) {
+            if ($uId != \Illuminate\Support\Facades\Auth::id()){
+                abort(404);
+
+            }else{
             return inertia::render('Projects/Add');
+            }
         })->name('project.add');
 //add
         Route::post('add', [ProjectController::class, 'add'])->name('project.addOne');
@@ -74,12 +82,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/groupDelete', [\App\Http\Controllers\Controller::class, 'groupDelete'])->name('trash.groupDelete');
     Route::post('/restore/{pId}', [\App\Http\Controllers\Controller::class, 'restore'])->name('restore');
     Route::post('/force-delete/{pId}', [\App\Http\Controllers\Controller::class, 'forceDelete'])->name('forceDelete');
-});
+
 /// Settings
 //Route::prefix('settings')->group(function () {
     Route::get('settings',[SettingsController::class,'settings'])->name('settings.overview');
     Route::post('settings/update-token',[SettingsController::class,'changeToken'])->name('settings.updateToken');
 //});
+});
 Route::get('/test', function (){
     return view('test');
 });

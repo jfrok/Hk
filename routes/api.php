@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//Route::get('hk/projects/{token}',[\App\Http\Controllers\ApiController::class,'projects']);
 Route::get('hk/projects/{token}',[\App\Http\Controllers\ApiController::class,'projects']);
 Route::get('hk/projects/{slug}/{token}',[\App\Http\Controllers\ApiController::class,'content']);
 Route::get('hk/personalDetails/{token}',[\App\Http\Controllers\ApiController::class,'personalDetails']);

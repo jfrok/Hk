@@ -3,7 +3,6 @@ import {Head, router, useForm} from '@inertiajs/vue3';
 import {Link} from "@inertiajs/vue3";
 import moment from 'moment';
 import {allPids} from "@/Pages/allPids";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {watch} from "vue";
 import Loader from "@/Components/Loader.vue";
 import { ref } from 'vue';
@@ -98,9 +97,15 @@ const groupDelete = () => {
 };
 
 </script>
+<script>
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
+export default {
+    layout:AuthenticatedLayout,
+}
+</script>
 <template>
-    <AuthenticatedLayout>
+<!--    <AuthenticatedLayout>-->
     <Head title="Projects"/>
     <div class="row">
         <div class="col-sm-12">
@@ -171,17 +176,17 @@ const groupDelete = () => {
                         </form>
                     </div>
                 </div>
-                <template v-else>
+                <div v-else>
                     <v-alert
                         type="info"
                         title="No data founded"
                         text="There are is no data"
                         variant="tonal"
                     ></v-alert>
-                </template>
+                </div>
             </div>
 
         </div>
     </div>
-    </AuthenticatedLayout>
+<!--    </AuthenticatedLayout>-->
 </template>

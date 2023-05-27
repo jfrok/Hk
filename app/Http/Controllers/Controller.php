@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class Controller extends BaseController
@@ -20,7 +21,7 @@ class Controller extends BaseController
         $events = Event::orderBy('dateFrom', 'DESC')->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))->paginate(10);
         $totalEvents = Event::count();
         $totalProjects = Project::count();
-        $period = \Carbon\CarbonPeriod::create('2023-05-09', Carbon::today());
+        $period = \Carbon\CarbonPeriod::create('2023-05-25', Carbon::today());
 
         $p = [];
         $count = [];
@@ -51,7 +52,7 @@ class Controller extends BaseController
     use AuthorizesRequests, ValidatesRequests;
     public function trash()
     {
-        $trashed = Project::onlyTrashed()->get();
+        $trashed = Project::onlyTrashed()->where('userId',Auth::id())->get();
         return inertia('Trash',[
             'trashed' => $trashed
         ]);
