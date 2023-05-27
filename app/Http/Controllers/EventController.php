@@ -10,7 +10,7 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::all();
+        $events = Event::where('userId',Auth::id())->get();
         return inertia('Calendar/Index', [
             'events' => $events->map(function ($event) {
                 return [
@@ -53,7 +53,7 @@ class EventController extends Controller
         Event::find($eId)->delete();
     }
     public function getEvents(){
-        $events = Event::all();
+        $events = Event::where('userId',Auth::id())->get();
         return response()->json(['events' => $events]);
     }
 }

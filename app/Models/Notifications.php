@@ -14,7 +14,7 @@ class Notifications extends Model
         $new->title = $title;
         $new->message = $message;
         $new->userId = $userId;
-        $new->sendedBy = Auth::id();
+        $new->sendedBy = 20;
         $new->save();
     }
 }

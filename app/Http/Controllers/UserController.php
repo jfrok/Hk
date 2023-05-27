@@ -7,6 +7,8 @@ use App\Models\Notifications;
 use App\Models\Setting;
 use App\Models\Skill;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -56,7 +58,6 @@ class UserController extends Controller
     {
         // Find the skill by its ID
         $skill = Skill::find($skillId);
-//dd($skill);
         // Check if the skill exists
         if ($skill) {
             // Delete the skill
@@ -69,6 +70,7 @@ class UserController extends Controller
     }
     public function createAccount(Request $request)
     {
+//        dd($request->all());
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -100,7 +102,12 @@ class UserController extends Controller
             $setting->api_token = $shuffled;
             $setting->save();
             Notifications::pushNotifications($user->id,'System','Your subscription will expire in '.$user->subscription_end_date->format('Y M d').'.');
-        };
+            if (Auth::id() == null){
+                event(new Registered($user));
+                Auth::login($user);
+                return redirect(RouteServiceProvider::HOME);
+            }
+        }
         return redirect()->route('dashboard')->with('success', 'Account created successfully.');
     }
 }

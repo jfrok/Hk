@@ -59,7 +59,7 @@ const submit = () => {
                         <div class="login-right">
                             <div class="login-right-wrap">
                                 <h1>Welcome to Preskool</h1>
-<!--                                <p class="account-subtitle">Need an account? <a href="register.html">Sign Up</a></p>-->
+                                <p class="account-subtitle">Need an account? <Link :href="route('register')">Sign Up</Link></p>
                                 <h2>Sign in</h2>
 
                                 <form @submit.prevent="submit">
