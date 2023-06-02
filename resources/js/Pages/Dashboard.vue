@@ -41,7 +41,7 @@ function getRemainingDays(dateFrom, dateTo) {
 
     const days = duration.asDays();
 
-    return Math.ceil(days);
+    return Math.ceil(days - 1);
 
 }
 const currentDate = new Date();
