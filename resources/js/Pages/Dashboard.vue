@@ -4,7 +4,7 @@ import Chart from "@/Components/Chart.vue";
 import moment from "moment";
 import {Link} from "@inertiajs/vue3";
 import CreateAccount from "@/Components/CreateAccount.vue";
-import {defineComponent} from "vue";
+import {computed, defineComponent} from "vue";
 let props = defineProps({
     projects: Object,
     events: Array,
@@ -34,6 +34,18 @@ uniqueMonths.forEach(month => {
 });
 // Rest of your component's logic goes here
 
+function getRemainingDays(dateFrom, dateTo) {
+    const start = moment(dateFrom);
+    const end = moment(dateTo);
+    const duration = moment.duration(end.diff(start));
+
+    const days = duration.asDays();
+
+    return Math.ceil(days);
+
+}
+const currentDate = new Date();
+const formattedDate = currentDate;
 </script>
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -173,12 +185,16 @@ export default {
                                 </div>
                                 <div v-for="event in events.data"
                                      :key="event.id">
+
                                     <div class="calendar-details" v-if="month == moment(event.dateFrom).format('MMMM')">
 
                                         <p style="font-size: 10px" v-if="event.timeFrom !== null">{{ event.timeFrom }}
                                             {{ event.timeTo }}</p>
                                         <div class="calendar-box  normal-bg">
                                             <div class="calandar-event-name">
+                                                <div class="event-square" :class="getRemainingDays(currentDay, event.dateTo) > 15 ? 'green' : getRemainingDays(currentDay, event.dateTo) < 7 ? 'red' : 'yellow'">
+                                                    <strong>{{ getRemainingDays(formattedDate, event.dateTo) }}</strong>
+                                                </div>
                                                 <h4>{{ event.title }}</h4>
                                                 <h5>{{ event.title }}</h5>
                                             </div>

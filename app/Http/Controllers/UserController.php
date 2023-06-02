@@ -70,7 +70,7 @@ class UserController extends Controller
     }
     public function createAccount(Request $request)
     {
-//        dd($request->all());
+        dd($request->all());
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -91,6 +91,7 @@ class UserController extends Controller
         $user->city = $request->city;
         $user->address = $request->address;
         $user->description = $request->description;
+        $user->lang = $request->lang;
         if ($imageName !== null) {
             $user->avatar = '/img/avatar/' . $imageName;
         }
@@ -109,5 +110,9 @@ class UserController extends Controller
             }
         }
         return redirect()->route('dashboard')->with('success', 'Account created successfully.');
+    }
+    public function clearNotifications()
+    {
+     Notifications::where('userId',Auth::id())->delete();
     }
 }

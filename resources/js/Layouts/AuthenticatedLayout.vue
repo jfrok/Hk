@@ -59,6 +59,10 @@ function formatTime(created_at) {
         return `${daysDiff} day${daysDiff > 1 ? 's' : ''} ago`;
     }
 }
+const clearNotifications = () => {
+    router.post(route('clearNotifications'),)
+    }
+
 </script>
 <template>
 <!--    <ExpireAlert />-->
@@ -106,7 +110,7 @@ function formatTime(created_at) {
                         <div class="dropdown-menu notifications">
                             <div class="topnav-dropdown-header">
                                 <span class="notification-title">Notifications</span>
-                                <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+                                <a href="javascript:void(0)" methods="post" @click="clearNotifications" class="clear-noti"> Clear All </a>
                             </div>
                             <div class="noti-content" v-if="notifications.length > 0">
                                 <ul class="notification-list">

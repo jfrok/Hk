@@ -39,6 +39,7 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::post('/updateProfileSkills', [\App\Http\Controllers\UserController::class, 'updateProfileSkills'])->name('updateProfileSkills');
     Route::post('/updateProfile', [\App\Http\Controllers\UserController::class, 'updateProfile'])->name('updateProfile');
     Route::post('removeSkill/{skillId}',[\App\Http\Controllers\UserController::class,'removeSkill'])->name('removeSkill');
+    Route::post('/clearNotifications', [\App\Http\Controllers\UserController::class, 'clearNotifications'])->name('clearNotifications');
 //    Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
     Route::get('/account/overview', [\App\Http\Controllers\UserController::class, 'accounts'])->name('account.overview');
 
