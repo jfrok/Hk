@@ -7,6 +7,8 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 const form = useForm({
     name: '',
     email: '',
+    arabic: '',
+    english: '',
     password: '',
     password_confirmation: '',
     terms: false,
@@ -111,12 +113,6 @@ export default {
                                     <span class="profile-views"><i class="fas fa-lock"></i></span>
                                 </div>
                                 <div class="forgotpass">
-                                    <div class="remember-me">
-                                        <label class="custom_check mr-2 mb-0 d-inline-flex remember-me"> Remember me
-                                            <Checkbox name="remember" v-model:checked="form.remember" />
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
                                     <Link
                                         :href="route('login')"
                                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -125,6 +121,11 @@ export default {
                                     </Link>
                                     <!--                                        <a href="forgot-password.html">Forgot Password?</a>-->
                                 </div>
+<!--                                <v-radio-group>-->
+<!--                                    <v-radio label="English" v-model="form.english"></v-radio>-->
+<!--                                    <v-radio label="Arabic" v-model="form.arabic"></v-radio>-->
+<!--                                </v-radio-group>-->
+
                                 <div class="form-group">
                                     <PrimaryButton style="background-color: #0a53be" class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                         Register

@@ -14,6 +14,8 @@ const state = reactive({
 
 const {getRootProps, getInputProps, isDragActive, ...rest} = useDropzone({
     onDrop,
+    accept: 'image/png, image/jpeg',
+
 });
 
 watch(state, () => {
@@ -110,6 +112,7 @@ let submit = () => {
                                                 >
                                             </div>
                                         </div>
+
                                         <div v-else class="dropzone" v-bind="getRootProps()">
                                             <div
                                                 class="border"
@@ -117,7 +120,7 @@ let submit = () => {
           isDragActive,
         }"
                                             >
-                                                <input type="file" @input="form.img = $event.target.files[0]"
+                                                <input type="file" accept="image/png, image/jpeg" @input="form.img = $event.target.files[0]"
                                                        v-bind="getInputProps()"/>
                                                 <p v-if="isDragActive">Drop the files here ...</p>
                                                 <p v-else>Drag and drop files here, or Click to select files</p>

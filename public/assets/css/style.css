@@ -10911,7 +10911,23 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
     top: -8px !important;
     left: 8px !important;
 }
-
+.event-square {
+    width: 30px;
+    height: 15px;
+    margin-bottom: 5px;
+    color: #fff0f6;
+    font-size: 10px;
+    text-align: center;
+}
+.green{
+    background-color: #0ab39c;
+}
+.red{
+    background-color: red;
+}
+.yellow{
+    background-color: #ffb72c;
+}
 /*.fc-header-toolbar .fc-toolbar .fc-toolbar-ltr .fc-toolbar-chunk{*/
 /*    font-size: 10px;*/
 /*    width: 30px;*/

@@ -18,7 +18,7 @@ class Controller extends BaseController
     public function dashboard()
     {
         $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
-        $events = Event::orderBy('dateFrom', 'DESC')->where('userId',Auth::id())
+        $events = Event::orderBy('dateFrom', 'ASC')->where('userId',Auth::id())
             ->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))->paginate(10);
         $totalEvents = Event::where('userId',Auth::id())->count();
         $totalProjects = Project::where('userId',Auth::id())->count();

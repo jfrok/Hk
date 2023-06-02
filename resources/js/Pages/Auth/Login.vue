@@ -1,7 +1,7 @@
 <script setup>
 import Checkbox from '@/Components/Checkbox.vue';
 // import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
+import InputError from '../../Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -106,6 +106,7 @@ const submit = () => {
                                         </Link>
 <!--                                        <a href="forgot-password.html">Forgot Password?</a>-->
                                     </div>
+
                                     <div class="form-group">
                                         <PrimaryButton class="ml-4" style="background-color: #0a53be" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" >
                                             Log in

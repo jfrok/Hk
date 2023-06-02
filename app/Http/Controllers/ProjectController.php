@@ -26,7 +26,7 @@ class ProjectController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'img' => 'file'
+            'img' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
         $imageName = $request->file('img')->getClientOriginalName();
         // $image = $request->file('img')->store('cases','public');
