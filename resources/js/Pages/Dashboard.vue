@@ -192,7 +192,7 @@ export default {
                                             {{ event.timeTo }}</p>
                                         <div class="calendar-box  normal-bg">
                                             <div class="calandar-event-name">
-                                                <div class="event-square" :class="getRemainingDays(currentDay, event.dateTo) > 15 ? 'green' : getRemainingDays(currentDay, event.dateTo) < 7 ? 'red' : 'yellow'">
+                                                <div class="event-square" :class="getRemainingDays(formattedDate, event.dateTo) > 15 ? 'green' : getRemainingDays(currentDay, event.dateTo) < 7 ? 'red' : 'yellow'">
                                                     <strong>{{ getRemainingDays(formattedDate, event.dateTo) }}</strong>
                                                 </div>
                                                 <h4>{{ event.title }}</h4>
