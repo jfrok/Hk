@@ -12,7 +12,7 @@
         <!-- Add to homescreen for Chrome on Android -->
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="application-name" content="PWA">
-        <link rel="icon" sizes="512x512" href="/images/icons/icon-512x512.png">
+        <link rel="icon" sizes="512x512" href="{{asset('/images/icons/5.jpg')}}">
 
         <!-- Add to homescreen for Safari on iOS -->
         <meta name="apple-mobile-web-app-capable" content="yes">

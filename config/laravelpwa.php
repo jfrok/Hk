@@ -13,27 +13,27 @@ return [
         'status_bar'=> 'black',
         'icons' => [
             '72x72' => [
-                'path' => '/images/icons/icon-72x72.png',
+                'path' => '/images/icons/5.jpg',
                 'purpose' => 'any'
             ],
             '96x96' => [
-                'path' => '/images/icons/icon-96x96.png',
+                'path' => '/images/icons/5.jpg',
                 'purpose' => 'any'
             ],
             '128x128' => [
-                'path' => '/images/icons/icon-128x128.png',
+                'path' => '/images/icons/5.jpg',
                 'purpose' => 'any'
             ],
             '144x144' => [
-                'path' => '/images/icons/icon-144x144.png',
+                'path' => '/images/icons/5.jpg',
                 'purpose' => 'any'
             ],
             '152x152' => [
-                'path' => '/images/icons/icon-152x152.png',
+                'path' => '/images/icons/5.jpg',
                 'purpose' => 'any'
             ],
             '192x192' => [
-                'path' => '/images/icons/icon-192x192.png',
+                'path' => '/images/icons/5.jpg',
                 'purpose' => 'any'
             ],
             '384x384' => [
@@ -46,7 +46,7 @@ return [
             ],
         ],
         'splash' => [
-            '640x1136' => '/images/icons/splash-640x1136.png',
+            '640x1136' => '/images/icons/5.jpg',
             '750x1334' => '/images/icons/splash-750x1334.png',
             '828x1792' => '/images/icons/splash-828x1792.png',
             '1125x2436' => '/images/icons/splash-1125x2436.png',
