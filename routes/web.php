@@ -21,17 +21,17 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Auth/Login', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect(\route('login'));
+    //[
+//        'canLogin' => Route::has('login'),
+//        'canRegister' => Route::has('register'),
+//        'laravelVersion' => Application::VERSION,
+//        'phpVersion' => PHP_VERSION,
+    //]);
+
 });
 
-Route::get('/dashboard',[\App\Http\Controllers\Controller::class,'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
-
 Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -42,6 +42,8 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::post('/clearNotifications', [\App\Http\Controllers\UserController::class, 'clearNotifications'])->name('clearNotifications');
 //    Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
     Route::get('/account/overview', [\App\Http\Controllers\UserController::class, 'accounts'])->name('account.overview');
+    Route::get('/dashboard',[\App\Http\Controllers\Controller::class,'dashboard'])->name('dashboard');
+
 
     /// Projects
     Route::prefix('projects')->group(function () {

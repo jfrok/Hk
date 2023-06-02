@@ -25,6 +25,10 @@ class EventController extends Controller
     }
     public function add(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'dateFrom' => 'required',
+        ]);
        //  dd($request->all());
         $new = new Event();
         $new->userId = Auth::id();

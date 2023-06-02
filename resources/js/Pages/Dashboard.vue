@@ -41,7 +41,7 @@ function getRemainingDays(dateFrom, dateTo) {
 
     const days = duration.asDays();
 
-    return Math.ceil(days - 1);
+    return Math.ceil(days);
 
 }
 const currentDate = new Date();
@@ -185,24 +185,21 @@ export default {
                                 </div>
                                 <div v-for="event in events.data"
                                      :key="event.id">
-
                                     <div class="calendar-details" v-if="month == moment(event.dateFrom).format('MMMM')">
-
                                         <p style="font-size: 10px" v-if="event.timeFrom !== null">{{ event.timeFrom }}
                                             {{ event.timeTo }}</p>
                                         <div class="calendar-box  normal-bg">
                                             <div class="calandar-event-name">
-                                                <div class="event-square" :class="getRemainingDays(formattedDate, event.dateTo) > 15 ? 'green' : getRemainingDays(currentDay, event.dateTo) < 7 ? 'red' : 'yellow'">
-                                                    <strong>{{ getRemainingDays(formattedDate, event.dateTo) }}</strong>
+                                                <div class="event-square" :class="getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) > 15 ? 'green' : getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 7 ? 'red' : 'yellow'">
+                                                    <strong>{{ getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) }}</strong>
                                                 </div>
                                                 <h4>{{ event.title }}</h4>
-                                                <h5>{{ event.title }}</h5>
+                                                <h5>{{ moment(formattedDate).format('YYYY MMMM DD') }}</h5>
                                             </div>
-                                            <span>{{ event.dateFrom }} - {{ event.dateTo }}</span>
+                                            <span> {{ event.dateFrom }} {{ event.dateTo !== null ?'to' : '' }} {{ event.dateTo }}</span>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

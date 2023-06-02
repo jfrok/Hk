@@ -7,8 +7,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 const form = useForm({
     name: '',
     email: '',
-    arabic: '',
-    english: '',
+    lang: '',
     password: '',
     password_confirmation: '',
     terms: false,
@@ -121,11 +120,21 @@ export default {
                                     </Link>
                                     <!--                                        <a href="forgot-password.html">Forgot Password?</a>-->
                                 </div>
-<!--                                <v-radio-group>-->
-<!--                                    <v-radio label="English" v-model="form.english"></v-radio>-->
-<!--                                    <v-radio label="Arabic" v-model="form.arabic"></v-radio>-->
-<!--                                </v-radio-group>-->
-
+                                <v-radio-group
+                                    v-model="form.lang"
+                                    column
+                                >
+                                <v-radio
+                                    label="English"
+                                    color="red-darken-3"
+                                    value="english"
+                                ></v-radio>
+                                <v-radio
+                                    label="Arabic"
+                                    color="indigo"
+                                    value="arabic"
+                                ></v-radio>
+                                </v-radio-group>
                                 <div class="form-group">
                                     <PrimaryButton style="background-color: #0a53be" class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                         Register

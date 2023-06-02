@@ -11,10 +11,11 @@ import {eventDetails} from "@/Pages/Calendar/TestCalendar";
 import {eventEditDetails} from "@/Pages/Calendar/EditCalendar";
 import Modal from "@/Components/Modal.vue";
 import moment from 'moment';
-import {console} from "vuedraggable/src/util/helper";
 
 let allEvents = []
 let dataToRender = []
+
+
 export default defineComponent({
     layout: AuthenticatedLayout,
     props: {
@@ -34,9 +35,8 @@ export default defineComponent({
         const { page } = usePage();
         const calendarRef = ref(null);
 
+
         const handleEventDrop = (eventDropInfo) => {
-            // console.log(eventDropInfo.event)
-            // console.log(eventDropInfo.event.end)
             const eventId = eventDropInfo.event.id;
             const newStart = moment(eventDropInfo.event.start).format('YYYY-MM-DD')
             const newEnd = moment(eventDropInfo.event.end).format('YYYY-MM-DD')
@@ -65,15 +65,19 @@ export default defineComponent({
         watch(() => eventDetails, ($eventDetails) => {
             // console.log( moment($eventDetails.value[$eventDetails.value.length - 1].start).format('HH:mm'))
             if (moment($eventDetails.value[$eventDetails.value.length - 1].start).format('HH:mm') !== '00:00') {
-                console.log('is 0')
                 form.timeFrom = moment($eventDetails.value[$eventDetails.value.length - 1].start).format('HH:mm')
                 form.timeTo = moment($eventDetails.value[$eventDetails.value.length - 1].end).format('HH:mm')
             } else {
                 form.timeFrom = ''
                 form.timeTo = ''
             }
-            form.dateFrom = moment($eventDetails.value[$eventDetails.value.length - 1].start).format('YYYY-MM-DD')
-            form.dateTo = moment($eventDetails.value[$eventDetails.value.length - 1].end).format('YYYY-MM-DD')
+            if (moment($eventDetails.value[$eventDetails.value.length - 1].end).subtract(1,"days").format('YYYY-MM-DD') == moment($eventDetails.value[$eventDetails.value.length - 1].start).format('YYYY-MM-DD')) {
+                form.dateFrom = moment($eventDetails.value[$eventDetails.value.length - 1].start).format('YYYY-MM-DD')
+                form.dateTo = null;
+            }else {
+                form.dateFrom = moment($eventDetails.value[$eventDetails.value.length - 1].start).format('YYYY-MM-DD')
+                form.dateTo = moment($eventDetails.value[$eventDetails.value.length - 1].end).subtract(1,"days").format('YYYY-MM-DD')
+            }
         }, {deep: true})
 
         let editForm = useForm({
@@ -85,7 +89,7 @@ export default defineComponent({
             dateTo: eventEditDetails.value[1],
         })
         watch(() => eventEditDetails, ($eventEditDetails) => {
-             let lastArry = $eventEditDetails.value[$eventEditDetails.value.length - 1]
+            let lastArry = $eventEditDetails.value[$eventEditDetails.value.length - 1]
             editForm.eId = lastArry.id
             editForm.title = lastArry.title
             editForm.timeFrom = lastArry.extendedProps.timeFrom
@@ -99,9 +103,11 @@ export default defineComponent({
             $.get('/calendar/events', (data) => {
                 dataToRender = data.events.map(x => {
                     x.start = x.timeFrom ? `${x.dateFrom}T${x.timeFrom}` : x.dateFrom;
-                    x.end = x.timeTo ? `${x.dateFrom}T${x.timeTo}` : x.dateTo;
+                    x.end = x.timeTo ? `${x.dateTo}T${x.timeTo}` : x.dateTo;
                     if (!x.timeFrom) {
-                        x.allDay = true;
+                        x.start =  `${x.dateFrom}`
+                        x.end =  `${x.dateTo}T23:59:00`;
+                        document.querySelector('.fc-event-time').style.display = 'none';
                     }
                     return x;
                 });
@@ -130,7 +136,6 @@ export default defineComponent({
         };
 
         let update = async () => {
-            console.log(editForm.data().eId)
             await editForm.post(route('calendar.update', editForm.data().eId), {
                 preserveScroll: true,
                 // onStart: () => Spinner.content({content:"Saving Settings..."}),
@@ -145,7 +150,6 @@ export default defineComponent({
 
         };
         let remove = async () => {
-            console.log(editForm.data().eId)
             await editForm.post(route('calendar.remove', editForm.data().eId), {
                 onSuccess: () => {
                     // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
@@ -160,25 +164,13 @@ export default defineComponent({
     },
     data() {
 
-        let t = [
-            $.get('/calendar/events', function (data) {
-                let dataToRender = data.events.map(x => {
-                    x.start = x.dateFrom;
-                    x.end = x.dateTo;
-                    // if(!x.time_from){
-                    x.allDay = true;
-                    //  }
-                    return x;
-                });
-                // console.log(dataToRender)
-                // success(dataToRender);
-            })
-        ]
+
         // function testCalendar() {
         return {
             step: 1,
             dialog: false,
             calendarOptions: {
+
                 plugins: [
                     dayGridPlugin,
                     timeGridPlugin,
@@ -207,21 +199,20 @@ export default defineComponent({
                 eventRemove:
                 */
                 // initialEvents: t,
-
+                // eventDidMount: function(info) {
+                //     $(info.el).find(".fc-event-title").prepend("<b style='display: block'>"+getRemainingDays(info.event.dateTo)+"</b>");
+                // },
                 events: (info, success, fail) => {
                     $.get('/calendar/events', function (data) {
-                        // console.log(data)
-                        // ALL RIGHHTS RESEVED BY JAFAAAR!!!! 2023c
-
                         let dataToRender = data.events.map(x => {
                             x.start = x.timeFrom ? `${x.dateFrom}T${x.timeFrom}` : x.dateFrom;
-                            x.end = x.timeTo ? `${x.dateFrom}T${x.timeTo}` : x.dateTo;
+                            x.end = x.timeTo ? `${x.dateTo}T${x.timeTo}` : x.dateTo;
                             if (!x.timeFrom) {
-                                x.allDay = true;
+                                x.start =  `${x.dateFrom}`
+                                x.end =  `${x.dateTo}T23:59:00`;
                             }
                             return x;
                         });
-                        // console.log(dataToRender)
                         success(dataToRender);
                     })
                 }
@@ -233,9 +224,26 @@ export default defineComponent({
     },
 
     methods: {
+        handleEventRender(info) {
+            const event = info.event
+console.log(info)
+            // Check if the event's title is '12a'
+            if (event.timeTo === '23:59:00') {
+                event.setProp('displayEventTime', false)
+            }
+        },
+         getRemainingDays(dateTo) {
+    const start = new Date();
+    const end = moment(dateTo);
+    const duration = moment.duration(end.diff(start));
+
+    const days = duration.asDays();
+
+    return Math.ceil(days);
+
+},
 
         openAddEventModal() {
-            // Reset the form data
             this.form.title = '';
             this.form.timeFrom = '';
             this.form.timeTo = '';
@@ -252,7 +260,6 @@ export default defineComponent({
             eventDetails.value.push(selectInfo)
             // eventDetails.value.push(selectInfo.startStr, selectInfo.endStr)
 
-            console.log(selectInfo)
             $('#con-close-modal').modal('show')
         },
 
@@ -452,7 +459,7 @@ export default defineComponent({
             <div class="card">
                 <div class="card-body">
                     <div class='demo-app-main'>
-                        <FullCalendar id="calendar" ref="calendar" v-on:update-calendar="updateCalendar"  @eventDrop="handleEventDrop" :options="calendarOptions"/>
+                        <FullCalendar id="calendar" ref="calendar" v-on:update-calendar="updateCalendar"  :event-render="handleEventRender" @eventDrop="handleEventDrop"  :options="calendarOptions"/>
                     </div>
                 </div>
             </div>

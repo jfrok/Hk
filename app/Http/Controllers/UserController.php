@@ -70,7 +70,7 @@ class UserController extends Controller
     }
     public function createAccount(Request $request)
     {
-        dd($request->all());
+//        dd($request->all());
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -111,8 +111,16 @@ class UserController extends Controller
         }
         return redirect()->route('dashboard')->with('success', 'Account created successfully.');
     }
-    public function clearNotifications()
+    public function clearNotifications(Request $request)
     {
-     Notifications::where('userId',Auth::id())->delete();
+        $notificationId = $request->query('notificationId');
+        if ($notificationId) {
+           Notifications::where('userId', Auth::id())->where('id', $notificationId)->delete();
+        } else {
+             Notifications::where('userId', Auth::id())->delete();
+        }
+
+        // Rest of your code...
     }
+
 }
