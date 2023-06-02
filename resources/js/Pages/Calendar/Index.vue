@@ -107,7 +107,6 @@ export default defineComponent({
                     if (!x.timeFrom) {
                         x.start =  `${x.dateFrom}`
                         x.end =  `${x.dateTo}T23:59:00`;
-                        document.querySelector('.fc-event-time').style.display = 'none';
                     }
                     return x;
                 });
