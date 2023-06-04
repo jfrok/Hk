@@ -17,7 +17,7 @@ defineProps({
 });
 
 const form = useForm({
-    email: '',
+    name: '',
     password: '',
     remember: false,
 });
@@ -58,24 +58,24 @@ const submit = () => {
                         </div>
                         <div class="login-right">
                             <div class="login-right-wrap">
-                                <h1>Welcome to Preskool</h1>
+                                <h1>Welcome to JfrO</h1>
                                 <p class="account-subtitle">Need an account? <Link :href="route('register')">Sign Up</Link></p>
                                 <h2>Sign in</h2>
 
                                 <form @submit.prevent="submit">
                                     <div class="form-group">
-                                        <label>Username <span class="login-danger">*</span></label>
+                                        <label>Username / Email <span class="login-danger">*</span></label>
                                         <TextInput
-                                            id="email"
-                                            type="email"
+                                            id="name"
+                                            type="text"
                                             class="form-control"
-                                            v-model="form.email"
+                                            v-model="form.name"
                                             required
                                             autofocus
                                             autocomplete="username"
                                         />
 
-                                        <InputError class="mt-2" :message="form.errors.email" />
+                                        <InputError class="mt-2" :message="form.errors.name" />
                                         <span class="profile-views"><i class="fas fa-user-circle"></i></span>
                                     </div>
                                     <div class="form-group">

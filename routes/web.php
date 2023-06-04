@@ -43,6 +43,7 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
 //    Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
     Route::get('/account/overview', [\App\Http\Controllers\UserController::class, 'accounts'])->name('account.overview');
     Route::get('/dashboard',[\App\Http\Controllers\Controller::class,'dashboard'])->name('dashboard');
+    Route::post('/change-language', [\App\Http\Controllers\UserController::class,'changeLanguage']);
 
 
     /// Projects
@@ -86,7 +87,11 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::post('/groupDelete', [\App\Http\Controllers\Controller::class, 'groupDelete'])->name('trash.groupDelete');
     Route::post('/restore/{pId}', [\App\Http\Controllers\Controller::class, 'restore'])->name('restore');
     Route::post('/force-delete/{pId}', [\App\Http\Controllers\Controller::class, 'forceDelete'])->name('forceDelete');
-
+    Route::post('/set-locale', function (Illuminate\Http\Request $request) {
+        $locale = $request->input('locale');
+        session(['locale' => $locale]); // Store the selected locale in the session
+        return response()->json(['success' => true]);
+    })->name('setLocale');
 /// Settings
 //Route::prefix('settings')->group(function () {
     Route::get('settings',[SettingsController::class,'settings'])->name('settings.overview');

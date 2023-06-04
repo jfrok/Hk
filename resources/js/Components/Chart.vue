@@ -5,6 +5,7 @@ export default {
     props:{
         p:Array,
         count:Array,
+        eventCount:Array,
     },
     data: function() {
         return {
@@ -17,9 +18,13 @@ export default {
                 }
             },
             series: [{
-                name: 'series-1',
-                data: this.count
-            }]
+                name: 'projects',
+                data: this.count,
+            },
+                {
+                    name: 'events',
+                    data: this.eventCount
+                }]
         }
     }
 }

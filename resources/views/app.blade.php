@@ -12,13 +12,13 @@
         <!-- Add to homescreen for Chrome on Android -->
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="application-name" content="Jhdevelopers">
-        <link rel="icon" sizes="512x512" href="{{asset('/images/icons/5.jpg')}}">
+        <link rel="icon" sizes="512x512" href="{{asset('/images/icons/4.jpg')}}">
 
         <!-- Add to homescreen for Safari on iOS -->
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
-        <meta name="apple-mobile-web-app-title" content="PWA">
-        <link rel="apple-touch-icon" href="/images/icons/icon-512x512.png">
+        <meta name="apple-mobile-web-app-title" content="Jhdevelopers">
+        <link rel="apple-touch-icon" href="{{asset('../images/icons/9.png')}}">
 
         <link href="{{asset('../images/icons/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image')}}"/>
         <link href="{{asset('../images/icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image')}}"/>
@@ -56,7 +56,8 @@
 
         <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <script src="{{asset('assets/js/feather.min.js')}}"></script>
-
+{{--        <script src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>--}}
+{{--        <script src="https://raw.githubusercontent.com/xsoh/moment-hijri/master/moment-hijri.js"></script>--}}
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <script src="{{asset('assets/js/script.js')}}"></script>

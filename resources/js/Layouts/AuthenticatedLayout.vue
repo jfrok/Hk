@@ -4,7 +4,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import {Link, router, usePage} from '@inertiajs/vue3';
 import FormatTime from "@/Components/FormatTime.vue";
 import ExpireAlert from "@/Components/ExpireAlert.vue";
-
+import axios from "axios";
 const showingNavigationDropdown = ref(false);
 
 const fullName = ref(usePage().props.auth.user.name);
@@ -78,7 +78,10 @@ const clearNotifications = (notificationId = null) => {
                 </a>
 
                 <ul class="nav user-menu">
-
+                    <select @change="changeLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="ar">العربية</option>
+                    </select>
 
                     <li class="nav-item dropdown noti-dropdown me-2">
                         <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">

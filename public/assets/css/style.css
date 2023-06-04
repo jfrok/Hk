@@ -10938,6 +10938,28 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 .hide {
     display: none!important;
 }
+@media (max-width: 500px) {
+    .fc .fc-toolbar.fc-header-toolbar {
+        margin-bottom: 1.5em;
+        font-size: 7px;
+    }
+    .fc .fc-view-harness {
+        flex-grow: 1;
+        position: relative;
+    }
+    tbody, td, tfoot, th, thead, tr {
+        border-color: inherit;
+        border-style: solid;
+        border-width: 0;
+        height:  70px;
+        width: 60px;
+    }
+
+    .fc-view-harness .fc-view-harness-active {
+        height:  470px;
+        width: 100%;
+    }
+}
 /*.fc-header-toolbar .fc-toolbar .fc-toolbar-ltr .fc-toolbar-chunk{*/
 /*    font-size: 10px;*/
 /*    width: 30px;*/

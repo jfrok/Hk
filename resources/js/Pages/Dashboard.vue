@@ -1,14 +1,30 @@
 <script setup>
 import {Head} from '@inertiajs/vue3';
 import Chart from "@/Components/Chart.vue";
-import moment from "moment";
 import {Link} from "@inertiajs/vue3";
 import CreateAccount from "@/Components/CreateAccount.vue";
 import {computed, defineComponent} from "vue";
+import { ref, onMounted } from 'vue';
+import moment from 'moment';
+import 'moment/locale/ar';
+
+const gregorianDate = ref('2023-10-15');
+const hijriDate = ref('15/11/1444');
+
+onMounted(() => {
+    formatDateToHijri();
+});
+
+function formatDateToHijri() {
+    const formattedDate = moment(gregorianDate.value, 'YYYY-MM-DD').locale('ar').format('iD iMMMM iYYYY');
+    hijriDate.value = formattedDate;
+    console.log(formattedDate)
+}
 let props = defineProps({
     projects: Object,
     events: Array,
     p:Array,
+    eventCount:Array,
     count:Array,
     totalEvents: Number,
     totalProjects: Number,
@@ -46,6 +62,7 @@ function getRemainingDays(dateFrom, dateTo) {
 }
 const currentDate = new Date();
 const formattedDate = currentDate;
+
 </script>
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -101,12 +118,12 @@ export default {
                             <div class="card-header">
                                 <div class="row align-items-center">
                                     <div class="col-6">
-                                        <h5 class="card-title">Projects Activity</h5>
+                                        <h5 class="card-title">Activity's</h5>
                                     </div>
                                     <div class="col-6">
                                         <ul class="chart-list-out">
-                                            <li><span class="circle-blue"></span>Teacher</li>
-                                            <li><span class="circle-green"></span>Students</li>
+<!--                                            <li><span class="circle-blue"></span>Teacher</li>-->
+<!--                                            <li><span class="circle-green"></span>Students</li>-->
 
                                         </ul>
                                     </div>
@@ -114,7 +131,7 @@ export default {
                             </div>
                             <div class="card-body">
                                 <!--                                <div id="school-area"></div>-->
-                                <Chart :p="$page.props.p" :count="$page.props.count"/>
+                                <Chart :p="$page.props.p" :count="$page.props.count" :eventCount="$page.props.eventCount"/>
                             </div>
                         </div>
                     </div>
