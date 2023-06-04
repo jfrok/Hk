@@ -78,10 +78,10 @@ const clearNotifications = (notificationId = null) => {
                 </a>
 
                 <ul class="nav user-menu">
-                    <select @change="changeLanguage(this.value)">
-                        <option value="en">English</option>
-                        <option value="ar">العربية</option>
-                    </select>
+<!--                    <select @change="changeLanguage(this.value)">-->
+<!--                        <option value="en">English</option>-->
+<!--                        <option value="ar">العربية</option>-->
+<!--                    </select>-->
 
                     <li class="nav-item dropdown noti-dropdown me-2">
                         <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
