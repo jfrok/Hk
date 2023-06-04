@@ -4,23 +4,8 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import {Link, router, usePage} from '@inertiajs/vue3';
 import FormatTime from "@/Components/FormatTime.vue";
 import ExpireAlert from "@/Components/ExpireAlert.vue";
-
+import axios from "axios";
 const showingNavigationDropdown = ref(false);
-// computed: {
-//     return $page.
-// }
-// let props = defineProps({
-//     notie:Array,
-// })
-let speakers = [
-    {id: usePage().props.auth.user.id, user: {name: usePage().props.auth.user.name}},   // FB
-
-]
-
-function speakerInitials() {
-    const name = usePage().props.auth.user.name.split(' ')
-    return `${name[0].charAt(0)}${name[1] ? name[1].charAt(0) : ''}`;
-}
 
 const fullName = ref(usePage().props.auth.user.name);
 const initials = ref('');
@@ -35,37 +20,30 @@ function setInitials() {
     initials.value = initialsValue;
 }
 
-let notifications = usePage().props.auth.notifications
+const notifications = ref(usePage().props.auth.notifications);
 
-function formatTime(created_at) {
-    const now = new Date();
-    const createdAtDate = new Date(created_at);
+const clearNotifications = (notificationId = null) => {
+    console.log(notificationId)
+    const url = notificationId ? route('clearNotifications', { notificationId }) : route('clearNotifications');
 
-    // Calculate the time difference in milliseconds
-    const timeDiff = now - createdAtDate;
-
-    // Convert the time difference to minutes
-    const minutesDiff = Math.floor(timeDiff / (1000 * 60));
-
-    if (minutesDiff < 1) {
-        return 'Just now';
-    } else if (minutesDiff < 60) {
-        return `${minutesDiff} minutes ago`;
-    } else if (minutesDiff < 1440) {
-        const hoursDiff = Math.floor(minutesDiff / 60);
-        return `${hoursDiff} hour${hoursDiff > 1 ? 's' : ''} ago`;
-    } else {
-        const daysDiff = Math.floor(minutesDiff / 1440);
-        return `${daysDiff} day${daysDiff > 1 ? 's' : ''} ago`;
-    }
-}
-const clearNotifications = () => {
-    router.post(route('clearNotifications'),)
-    }
+    router.post(url, {
+        onSuccess: () => {
+            if (notificationId) {
+                // Remove the single notification by ID
+                notifications.value = notifications.value.filter(
+                    (notification) => notification.id !== notificationId
+                );
+            } else {
+                // Remove all notifications
+                notifications.value = [];
+            }
+        },
+    });
+};
 
 </script>
 <template>
-<!--    <ExpireAlert />-->
+    <!--    <ExpireAlert />-->
 
     <div>
 
@@ -76,7 +54,9 @@ const clearNotifications = () => {
                 <div class="header-left">
                     <Link v-if="$page.props.auth.user"
                           :href="route('dashboard')" class="logo">
-                        <!--                        <img src="assets/img/logo.png" alt="Logo">-->
+                        <!--                                                <img src="assets/img/logo.png" alt="Logo">-->
+
+                        <h6>Beta v0.0.3</h6>
                     </Link>
                     <!--                    <a href="index.html" class="logo logo-small">-->
                     <!--&lt;!&ndash;                        <img src="assets/img/logo-small.png" alt="Logo" width="30" height="30">&ndash;&gt;-->
@@ -98,54 +78,60 @@ const clearNotifications = () => {
                 </a>
 
                 <ul class="nav user-menu">
-
+<!--                    <select @change="changeLanguage(this.value)">-->
+<!--                        <option value="en">English</option>-->
+<!--                        <option value="ar">العربية</option>-->
+<!--                    </select>-->
 
                     <li class="nav-item dropdown noti-dropdown me-2">
                         <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
                             <!--                            <img src="assets/img/icons/header-icon-05.svg" alt="">-->
-                            <span class="notification-badge" v-if="notifications.length > 0">{{ notifications.length }}</span>
+                            <span class="notification-badge" v-if="notifications.length > 0">{{
+                                    notifications.length
+                                }}</span>
 
                             <i class="feather-bell"></i>
                         </a>
                         <div class="dropdown-menu notifications">
                             <div class="topnav-dropdown-header">
                                 <span class="notification-title">Notifications</span>
-                                <a href="javascript:void(0)" methods="post" @click="clearNotifications" class="clear-noti"> Clear All </a>
+                                <a href="javascript:void(0)" methods="post" @click="clearNotifications()"
+                                   class="clear-noti"> Clear All </a>
                             </div>
                             <div class="noti-content" v-if="notifications.length > 0">
                                 <ul class="notification-list">
 
-                                    <li class="notification-message" v-for="notification in notifications" :key="notification.id">
-
-                                        <a href="#"  >
-                                            <div class="media d-flex" >
-                                            <span class="avatar avatar-sm flex-shrink-0">
-                                                <img class="avatar-img rounded-circle" alt="User Image"
-                                                     src="https://i.postimg.cc/fLHg7Wx1/system2.webp">
-                                            </span>
-                                                <div class="media-body flex-grow-1"
-                                                     >
-                                                    <p class="noti-details"><span
-                                                        class="noti-title">{{ notification.title }}</span> has
-                                                        approved <span class="noti-title">{{
-                                                                notification.message
-                                                            }}</span></p>
-                                                    <p class="noti-time"><span
-                                                        class="notification-time"><FormatTime :time="notification.created_at"/></span>
+                                    <li class="notification-message" v-for="notification in notifications"
+                                        :key="notification.id">
+                                        <a href="#">
+                                            <div class="media d-flex">
+          <span class="avatar avatar-sm flex-shrink-0">
+            <img class="avatar-img rounded-circle" alt="User Image" src="https://i.postimg.cc/fLHg7Wx1/system2.webp">
+          </span>
+                                                <div class="media-body flex-grow-1">
+                                                    <p class="noti-details">
+                                                        <span class="noti-title">{{ notification.title }}</span> has
+                                                        approved
+                                                        <span class="noti-title">{{ notification.message }}</span>
+                                                    </p>
+                                                    <p class="noti-time">
+              <span class="notification-time">
+                <FormatTime :time="notification.created_at"/>
+              </span>
+                                                        <button class="clear-button" @click="clearNotifications(notification.id)">Clear</button>
                                                     </p>
                                                 </div>
                                             </div>
                                         </a>
+
                                     </li>
-
-
                                 </ul>
                             </div>
 
                             <v-alert v-else
-                                color="#2A3B4D"
-                                theme="dark"
-                                prominent
+                                     color="#2A3B4D"
+                                     theme="dark"
+                                     prominent
                             >
                                 You have no notification
                             </v-alert>
@@ -176,15 +162,15 @@ const clearNotifications = () => {
                         </a>
                         <div class="dropdown-menu">
                             <div class="user-header">
-<!--                                <div class="avatar avatar-sm" v-if="$page.props.auth.user.avatar">-->
-<!--                                    <img :src="$page.props.auth.user.avatar" alt="User Image"-->
-<!--                                         class="avatar-img rounded-circle">-->
+                                <!--                                <div class="avatar avatar-sm" v-if="$page.props.auth.user.avatar">-->
+                                <!--                                    <img :src="$page.props.auth.user.avatar" alt="User Image"-->
+                                <!--                                         class="avatar-img rounded-circle">-->
 
-<!--                                </div>-->
-<!--                                <div  v-else>-->
+                                <!--                                </div>-->
+                                <!--                                <div  v-else>-->
 
-<!--                                    <div id="profileImage avatar avatar-sm" >{{ initials }}</div>-->
-<!--                                </div>-->
+                                <!--                                    <div id="profileImage avatar avatar-sm" >{{ initials }}</div>-->
+                                <!--                                </div>-->
                                 <div class="user-text">
                                     <h6>{{ $page.props.auth.user.name }}</h6>
                                     <p class="text-muted mb-0">{{ $page.props.auth.user.job }}</p>
@@ -224,7 +210,8 @@ const clearNotifications = () => {
                                         class="menu-arrow"></span></Link>
                             </li>
                             <li class="submenu" :class="{'active':$page.component == 'Projects/Index'}">
-                                <Link :href="route('project.overview')"><i class="fas fa-server"></i> <span> Projects</span>
+                                <Link :href="route('project.overview')"><i class="fas fa-server"></i>
+                                    <span> Projects</span>
                                     <span
                                         class="menu-arrow"></span></Link>
                             </li>

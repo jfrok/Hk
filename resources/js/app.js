@@ -7,19 +7,13 @@ import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
 import {router} from "@inertiajs/vue3";
 import FullCalendar from "@fullcalendar/vue3";
-import VueSweetalert2 from 'vue-sweetalert2';
-// import 'sweetalert2/dist/sweetalert2.min.css';
 import Antd from 'ant-design-vue';
-// import App from './App';
 import 'ant-design-vue/dist/antd.css';
-import VueApexCharts from "vue-apexcharts";
 import Vue3Apexcharts from "vue3-apexcharts/src/vue3-apexcharts";
-// Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/dist/vuetify.css'
-
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'

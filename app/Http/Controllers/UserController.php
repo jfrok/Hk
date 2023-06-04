@@ -16,13 +16,19 @@ use Inertia\Inertia;
 class UserController extends Controller
 {
     //
- public function accounts(){
-     return Inertia::render('Accounts/Index');
- }
+    public function accounts()
+    {
+        $users = User::all();
+        return \inertia('Accounts/Overview',
+            [
+                'users' => $users
+            ]);
+    }
+
     public function updateProfile(ProfileUpdateRequest $request)
     {
-       // dd($request->all());
-        if ($request->file('img') != null){
+        // dd($request->all());
+        if ($request->file('img') != null) {
 
             $imageName = $request->file('img')->getClientOriginalName();
         }
@@ -42,6 +48,7 @@ class UserController extends Controller
         }
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
+
     public function updateProfileSkills(Request $request)
     {
         $chips = $request->input('chips', []); // Get the chips array from the request
@@ -54,6 +61,7 @@ class UserController extends Controller
             ]);
         }
     }
+
     public function removeSkill($skillId)
     {
         // Find the skill by its ID
@@ -68,15 +76,21 @@ class UserController extends Controller
 
         return back()->with('message', 'Skill not found', 404);
     }
+
     public function createAccount(Request $request)
     {
-        dd($request->all());
+//        dd($request->all());
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:users|regex:/^[^\s]+$/',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
             'img' => 'image|mimes:jpeg,png,jpg|max:2048|nullable',
-        ]);
+        ],
+            [
+                'name.required' => 'The username field is required.',
+                'name.unique' => 'The username has already been taken.',
+                'name.regex' => 'The username must not contain spaces.',
+            ]);
         $imageName = null;
         if ($request->img !== null) {
             $imageName = $request->img->getClientOriginalName();
@@ -95,15 +109,15 @@ class UserController extends Controller
         if ($imageName !== null) {
             $user->avatar = '/img/avatar/' . $imageName;
         }
-        if($user->save()){
+        if ($user->save()) {
             $string = 'xSf1pvnMobVx15mjcCKS';
             $shuffled = str_shuffle($string);
             $setting = new Setting();
             $setting->userId = $user->id;
             $setting->api_token = $shuffled;
             $setting->save();
-            Notifications::pushNotifications($user->id,'System','Your subscription will expire in '.$user->subscription_end_date->format('Y M d').'.');
-            if (Auth::id() == null){
+            Notifications::pushNotifications($user->id, 'System', 'Your subscription will expire in ' . $user->subscription_end_date->format('Y M d') . '.');
+            if (Auth::id() == null) {
                 event(new Registered($user));
                 Auth::login($user);
                 return redirect(RouteServiceProvider::HOME);
@@ -111,8 +125,23 @@ class UserController extends Controller
         }
         return redirect()->route('dashboard')->with('success', 'Account created successfully.');
     }
-    public function clearNotifications()
+
+    public function clearNotifications(Request $request)
     {
-     Notifications::where('userId',Auth::id())->delete();
+        $notificationId = $request->query('notificationId');
+        if ($notificationId) {
+            Notifications::where('userId', Auth::id())->where('id', $notificationId)->delete();
+        } else {
+            Notifications::where('userId', Auth::id())->delete();
+        }
+
+    }
+
+    public function changeLanguage(Request $request)
+    {
+
+        $locale = $request->input('locale');
+
+        session()->put('locale', $locale);
     }
 }

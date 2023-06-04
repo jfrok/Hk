@@ -1,14 +1,30 @@
 <script setup>
 import {Head} from '@inertiajs/vue3';
 import Chart from "@/Components/Chart.vue";
-import moment from "moment";
 import {Link} from "@inertiajs/vue3";
 import CreateAccount from "@/Components/CreateAccount.vue";
 import {computed, defineComponent} from "vue";
+import { ref, onMounted } from 'vue';
+import moment from 'moment';
+import 'moment/locale/ar';
+
+const gregorianDate = ref('2023-10-15');
+const hijriDate = ref('15/11/1444');
+
+onMounted(() => {
+    formatDateToHijri();
+});
+
+function formatDateToHijri() {
+    const formattedDate = moment(gregorianDate.value, 'YYYY-MM-DD').locale('ar').format('iD iMMMM iYYYY');
+    hijriDate.value = formattedDate;
+    console.log(formattedDate)
+}
 let props = defineProps({
     projects: Object,
     events: Array,
     p:Array,
+    eventCount:Array,
     count:Array,
     totalEvents: Number,
     totalProjects: Number,
@@ -41,11 +57,12 @@ function getRemainingDays(dateFrom, dateTo) {
 
     const days = duration.asDays();
 
-    return Math.ceil(days - 1);
+    return Math.ceil(days);
 
 }
 const currentDate = new Date();
 const formattedDate = currentDate;
+
 </script>
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -101,12 +118,12 @@ export default {
                             <div class="card-header">
                                 <div class="row align-items-center">
                                     <div class="col-6">
-                                        <h5 class="card-title">Projects Activity</h5>
+                                        <h5 class="card-title">Activity's</h5>
                                     </div>
                                     <div class="col-6">
                                         <ul class="chart-list-out">
-                                            <li><span class="circle-blue"></span>Teacher</li>
-                                            <li><span class="circle-green"></span>Students</li>
+<!--                                            <li><span class="circle-blue"></span>Teacher</li>-->
+<!--                                            <li><span class="circle-green"></span>Students</li>-->
 
                                         </ul>
                                     </div>
@@ -114,7 +131,7 @@ export default {
                             </div>
                             <div class="card-body">
                                 <!--                                <div id="school-area"></div>-->
-                                <Chart :p="$page.props.p" :count="$page.props.count"/>
+                                <Chart :p="$page.props.p" :count="$page.props.count" :eventCount="$page.props.eventCount"/>
                             </div>
                         </div>
                     </div>
@@ -185,24 +202,21 @@ export default {
                                 </div>
                                 <div v-for="event in events.data"
                                      :key="event.id">
-
                                     <div class="calendar-details" v-if="month == moment(event.dateFrom).format('MMMM')">
-
                                         <p style="font-size: 10px" v-if="event.timeFrom !== null">{{ event.timeFrom }}
                                             {{ event.timeTo }}</p>
                                         <div class="calendar-box  normal-bg">
                                             <div class="calandar-event-name">
-                                                <div class="event-square" :class="getRemainingDays(formattedDate, event.dateTo) > 15 ? 'green' : getRemainingDays(currentDay, event.dateTo) < 7 ? 'red' : 'yellow'">
-                                                    <strong>{{ getRemainingDays(formattedDate, event.dateTo) }}</strong>
+                                                <div class="event-square" :class="getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) > 15 ? 'green' : getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 7 ? 'red' : 'yellow'">
+                                                    <strong>{{ getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) }}</strong>
                                                 </div>
                                                 <h4>{{ event.title }}</h4>
-                                                <h5>{{ event.title }}</h5>
+                                                <h5>{{ moment(formattedDate).format('YYYY MMMM DD') }}</h5>
                                             </div>
-                                            <span>{{ event.dateFrom }} - {{ event.dateTo }}</span>
+                                            <span> {{ event.dateFrom }} {{ event.dateTo !== null ?'to' : '' }} {{ event.dateTo }}</span>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

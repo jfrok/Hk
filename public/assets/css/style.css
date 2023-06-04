@@ -26,7 +26,7 @@ html {
 body {
     background-color: #f7f7fa;
     color: #333;
-    font-family: roboto, sans-serif;
+    font-family: roboto, sans-serif,"Amiri", serif;
     font-size: 15px;
     height: 100%;
     line-height: 1.5;
@@ -3108,16 +3108,23 @@ footer p {
 
 .notifications {
     padding: 0
-}
 
+}
+.clear-button {
+    margin-left: auto;
+    position: relative;
+    float: right;
+}
 .notifications .notification-time {
     font-size: 12px;
     line-height: 1.35;
+
     color: #bdbdbd
 }
 
 .notifications .media {
     margin-top: 0;
+
     border-bottom: 1px solid #f5f5f5
 }
 
@@ -10927,6 +10934,31 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 }
 .yellow{
     background-color: #ffb72c;
+}
+.hide {
+    display: none!important;
+}
+@media (max-width: 500px) {
+    .fc .fc-toolbar.fc-header-toolbar {
+        margin-bottom: 1.5em;
+        font-size: 7px;
+    }
+    .fc .fc-view-harness {
+        flex-grow: 1;
+        position: relative;
+    }
+    tbody, td, tfoot, th, thead, tr {
+        border-color: inherit;
+        border-style: solid;
+        border-width: 0;
+        height:  70px;
+        width: 60px;
+    }
+
+    .fc-view-harness .fc-view-harness-active {
+        height:  470px;
+        width: 100%;
+    }
 }
 /*.fc-header-toolbar .fc-toolbar .fc-toolbar-ltr .fc-toolbar-chunk{*/
 /*    font-size: 10px;*/

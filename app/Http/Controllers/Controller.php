@@ -26,6 +26,7 @@ class Controller extends BaseController
 
         $p = [];
         $count = [];
+        $eventCount = [];
         // If you want just dates
         // Iterate over the period and create push to array
         foreach ($period as $date) {
@@ -39,14 +40,23 @@ class Controller extends BaseController
                 array_push($count,  0);
             }
 }
-
+        foreach ($p as $pd){
+            if (Event::where('userId',Auth::id())->whereDate('created_at', \Carbon\Carbon::parse($pd))->count() > 0 || !\Carbon\Carbon::parse($pd)->isFuture()){
+                array_push($eventCount,  Event::where('userId',Auth::id())->whereDate('created_at', \Carbon\Carbon::parse($pd))->count());
+            }else{
+                array_push($eventCount,  0);
+            }
+        }
+        $translations = __('messages');
         return inertia('Dashboard', [
             'p' => $p,
             'count' => $count,
+            'eventCount' => $eventCount,
             'projects' => $projects,
             'events' => $events,
             'totalEvents' => $totalEvents,
-            'totalProjects' => $totalProjects
+            'totalProjects' => $totalProjects,
+            'translations' => $translations
         ]);
     }
 

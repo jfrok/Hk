@@ -6,21 +6,30 @@ import draggable from "vuedraggable";
 import format from "@popperjs/core/lib/utils/format";
 import EditContentModal from "@/Components/EditContentModal.vue";
 import {ref} from "vue";
+
 const showSpinner = ref(false);
+
 function alert(mesg) {
     toastr.success(mesg)
 }
+
 function alertError(mesg) {
     toastr.error(mesg)
 }
+
 export default {
     layout: AuthenticatedLayout,
     props: {
         // show: Array,
         // contents: Array,
     },
-    components: {EditContentModal, Head, Link,draggable},
-
+    components: {EditContentModal, Head, Link, draggable},
+    methods: {
+        goBack() {
+            // Go back one step in the browser history
+            window.history.length > 1 ? this.$inertia.visit(window.history.back()) : this.$inertia.visit('/');
+        },
+    },
 }
 
 </script>
@@ -33,16 +42,17 @@ export default {
         {{ alertError($page.props.ziggy.flash.error) }}
     </div>
     <div class="content container-fluid">
-        <Loader :show="showSpinner" color="blue"  />
+        <!--        <Loader :show="showSpinner" color="blue"  />-->
 
         <div class="blog-view">
             <div class="blog-single-post">
-                <a href="blog.html" class="back-btn"><i class="feather-chevron-left"></i> Back</a>
-                <div class="blog-image" >
+                <a href="javascript:void(0)" @click="goBack()" class="back-btn"><i class="feather-chevron-left"></i>
+                    Back</a>
+                <div class="blog-image">
                     <a href="javascript:void(0);">
                         <img alt=""
-                                                       :src="show.path"
-                                                       class="img-fluid" style="height:430px" ></a>
+                             :src="show.path"
+                             class="img-fluid" style="height:430px"></a>
                 </div>
             </div>
         </div>
@@ -91,7 +101,7 @@ export default {
                         </div>
 
                         <div class="table-responsive">
-<!--                            <form @submit.prevent="groupDelete">-->
+                            <!--                            <form @submit.prevent="groupDelete">-->
                             <v-alert v-if="contents.length < 1"
                                      type="info"
                                      title="No data founded"
@@ -99,12 +109,13 @@ export default {
                                      variant="tonal"
                             ></v-alert>
                             <table v-else
-                                class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                                   class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
                                 <thead class="student-thread blue-background-class">
                                 <tr>
                                     <th>
                                         <div class="form-check check-tables">
-                                            <input class="form-check-input" v-model="groupDeleteForm.checkIfAllSelected" @change="selectAll" id="checkAll" type="checkbox">                                        </div>
+                                            <input class="form-check-input" v-model="groupDeleteForm.checkIfAllSelected"
+                                                   @change="selectAll" id="checkAll" type="checkbox"></div>
                                     </th>
                                     <th>Type</th>
                                     <th>Title</th>
@@ -114,17 +125,20 @@ export default {
                                 </tr>
                                 </thead>
 
-                                <tbody id="sortable" >
+                                <tbody id="sortable">
 
                                 <tr v-for="content in contents"
-                                    :key="content.id"  >
+                                    :key="content.id">
 
                                     <td>
                                         <input type="hidden" id="contentIds" name="contentIds[]" :value="content.id">
                                         <div class="form-check check-tables">
-<!--                                            <input class="form-check-input" id="cIds" name="cIds" v-model="groupDeleteForm.cIds"  type="checkbox" :value="content.id" @change="event => updateSelectedContentIds(event.target.checked, content.id)">                                        </div>-->
-                                            <input class="form-check-input" id="cIds" name="cIds"   v-model="groupDeleteForm.selectedContentIds" type="checkbox" :value="content.id" @change="event => updateSelectedContentIds(event.target.checked, content.id)">
-<!--                                            <input type="text" v-model="groupDeleteForm.allContentIds">-->
+                                            <!--                                            <input class="form-check-input" id="cIds" name="cIds" v-model="groupDeleteForm.cIds"  type="checkbox" :value="content.id" @change="event => updateSelectedContentIds(event.target.checked, content.id)">                                        </div>-->
+                                            <input class="form-check-input" id="cIds" name="cIds"
+                                                   v-model="groupDeleteForm.selectedContentIds" type="checkbox"
+                                                   :value="content.id"
+                                                   @change="event => updateSelectedContentIds(event.target.checked, content.id)">
+                                            <!--                                            <input type="text" v-model="groupDeleteForm.allContentIds">-->
                                         </div>
                                     </td>
                                     <td>{{ content.type }}</td>
@@ -134,7 +148,7 @@ export default {
                                             <a>{{ content.description }}</a>
                                         </h2>
                                     </td>
-                                    <td>{{content.path}}</td>
+                                    <td>{{ content.path }}</td>
                                     <td class="text-end">
                                         <div class="actions">
                                             <!--                                            <a href="javascript:;" class="btn btn-sm bg-success-light me-2">-->
@@ -156,10 +170,10 @@ export default {
                                 </tbody>
 
                             </table>
-                                <button v-if="contents.length > 1" class="btn btn-danger mt-5" @click="groupDelete"><span><i
-                                    class="feather-trash-2"></i></span></button>
+                            <button v-if="contents.length > 1" class="btn btn-danger mt-5" @click="groupDelete"><span><i
+                                class="feather-trash-2"></i></span></button>
 
-<!--                            </form>-->
+                            <!--                            </form>-->
                         </div>
                     </div>
                 </div>
@@ -174,12 +188,13 @@ export default {
 import {router, useForm} from "@inertiajs/vue3";
 import {allCids} from "@/Pages/Content/allCids";
 import Loader from "@/Components/Loader.vue";
+
 let props = defineProps({
-    show:Array,
+    show: Array,
     contents: Array,
 })
-$( function() {
-    $( "#sortable" ).sortable({
+$(function () {
+    $("#sortable").sortable({
         placeholder: "ui-state-highlight",
         update: function () {
             let contentIds = [];
@@ -222,11 +237,12 @@ function selectAll(event) {
         // selectedContentIds = [];
     }
 }
+
 let save = () => {
 
     const cId = document.getElementById('cId').value
 
-    form.post(route('content.save', cId),{
+    form.post(route('content.save', cId), {
         preserveScroll: true
 
     })
@@ -234,12 +250,12 @@ let save = () => {
 }
 let groupDeleteForm = useForm({
     checkIfAllSelected: Boolean,
-     pId: props.show.id,
+    pId: props.show.id,
     selectedContentIds: selectedContentIds,
 });
 
 let groupDelete = () => {
-    groupDeleteForm.post(route('content.groupDelete'),{
+    groupDeleteForm.post(route('content.groupDelete'), {
         preserveScroll: true,
         onStart: () => {
             showSpinner.value = true;

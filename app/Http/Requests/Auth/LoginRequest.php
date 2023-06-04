@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Auth;
 
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +29,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'name' => ['required', 'string',],
             'password' => ['required', 'string'],
         ];
     }
@@ -41,17 +43,40 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $remember = $this->boolean('remember');
+        $credentials = $this->only('name', 'password');
+
+        // Check if the input is an email address
+        if (filter_var($credentials['name'], FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $credentials['name'];
+            unset($credentials['name']);
+        }
+
+        if (!Auth::attempt($credentials, $remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'name' => trans('auth.failed'),
             ]);
         }
 
         RateLimiter::clear($this->throttleKey());
     }
 
+    protected function getUserIpAddress(): string
+    {
+        $client = new Client();
+
+        try {
+            $response = $client->get('https://api.ipify.org');
+            $ipAddress = $response->getBody()->getContents();
+        } catch (\Exception $e) {
+            // Handle the exception if the request to the IP API fails
+            $ipAddress = 'Unknown';
+        }
+
+        return $ipAddress;
+    }
     /**
      * Ensure the login request is not rate limited.
      *
