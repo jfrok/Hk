@@ -79,8 +79,8 @@ class ContentController extends Controller
     public function create(Request $request, $pId)
     {
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+            'title' => '|max:2048',
+            'description' => 'required|max:6048',
         ]);
         $new = new Content();
         $new->project_id = $pId;

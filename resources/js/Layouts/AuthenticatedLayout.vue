@@ -44,18 +44,13 @@ const clearNotifications = (notificationId = null) => {
 </script>
 <template>
     <!--    <ExpireAlert />-->
-
     <div>
-
         <div class="main-wrapper">
-
             <div class="header">
-
                 <div class="header-left">
                     <Link v-if="$page.props.auth.user"
                           :href="route('dashboard')" class="logo">
                         <!--                                                <img src="assets/img/logo.png" alt="Logo">-->
-
                         <h6>Beta v0.0.3</h6>
                     </Link>
                     <!--                    <a href="index.html" class="logo logo-small">-->
@@ -76,13 +71,11 @@ const clearNotifications = (notificationId = null) => {
                 <a class="mobile_btn" id="mobile_btn" onclick="">
                     <i class="fas fa-bars"></i>
                 </a>
-
                 <ul class="nav user-menu">
 <!--                    <select @change="changeLanguage(this.value)">-->
 <!--                        <option value="en">English</option>-->
 <!--                        <option value="ar">العربية</option>-->
 <!--                    </select>-->
-
                     <li class="nav-item dropdown noti-dropdown me-2">
                         <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
                             <!--                            <img src="assets/img/icons/header-icon-05.svg" alt="">-->
@@ -238,11 +231,11 @@ const clearNotifications = (notificationId = null) => {
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="page-sub-header">
-                                    <h3 class="page-title">Welcome Admin!</h3>
+                                    <h3 class="page-title">Welcome {{ $page.props.auth.user.name }}!</h3>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a
                                             href="javascript:void(0)">{{ $page.component }}</a></li>
-                                        <li class="breadcrumb-item active">Admin</li>
+                                        <li class="breadcrumb-item active">{{ $page.props.auth.user.name }}</li>
                                     </ul>
                                 </div>
                             </div>

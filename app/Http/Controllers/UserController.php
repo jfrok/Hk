@@ -81,9 +81,9 @@ class UserController extends Controller
     {
 //        dd($request->all());
         $request->validate([
-            'name' => 'required|unique:users|regex:/^[^\s]+$/',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed',
+            'name' => 'required|unique:users|regex:/^[^\s]+$/|max:78',
+            'email' => 'required|email|unique:users|max:148',
+            'password' => 'required|confirmed|max:2048',
             'img' => 'image|mimes:jpeg,png,jpg|max:2048|nullable',
         ],
             [

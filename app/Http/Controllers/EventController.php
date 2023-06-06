@@ -11,7 +11,7 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::where('userId',Auth::id())->get();
-        return inertia('Calendar/Index', [
+        return inertia('Calendar/Overview', [
             'events' => $events->map(function ($event) {
                 return [
                     'id' => $event->id,
@@ -26,8 +26,8 @@ class EventController extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'dateFrom' => 'required',
+            'title' => 'required|max:2048',
+            'dateFrom' => 'required|max:148',
         ]);
        //  dd($request->all());
         $new = new Event();
