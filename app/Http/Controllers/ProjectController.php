@@ -13,7 +13,7 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
-        return \inertia('Projects/Index', [
+        return \inertia('Projects/Overview', [
             'projects' => $projects
 
         ]);
@@ -24,9 +24,11 @@ class ProjectController extends Controller
        // dd($request->all());
 
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'img' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'title' => 'required|max:2048',
+            'description' => 'required|max:6048',
+            'demoUrl' => 'nullable|max:6048',
+            'sourceUrl' => 'nullable|max:6048',
+            'img' => 'file|max:2048',
         ]);
         $imageName = $request->file('img')->getClientOriginalName();
         // $image = $request->file('img')->store('cases','public');

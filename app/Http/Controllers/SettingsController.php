@@ -24,7 +24,7 @@ class SettingsController extends Controller
 
         $apiRoutesNames = array_filter($apiRoutesNames);
         $apiToken = Setting::where('userId',Auth::id())->first();
-        return inertia('Settings/Index',[
+        return inertia('Settings/Overview',[
             'apiRoutes' => $apiRoutesNames,
             'apiToken' => $apiToken
         ]);
