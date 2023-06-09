@@ -10941,7 +10941,7 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 @media (max-width: 500px) {
     .fc .fc-toolbar.fc-header-toolbar {
         margin-bottom: 1.5em;
-        font-size: 7px;
+        font-size: 4px;
     }
     .fc .fc-view-harness {
         flex-grow: 1;
@@ -10958,6 +10958,13 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
     .fc-view-harness .fc-view-harness-active {
         height:  470px;
         width: 100%;
+    }
+    .fc .fc-view-harness-active>.fc-view {
+        bottom: -75px;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 }
 /*.fc-header-toolbar .fc-toolbar .fc-toolbar-ltr .fc-toolbar-chunk{*/

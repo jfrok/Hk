@@ -42,6 +42,7 @@ class EventController extends Controller
     }
     public function update($eId,Request $request)
     {
+//        dd($request->all());
          // dd($request->all());
         $update = Event::find($eId);
         $update->title = $request->title;

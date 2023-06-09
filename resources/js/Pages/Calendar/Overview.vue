@@ -2,7 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {defineComponent, ref, watch, getCurrentInstance} from "vue";
 import FullCalendar from "@fullcalendar/vue3";
-import {useForm, usePage} from "@inertiajs/vue3";
+import {router, useForm, usePage} from "@inertiajs/vue3";
 import EventModal from "@/Components/EventModal.vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -14,7 +14,7 @@ import moment from 'moment';
 
 let allEvents = []
 let dataToRender = []
-
+let resize = ref([])
 
 export default defineComponent({
     layout: AuthenticatedLayout,
@@ -88,8 +88,11 @@ export default defineComponent({
             dateFrom: eventEditDetails.value[0],
             dateTo: eventEditDetails.value[1],
         })
+        /// watch the range of the evnt if its change update it to the data base
         watch(() => eventEditDetails, ($eventEditDetails) => {
+
             let lastArry = $eventEditDetails.value[$eventEditDetails.value.length - 1]
+            console.log(lastArry.end)
             editForm.eId = lastArry.id
             editForm.title = lastArry.title
             editForm.timeFrom = lastArry.extendedProps.timeFrom
@@ -97,7 +100,24 @@ export default defineComponent({
             editForm.dateFrom = lastArry.extendedProps.dateFrom
             editForm.dateTo = lastArry.extendedProps.dateTo
         }, {deep: true})
+        // console.log(eventEditDetails.value[eventEditDetails.value.length - 1].end)
+        watch(() => resize.value[resize.value.length - 1], ($endDate) => {
+            editForm.eId = $endDate.event.id
+            editForm.title = $endDate.event.title
+            editForm.timeFrom = $endDate.event.extendedProps.timeFrom
+            editForm.timeTo = $endDate.event.extendedProps.timeTo
+            editForm.dateFrom = $endDate.event.extendedProps.dateFrom
+            editForm.dateTo = moment($endDate.event.end).subtract(1,"days").format('YYYY-MM-DD')
+            editForm.post(route('calendar.update', $endDate.event.id),{
+                preserveScroll: true,
+                onSuccess: () => {
 
+                    // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
+                    updateCalendar();
+
+                },
+            })
+        })
         function updateCalendar() {
             // Fetch updated events data from API or database
             $.get('/calendar/events', (data) => {
@@ -150,6 +170,7 @@ export default defineComponent({
         };
         let remove = async () => {
             await editForm.post(route('calendar.remove', editForm.data().eId), {
+                preserveScroll: true,
                 onSuccess: () => {
                     // استدعاء دالة التحديث هنا بعد إضافة البيانات إلى قاعدة البيانات
                     updateCalendar();
@@ -191,6 +212,7 @@ export default defineComponent({
                 select: this.handleDateSelect,
                 eventClick: this.handleEventClick,
                 eventDrop: this.handleEventDrop,
+                eventResize: this.handleEventResize,
                 // eventsSet: this.handleEvents
                 /* you can update a remote database when these fire:
                 eventAdd:
@@ -268,8 +290,11 @@ console.log(info)
             eventEditDetails.value.push(clickInfo.event)
             // }
         },
+        handleEventResize(info){
+            resize.value.push(info)
+        },
         handleEvents(events) {
-            // console.log(events)
+             console.log(events)
             this.currentEvents = events
         },
 
