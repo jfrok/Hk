@@ -51,7 +51,7 @@ const clearNotifications = (notificationId = null) => {
                     <Link v-if="$page.props.auth.user"
                           :href="route('dashboard')" class="logo">
                         <!--                                                <img src="assets/img/logo.png" alt="Logo">-->
-                        <h6>Beta v0.0.3</h6>
+                        <h6>Beta v0.0.5</h6>
                     </Link>
                     <!--                    <a href="index.html" class="logo logo-small">-->
                     <!--&lt;!&ndash;                        <img src="assets/img/logo-small.png" alt="Logo" width="30" height="30">&ndash;&gt;-->
