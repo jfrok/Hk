@@ -8,7 +8,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\SettingsController;
 use Inertia\Inertia;
-
+use Stichoza\GoogleTranslate\GoogleTranslate;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,6 +31,10 @@ Route::get('/', function () {
 
 });
 
+Route::get('translate' , function() {
+    $lang = new GoogleTranslate('en');
+    return $lang->setSource('en')->setTarget('ar')->translate('Hello World');
+});
 Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
 Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

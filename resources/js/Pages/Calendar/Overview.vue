@@ -31,7 +31,7 @@ export default defineComponent({
     mounted() {
         this.$nextTick(() => {
             const { props } = usePage();
-            const date = props.date ?? new Date();;
+            const date = props.date ?? new Date();
             this.$refs.calendar.getApi().gotoDate(date);
         });
     },
@@ -57,6 +57,7 @@ export default defineComponent({
                 dateFrom: newStart,
                 dateTo: newEnd ,
             })
+
             dropForm
                 .post(route('calendar.update', eventId),{
                     preserveScroll: true

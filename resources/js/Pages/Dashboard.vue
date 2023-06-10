@@ -254,7 +254,7 @@ export default {
                                                  :class="getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) > 15 ? 'green' : getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 7 ? 'red' : 'yellow'">
                                                 <strong>{{ getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) == 0 ? 'Today' : getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) }}</strong>
                                             </div>
-                                            <h4 @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
+                                            <h4 style="cursor: pointer" @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
 
                                             <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' يصادف يوم '+arabicDay(event.dateFrom) :  moment(event.dateFrom).format('dddd') }}</h5>
                                         </div>
@@ -280,7 +280,7 @@ export default {
                                             <div class="event-square" style="background-color: gray"
 >                                                <strong>{{getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) }}</strong>
                                             </div>
-                                            <h4 @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
+                                            <h4 style="cursor: pointer" @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
 
                                             <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' صادف يوم '+arabicDay(event.dateFrom) :  moment(event.dateFrom).format('dddd')}}</h5>
                                         </div>
