@@ -76,7 +76,7 @@ export default defineComponent({
                 form.dateTo = null;
             }else {
                 form.dateFrom = moment($eventDetails.value[$eventDetails.value.length - 1].start).format('YYYY-MM-DD')
-                form.dateTo = moment($eventDetails.value[$eventDetails.value.length - 1].end).subtract(1,"days").format('YYYY-MM-DD')
+                form.dateTo = moment($eventDetails.value[$eventDetails.value.length - 1].end).format('YYYY-MM-DD')
             }
         }, {deep: true})
 
@@ -107,7 +107,7 @@ export default defineComponent({
             editForm.timeFrom = $endDate.event.extendedProps.timeFrom
             editForm.timeTo = $endDate.event.extendedProps.timeTo
             editForm.dateFrom = $endDate.event.extendedProps.dateFrom
-            editForm.dateTo = moment($endDate.event.end).subtract(1,"days").format('YYYY-MM-DD')
+            editForm.dateTo = moment($endDate.event.end).format('YYYY-MM-DD')
             editForm.post(route('calendar.update', $endDate.event.id),{
                 preserveScroll: true,
                 onSuccess: () => {
@@ -126,7 +126,8 @@ export default defineComponent({
                     x.end = x.timeTo ? `${x.dateTo}T${x.timeTo}` : x.dateTo;
                     if (!x.timeFrom) {
                         x.start =  `${x.dateFrom}`
-                        x.end =  `${x.dateTo}T23:59:00`;
+                        x.end =  `${x.dateTo}`;
+                        x.allDay = true
                     }
                     return x;
                 });
@@ -203,6 +204,7 @@ export default defineComponent({
                 },
                 //  locale: esLocale,
                 initialView: 'dayGridMonth',
+
                 // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
                 editable: true,
                 selectable: true,
@@ -213,6 +215,7 @@ export default defineComponent({
                 eventClick: this.handleEventClick,
                 eventDrop: this.handleEventDrop,
                 eventResize: this.handleEventResize,
+
                 // eventsSet: this.handleEvents
                 /* you can update a remote database when these fire:
                 eventAdd:
@@ -229,8 +232,10 @@ export default defineComponent({
                             x.start = x.timeFrom ? `${x.dateFrom}T${x.timeFrom}` : x.dateFrom;
                             x.end = x.timeTo ? `${x.dateTo}T${x.timeTo}` : x.dateTo;
                             if (!x.timeFrom) {
+                                x.displayEventTime = false
                                 x.start =  `${x.dateFrom}`
-                                x.end =  `${x.dateTo}T23:59:00`;
+                                x.end =  `${x.dateTo}`;
+                                x.allDay = true
                             }
                             return x;
                         });

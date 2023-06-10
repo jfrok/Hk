@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Notifications;
+use App\Models\ScheduledTask;
 use App\Models\Setting;
 use App\Models\Skill;
 use App\Models\User;
@@ -11,6 +12,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules;
+
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -51,7 +54,7 @@ class UserController extends Controller
 
     public function updateProfileSkills(Request $request)
     {
-        $chips = $request->input('chips', []); // Get the chips array from the request
+        $chips = $request->input('chips', []);
 
         // Store each chip in the database
         foreach ($chips as $chip) {
@@ -83,7 +86,9 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|unique:users|regex:/^[^\s]+$/|max:78',
             'email' => 'required|email|unique:users|max:148',
-            'password' => 'required|confirmed|max:2048',
+//            'password' => 'required|confirmed|max:2048',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+
             'img' => 'image|mimes:jpeg,png,jpg|max:2048|nullable',
         ],
             [
@@ -116,6 +121,9 @@ class UserController extends Controller
             $setting->userId = $user->id;
             $setting->api_token = $shuffled;
             $setting->save();
+            $task = new ScheduledTask();
+            $task->userId = $user->id;
+            $task->save();
             Notifications::pushNotifications($user->id, 'System', 'Your subscription will expire in ' . $user->subscription_end_date->format('Y M d') . '.');
             if (Auth::id() == null) {
                 event(new Registered($user));
