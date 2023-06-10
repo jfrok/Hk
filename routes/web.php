@@ -21,13 +21,13 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return redirect(\route('login'));
-    //[
-//        'canLogin' => Route::has('login'),
-//        'canRegister' => Route::has('register'),
-//        'laravelVersion' => Application::VERSION,
-//        'phpVersion' => PHP_VERSION,
-    //]);
+    return redirect(\route('login',
+    [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]));
 
 });
 
@@ -85,7 +85,7 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     });
     /// Calendar
     Route::prefix('calendar')->group(function () {
-        Route::get('index', [EventController::class,'index'])->name('calendar.overview');
+        Route::get('overview', [EventController::class,'index'])->name('calendar.overview');
         Route::post('add', [EventController::class,'add'])->name('calendar.add');
         Route::post('update/{eId}', [EventController::class,'update'])->name('calendar.update');
         Route::post('remove/{eId}', [EventController::class,'remove'])->name('calendar.remove');

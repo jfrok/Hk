@@ -28,6 +28,13 @@ export default defineComponent({
         EventModal,
         Modal
     },
+    mounted() {
+        this.$nextTick(() => {
+            const { props } = usePage();
+            const date = props.date ?? new Date();;
+            this.$refs.calendar.getApi().gotoDate(date);
+        });
+    },
     setup(_, {emit}) {
         allEvents = ref([])
         const internalInstance = getCurrentInstance();
@@ -48,10 +55,12 @@ export default defineComponent({
                 timeFrom:eventDropInfo.event.extendedProps.timeFrom,
                 timeTo:eventDropInfo.event.extendedProps.timeTo,
                 dateFrom: newStart,
-                dateTo: newEnd,
+                dateTo: newEnd ,
             })
             dropForm
-                .post(route('calendar.update', eventId),)
+                .post(route('calendar.update', eventId),{
+                    preserveScroll: true
+                })
         };
 
         // Rest of the component setup...
@@ -141,7 +150,10 @@ export default defineComponent({
                 calendarApi.refetchEvents(); // Update events on the calendar
             });
         }
-
+        // this.$nextTick(() => {
+        //     this.$refs.fullCalendar.calendar.gotoDate(new Date('2020-08-11'));
+        //
+        // });
         let submit = async () => {
             await form.post(route('calendar.add'), {
                 onSuccess: () => {

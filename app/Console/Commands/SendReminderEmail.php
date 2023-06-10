@@ -33,12 +33,12 @@ class SendReminderEmail extends Command
      */
     public function handle()
     {
-//        $events = Event::where('dateFrom', '<=', Carbon::now()->addDays(3))->get();
-//        foreach ($events as $event) {
-//            $user = User::find($event->userId);
-//            // Send reminder email for this event
-//            Mail::to($user->email)->send(new ReminderEmail($event));
-//        }
+        $events = Event::where('dateFrom', '<=', Carbon::now()->addDays(3))->get();
+        foreach ($events as $event) {
+            $user = User::find($event->userId);
+            // Send reminder email for this event
+            Mail::to($user->email)->send(new ReminderEmail($event));
+        }
 
 
     }
