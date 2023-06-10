@@ -19,7 +19,11 @@ class Controller extends BaseController
     {
         $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
         $events = Event::orderBy('dateFrom', 'ASC')->where('userId',Auth::id())
-            ->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))->paginate(10);
+            ->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))
+            ->paginate(10);
+        $eventPrevious = Event::orderBy('dateFrom', 'ASC')->where('userId',Auth::id())
+            ->where('dateFrom', '<=', Carbon::now()->format('Y-m-d'))
+            ->paginate(10);
         $totalEvents = Event::where('userId',Auth::id())->count();
         $totalProjects = Project::where('userId',Auth::id())->count();
         $period = \Carbon\CarbonPeriod::create('2023-05-25', Carbon::today());
@@ -50,6 +54,7 @@ class Controller extends BaseController
         $translations = __('messages');
         return inertia('Dashboard', [
             'p' => $p,
+            'eventPrevious' => $eventPrevious,
             'count' => $count,
             'eventCount' => $eventCount,
             'projects' => $projects,

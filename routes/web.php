@@ -21,13 +21,13 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return redirect(\route('login'));
-    //[
-//        'canLogin' => Route::has('login'),
-//        'canRegister' => Route::has('register'),
-//        'laravelVersion' => Application::VERSION,
-//        'phpVersion' => PHP_VERSION,
-    //]);
+    return redirect(\route('login',
+    [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]));
 
 });
 
@@ -44,7 +44,15 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::get('/account/overview', [\App\Http\Controllers\UserController::class, 'accounts'])->name('account.overview');
     Route::get('/dashboard',[\App\Http\Controllers\Controller::class,'dashboard'])->name('dashboard');
     Route::post('/change-language', [\App\Http\Controllers\UserController::class,'changeLanguage']);
+    Route::get('/foo', function () {
+        $user = \App\Models\User::first();
 
+        $exitCode = \Illuminate\Support\Facades\Artisan::call('reminders:send', [
+            'user' => $user->id,
+        ]);
+
+        //
+    });
 
     /// Projects
     Route::prefix('projects')->group(function () {
@@ -77,7 +85,7 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     });
     /// Calendar
     Route::prefix('calendar')->group(function () {
-        Route::get('index', [EventController::class,'index'])->name('calendar.overview');
+        Route::get('overview', [EventController::class,'index'])->name('calendar.overview');
         Route::post('add', [EventController::class,'add'])->name('calendar.add');
         Route::post('update/{eId}', [EventController::class,'update'])->name('calendar.update');
         Route::post('remove/{eId}', [EventController::class,'remove'])->name('calendar.remove');

@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Mail\ReminderEmail;
 use App\Models\Event;
+use App\Models\Notifications;
+use App\Models\ScheduledTask;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -37,5 +39,7 @@ class SendReminderEmail extends Command
             // Send reminder email for this event
             Mail::to($user->email)->send(new ReminderEmail($event));
         }
+
+
     }
 }

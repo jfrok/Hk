@@ -8,10 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+
         $events = Event::where('userId',Auth::id())->get();
-        return inertia('Calendar/Overview', [
+        $date = $request->input('date');
+        return inertia('Calendar/Overview',  [
+            'date' => $date,
             'events' => $events->map(function ($event) {
                 return [
                     'id' => $event->id,
@@ -19,7 +22,9 @@ class EventController extends Controller
                     'dateFrom' => $event->dateFrom,
                     'dateTo' => $event->dateTo,
                 ];
+
             })
+
         ]);
 
     }
@@ -42,12 +47,12 @@ class EventController extends Controller
     }
     public function update($eId,Request $request)
     {
-//        dd($request->all());
-         // dd($request->all());
+       // dd($request->all());
         $update = Event::find($eId);
         $update->title = $request->title;
         $update->dateFrom = $request->dateFrom;
-        $update->dateTo = $request->dateTo;
+       $request->dateTo == 'Invalid date' ? $update->dateTo = null : $update->dateTo = $request->dateTo;
+
         $update->timeFrom = $request->timeFrom;
         $update->timeTo = $request->timeTo;
         $update->save();
