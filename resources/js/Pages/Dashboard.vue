@@ -16,6 +16,22 @@ onMounted(() => {
 
 
 });
+
+   function arabicDay(dateFrom) {
+        const englishDay = moment(dateFrom).format('dddd');
+        const arabicDays = {
+            Sunday: 'الأحد',
+            Monday: 'الاثنين',
+            Tuesday: 'الثلاثاء',
+            Wednesday: 'الأربعاء',
+            Thursday: 'الخميس',
+            Friday: 'الجمعة',
+            Saturday: 'السبت',
+        };
+        return arabicDays[englishDay] || '';
+    }
+
+
 const currentDate = new Date();
 const formattedDate = currentDate;
 
@@ -240,7 +256,7 @@ export default {
                                             </div>
                                             <h4 @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
 
-                                            <h5>{{ moment(formattedDate).format('YYYY MMMM DD') }}</h5>
+                                            <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' يصادف يوم '+arabicDay(event.dateFrom) :  moment(event.dateFrom).format('dddd') }}</h5>
                                         </div>
                                         <span> {{ event.dateFrom }} {{
                                                 event.dateTo !== null ? 'to' : ''
@@ -266,7 +282,7 @@ export default {
                                             </div>
                                             <h4 @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
 
-                                            <h5>{{ moment(formattedDate).format('YYYY MMMM DD') }}</h5>
+                                            <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' صادف يوم '+arabicDay(event.dateFrom) :  moment(event.dateFrom).format('dddd')}}</h5>
                                         </div>
                                         <span style="font-size: 27px;color: #ce0909">X</span>
                                         <span> {{ event.dateFrom }} {{

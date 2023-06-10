@@ -21,7 +21,7 @@ class Controller extends BaseController
         $events = Event::orderBy('dateFrom', 'ASC')->where('userId',Auth::id())
             ->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))
             ->paginate(10);
-        $eventPrevious = Event::orderBy('dateFrom', 'ASC')->where('userId',Auth::id())
+        $eventPrevious = Event::orderBy('dateFrom', 'DESC')->where('userId',Auth::id())
             ->where('dateFrom', '<=', Carbon::now()->format('Y-m-d'))
             ->paginate(10);
         $totalEvents = Event::where('userId',Auth::id())->count();
@@ -51,6 +51,7 @@ class Controller extends BaseController
                 array_push($eventCount,  0);
             }
         }
+
         $translations = __('messages');
         return inertia('Dashboard', [
             'p' => $p,
