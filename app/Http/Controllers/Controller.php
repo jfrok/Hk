@@ -17,16 +17,19 @@ class Controller extends BaseController
 {
     public function dashboard()
     {
-        $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
-        $events = Event::orderBy('dateFrom', 'ASC')->where('userId',Auth::id())
+        $projects = Project::where('userId',Auth::id())
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
+        $events = Event::orderBy('dateFrom', 'ASC')
+            ->where('userId',Auth::id())
             ->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))
             ->paginate(10);
-        $eventPrevious = Event::orderBy('dateFrom', 'DESC')->where('userId',Auth::id())
+        $eventPrevious = Event::orderBy('dateFrom', 'DESC')
+            ->where('userId',Auth::id())
             ->where('dateFrom', '<=', Carbon::now()->format('Y-m-d'))
             ->paginate(10);
         $totalEvents = Event::where('userId',Auth::id())->count();
         $totalProjects = Project::where('userId',Auth::id())->count();
-//        dd(Auth::user()->created_at->format('Y-m-d') ?? '');
         $period = \Carbon\CarbonPeriod::create(Auth::user()->created_at->format('Y-m-d') ?? '2023-05-25', Carbon::today());
 
         $p = [];
