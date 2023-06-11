@@ -26,7 +26,8 @@ class Controller extends BaseController
             ->paginate(10);
         $totalEvents = Event::where('userId',Auth::id())->count();
         $totalProjects = Project::where('userId',Auth::id())->count();
-        $period = \Carbon\CarbonPeriod::create('2023-05-25', Carbon::today());
+//        dd(Auth::user()->created_at->format('Y-m-d') ?? '');
+        $period = \Carbon\CarbonPeriod::create(Auth::user()->created_at->format('Y-m-d') ?? '2023-05-25', Carbon::today());
 
         $p = [];
         $count = [];

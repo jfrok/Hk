@@ -113,5 +113,8 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
 Route::get('/test', function (){
     return view('test');
 });
+Route::fallback(function() {
+    return \inertia('404');
+});
 Route::get('/testApi',[\App\Http\Controllers\Controller::class,'steamApiTest'])->name('testSteamApi');
 require __DIR__ . '/auth.php';
