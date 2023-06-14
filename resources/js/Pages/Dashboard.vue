@@ -3,19 +3,12 @@ import {Head, router, usePage} from '@inertiajs/vue3';
 import Chart from "@/Components/Chart.vue";
 import {Link} from "@inertiajs/vue3";
 import CreateAccount from "@/Components/CreateAccount.vue";
-import {computed, defineComponent} from "vue";
+import {computed, defineComponent, reactive, watch} from "vue";
 import {ref, onMounted} from 'vue';
 import moment from 'moment';
-import 'moment/locale/ar';
+import debounce from "@popperjs/core/lib/utils/debounce";
+import Checkbox from "@/Components/Checkbox.vue";
 
-const gregorianDate = ref('2023-10-15');
-const hijriDate = ref('15/11/1444');
-
-onMounted(() => {
-    formatDateToHijri();
-
-
-});
 
    function arabicDay(dateFrom) {
         const englishDay = moment(dateFrom).format('dddd');
@@ -39,16 +32,10 @@ function goToCalendar(dateFrom) {
     this.router.visit(route('calendar.overview', {date: dateFrom}));
 }
 
-function formatDateToHijri() {
-    const formattedDate = moment(gregorianDate.value, 'YYYY-MM-DD').locale('ar').format('iD iMMMM iYYYY');
-    hijriDate.value = formattedDate;
-    console.log(formattedDate)
-}
 
 let props = defineProps({
     projects: Object,
     events: Array,
-    eventPrevious: Array,
     p: Array,
     eventCount: Array,
     count: Array,
@@ -58,54 +45,60 @@ let props = defineProps({
 defineComponent({
     layout: AuthenticatedLayout
 })
-let dates = props.events.data.map(event => event.dateFrom);
+function getRemainingDays(dateFrom, dateTo) {
+    const start = moment(dateFrom);
+    const end = moment(dateTo);
+    const duration = moment.duration(end.diff(start));
+    const days = duration.asDays();
+    return Math.ceil(days);
+}
+
+let filteringEvents = reactive({
+    past:false
+})
+let uniqueMonths = []; // Initialize uniqueMonths array
+
 let months = [
     'January', 'February', 'March', 'April', 'May',
     'June', 'July', 'August', 'September',
     'October', 'November', 'December'
 ];
-let monthWords = dates.map(months => {
-    return months.substring(5, 7);
-}).map(item => {
-    return months[parseInt(item) - 1]
+
+const updateUniqueMonths = (events) => {
+    let dates = events.map((event) => event.dateFrom);
+    let monthWords = dates.map((month) => {
+        return month.substring(5, 7);
+    }).map((item) => {
+        return months[parseInt(item) - 1];
+    });
+
+    uniqueMonths = [...new Set(monthWords)]; // Update uniqueMonths array
+    uniqueMonths.forEach((month) => {
+        console.log(month);
+    });
+};
+watch(() => props.events, (newEvents) => {
+    updateUniqueMonths(newEvents.data);
 });
-// console.log(monthWords);
-let uniqueMonths = [...new Set(monthWords)]; // Use Set to filter out duplicates
-uniqueMonths.forEach(month => {
-    // console.log(month); // Print each unique month only once
+watch (filteringEvents, (value) => {
+    router.get(route('dashboard'), filteringEvents, {
+        preserveScroll: true,
+        preserveState: true,
+    });
+    // updateUniqueMonths(value.past === false ? props.events.data : props.eventPrevious.data);
+});
+let dates = props.events.data.map((event) => event.dateFrom);
+
+let monthWords = dates.map((month) => {
+    return month.substring(5, 7);
+}).map((item) => {
+    return months[parseInt(item) - 1];
 });
 
-
-// Rest of your component's logic goes here
-let dates2 = props.eventPrevious.data.map(event => event.dateFrom);
-let months2 = [
-    'January', 'February', 'March', 'April', 'May',
-    'June', 'July', 'August', 'September',
-    'October', 'November', 'December'
-];
-let monthWords2 = dates2.map(months2 => {
-    return months2.substring(5, 7);
-}).map(item => {
-    return months2[parseInt(item) - 1]
+uniqueMonths = [...new Set(monthWords)]; // Update uniqueMonths array
+uniqueMonths.forEach((month) => {
+    console.log(month);
 });
-// console.log(monthWords);
-let uniqueMonths2 = [...new Set(monthWords2)]; // Use Set to filter out duplicates
-uniqueMonths2.forEach(month2 => {
-    // console.log(month2); // Print each unique month only once
-});
-
-function getRemainingDays(dateFrom, dateTo) {
-    const start = moment(dateFrom);
-    const end = moment(dateTo);
-    const duration = moment.duration(end.diff(start));
-
-    const days = duration.asDays();
-
-    return Math.ceil(days);
-
-}
-
-
 </script>
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -238,6 +231,10 @@ export default {
                             <span><Link :href="route('calendar.overview')"><i
                                 class="feather-plus"></i></Link></span>
                         </div>
+                        <div class="filter mt-1" style="position: relative;float: right">
+<!--                            <input type="checkbox" class="mt-2" id="filter" v-model="filteringEvents.past">-->
+                            <v-checkbox label="past" v-model="filteringEvents.past"></v-checkbox>
+                        </div>
                         <div v-for="month in uniqueMonths" :key="month.id">
                             <div class="upcome-event-date">
                                 <h3>{{ month }}</h3>
@@ -251,8 +248,13 @@ export default {
                                     <div class="calendar-box  normal-bg">
                                         <div class="calandar-event-name">
                                             <div class="event-square"
-                                                 :class="getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) > 15 ? 'green' : getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 7 ? 'red' : 'yellow'">
-                                                <strong>{{ getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) == 0 ? 'Today' : getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) }}</strong>
+                                                 :class="{
+                                                'green': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) > 15,
+                                                'red': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 7,
+                                                'yellow': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) >= 7 && getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) <= 15
+                                                }"
+                                                :style="getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 1 ? 'background-color: gray; opacity: 80%' : ''">
+                                            {{getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom)}}
                                             </div>
                                             <h4 style="cursor: pointer" @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
 
@@ -265,34 +267,9 @@ export default {
                                 </div>
                             </div>
                         </div>
-                        <div v-for="month in uniqueMonths2" :key="month.id">
-                            <div class="upcome-event-date">
-                                <h3>{{ month }}</h3>
-                                <!--                                    <span><i class="fas fa-ellipsis-h"></i></span>-->
-                            </div>
-                            <div v-for="event in eventPrevious.data"
-                                 :key="event.id"  >
-                                <div class="calendar-details" v-if="month == moment(event.dateFrom).format('MMMM')" style="opacity:70%;">
-                                    <p style="font-size: 10px" v-if="event.timeFrom !== null">{{ event.timeFrom }}
-                                        {{ event.timeTo }}</p>
-                                    <div class="calendar-box  normal-bg">
-                                        <div class="calandar-event-name">
-                                            <div class="event-square" style="background-color: gray"
->                                                <strong>{{getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) }}</strong>
-                                            </div>
-                                            <h4 style="cursor: pointer" @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
 
-                                            <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' صادف يوم '+arabicDay(event.dateFrom) :  moment(event.dateFrom).format('dddd')}}</h5>
-                                        </div>
-                                        <span style="font-size: 27px;color: #ce0909">X</span>
-                                        <span> {{ event.dateFrom }} {{
-                                                event.dateTo !== null ? 'to' : ''
-                                            }} {{ event.dateTo }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                </div>
                 </div>
             </div>
         </div>

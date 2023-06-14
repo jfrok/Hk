@@ -41,6 +41,13 @@ class EventController extends Controller
         $new->dateFrom = $request->dateFrom;
         $new->dateTo = $request->dateTo;
         $new->timeFrom = $request->timeFrom;
+        if (!is_null($request->timeFrom) && is_null($request->timeTo)) {
+            $startTime = \Carbon\Carbon::parse($request->timeFrom)->format('H:i');
+            $endTime = \Carbon\Carbon::parse($startTime)->addHour()->format('H:i');
+            $request->merge(['timeTo' => $endTime]);
+        } else {
+            $request->merge(['timeTo' => $request->timeTo]);
+        }
         $new->timeTo = $request->timeTo;
         $new->save();
         return to_route('calendar.overview');
@@ -54,6 +61,13 @@ class EventController extends Controller
        $request->dateTo == 'Invalid date' ? $update->dateTo = null : $update->dateTo = $request->dateTo;
 
         $update->timeFrom = $request->timeFrom;
+        if (!is_null($request->timeFrom) && is_null($request->timeTo)) {
+            $startTime = \Carbon\Carbon::parse($request->timeFrom)->format('H:i');
+            $endTime = \Carbon\Carbon::parse($startTime)->addHour()->format('H:i');
+            $request->merge(['timeTo' => $endTime]);
+        } else {
+            $request->merge(['timeTo' => $request->timeTo]);
+        }
         $update->timeTo = $request->timeTo;
         $update->save();
         return to_route('calendar.overview');

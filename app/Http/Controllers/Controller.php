@@ -15,14 +15,18 @@ use Inertia\Inertia;
 
 class Controller extends BaseController
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
-        $events = Event::orderBy('dateFrom', 'ASC')->where('userId',Auth::id())
-            ->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'))
-            ->paginate(10);
-        $eventPrevious = Event::orderBy('dateFrom', 'DESC')->where('userId',Auth::id())
-            ->where('dateFrom', '<=', Carbon::now()->format('Y-m-d'))
+        $past = $request->boolean('past');
+        $events = Event::orderBy('dateFrom', $past ? 'DESC' : 'ASC')
+            ->where('userId', Auth::id())
+            ->when(!$past, function ($query) {
+                return $query->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'));
+            })
+            ->when($past, function ($query) {
+                return $query->where('dateFrom', '<', Carbon::now()->format('Y-m-d'));
+            })
             ->paginate(10);
         $totalEvents = Event::where('userId',Auth::id())->count();
         $totalProjects = Project::where('userId',Auth::id())->count();
@@ -56,7 +60,6 @@ class Controller extends BaseController
         $translations = __('messages');
         return inertia('Dashboard', [
             'p' => $p,
-            'eventPrevious' => $eventPrevious,
             'count' => $count,
             'eventCount' => $eventCount,
             'projects' => $projects,

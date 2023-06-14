@@ -25,14 +25,14 @@ Route::get('/', function () {
     [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+//        'laravelVersion' => Application::VERSION,
+//        'phpVersion' => PHP_VERSION,
     ]));
 
 });
 
 Route::get('translate' , function() {
-    $lang = new GoogleTranslate('en');
+    $lang = new GoogleTranslate();
     return $lang->setSource('en')->setTarget('ar')->translate('Hello World');
 });
 Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
