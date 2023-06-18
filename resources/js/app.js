@@ -29,7 +29,7 @@ const vuetify = createVuetify({
     },
 })
 // const app = createApp(App);
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'jhdevelopers';
 router.on('navigate', () => document.getElementById('app').removeAttribute('data-page'));
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

@@ -31,6 +31,7 @@ body {
     height: 100%;
     line-height: 1.5;
     overflow-x: hidden
+
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -2425,9 +2426,9 @@ html.menu-opened {
     overflow: hidden
 }
 
-html.menu-opened body {
-    overflow: hidden
-}
+/*html.menu-opened body {*/
+/*    overflow: hidden*/
+/*}*/
 
 .top-nav-search {
     float: left;
@@ -10938,10 +10939,22 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 .hide {
     display: none!important;
 }
+.custom-checkbox .v-input--selection-controls__input {
+    height: 20px;
+    width: 20px;
+}
+
+.custom-checkbox .v-input--selection-controls__ripple {
+    top: 5px;
+    left: 5px;
+}
 @media (max-width: 500px) {
     .fc .fc-toolbar.fc-header-toolbar {
         margin-bottom: 1.5em;
         font-size: 4px;
+    }
+    body{
+        overflow-y: visible;
     }
     .fc .fc-view-harness {
         flex-grow: 1;

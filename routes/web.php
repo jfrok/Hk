@@ -33,7 +33,7 @@ Route::get('/', function () {
 
 Route::get('translate' , function() {
     $lang = new GoogleTranslate();
-    return $lang->setSource('en')->setTarget('ar')->translate('Hello World');
+    return GoogleTranslate::trans('Hello again', 'ka', 'en');
 });
 Route::post('/account/create', [\App\Http\Controllers\UserController::class, 'createAccount'])->name('account.create');
 Route::middleware(['web','auth','check.subscription'])->group(function () {
@@ -69,7 +69,7 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
             return inertia::render('Projects/Add');
             }
         })->name('project.add');
-//add
+        //add
         Route::post('add', [ProjectController::class, 'add'])->name('project.addOne');
         Route::post('delete/{pId}', [ProjectController::class, 'destroy'])->name('project.delete');
         //content
@@ -104,7 +104,7 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
         session(['locale' => $locale]); // Store the selected locale in the session
         return response()->json(['success' => true]);
     })->name('setLocale');
-/// Settings
+    // Settings
 //Route::prefix('settings')->group(function () {
     Route::get('settings',[SettingsController::class,'settings'])->name('settings.overview');
     Route::post('settings/update-token',[SettingsController::class,'changeToken'])->name('settings.updateToken');

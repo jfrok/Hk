@@ -1,5 +1,5 @@
 <script setup>
-import {computed, ref, onMounted} from 'vue';
+import {computed, ref, onMounted, onActivated} from 'vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import {Link, router, usePage} from '@inertiajs/vue3';
 import FormatTime from "@/Components/FormatTime.vue";
@@ -189,7 +189,7 @@ const clearNotifications = (notificationId = null) => {
                                 <span>Main Menu</span>
                             </li>
                             <li class="submenu" :class="{'active':$page.component == 'Dashboard'}">
-                                <Link :href="route('dashboard')"><i class="feather-grid"></i> <span> Dashboard</span>
+                                <Link :href="route('dashboard')"><i class="feather-grid"></i> <span> {{usePage().props.auth.user.lang == 'english'? 'Dashboard' : 'الرئيسية'}}</span>
                                     <span
                                         class="menu-arrow"></span>
                                 </Link>
@@ -199,22 +199,22 @@ const clearNotifications = (notificationId = null) => {
                             <li v-if="$page.props.auth.user.role == 'Admin'" class="submenu"
                                 :class="{'active':$page.component == 'Accounts/Index'}">
                                 <Link :href="route('account.overview')"><i class="fas fa-users"></i>
-                                    <span> Accounts</span> <span
+                                    <span> {{usePage().props.auth.user.lang == 'english'? 'Accounts' : 'الحسابات'}}</span> <span
                                         class="menu-arrow"></span></Link>
                             </li>
                             <li class="submenu" :class="{'active':$page.component == 'Projects/Index'}">
                                 <Link :href="route('project.overview')"><i class="fas fa-server"></i>
-                                    <span> Projects</span>
+                                    <span>{{usePage().props.auth.user.lang == 'english'? 'Projects' : 'المشاريع'}}</span>
                                     <span
                                         class="menu-arrow"></span></Link>
                             </li>
                             <li class="submenu" :class="{'active':$page.component == 'Calendar/Index'}">
-                                <Link :href="route('calendar.overview')"><i class="fas fa-graduation-cap"></i> <span> Calendar</span>
+                                <Link :href="route('calendar.overview')"><i class="fas fa-calendar"></i> <span> {{usePage().props.auth.user.lang == 'english'? 'Calendar' : 'التقويم'}}</span>
                                     <span
                                         class="menu-arrow"></span></Link>
                             </li>
                             <li class="submenu" :class="{'active':$page.component == 'Trash'}">
-                                <Link :href="route('trash')"><i class="fas fa-trash-restore"></i> <span> Trash</span>
+                                <Link :href="route('trash')"><i class="fas fa-trash-restore"></i> <span> {{usePage().props.auth.user.lang == 'english'? 'Trash' : 'المهملات'}}</span>
                                     <span
                                         class="menu-arrow"></span></Link>
                             </li>
@@ -293,7 +293,7 @@ const clearNotifications = (notificationId = null) => {
                     <!--            </div>-->
                 </div>
                 <footer>
-                    <p>Copyright © 2022 Jhdevelopers.</p>
+                    <p>Copyright © {{ new Date().getFullYear() }} Jhdevelopers.</p>
                 </footer>
             </div>
         </div>

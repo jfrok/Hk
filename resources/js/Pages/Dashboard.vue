@@ -2,13 +2,9 @@
 import {Head, router, usePage} from '@inertiajs/vue3';
 import Chart from "@/Components/Chart.vue";
 import {Link} from "@inertiajs/vue3";
-import CreateAccount from "@/Components/CreateAccount.vue";
-import {computed, defineComponent, reactive, watch} from "vue";
-import {ref, onMounted} from 'vue';
+import {onMounted, ref} from 'vue'
+import {computed, defineComponent, onActivated, reactive, watch} from "vue";
 import moment from 'moment';
-import debounce from "@popperjs/core/lib/utils/debounce";
-import Checkbox from "@/Components/Checkbox.vue";
-
 
    function arabicDay(dateFrom) {
         const englishDay = moment(dateFrom).format('dddd');
@@ -45,6 +41,7 @@ let props = defineProps({
 defineComponent({
     layout: AuthenticatedLayout
 })
+
 function getRemainingDays(dateFrom, dateTo) {
     const start = moment(dateFrom);
     const end = moment(dateTo);
@@ -52,10 +49,22 @@ function getRemainingDays(dateFrom, dateTo) {
     const days = duration.asDays();
     return Math.ceil(days);
 }
+// const selectedFilter = ref('');
 
 let filteringEvents = reactive({
-    past:false
+    past:false,
+    closest:false,
+    upcoming:false
 })
+
+
+// watch(selectedFilter, (value) => {
+//     filteringEvents.value = {
+//         past: value === 'past',
+//         closest: value === 'closest',
+//         upcoming: value === 'upcoming',
+//     };
+// });
 let uniqueMonths = []; // Initialize uniqueMonths array
 
 let months = [
@@ -84,7 +93,18 @@ watch (filteringEvents, (value) => {
     router.get(route('dashboard'), filteringEvents, {
         preserveScroll: true,
         preserveState: true,
+
     });
+    if (filteringEvents.past === true) {
+        filteringEvents.upcoming = false;
+        filteringEvents.closest = false;
+    } else if (filteringEvents.upcoming === true) {
+        filteringEvents.past = false;
+        filteringEvents.closest = false;
+    } else if (filteringEvents.closest === true) {
+        filteringEvents.past = false;
+        filteringEvents.upcoming = false;
+    }
     // updateUniqueMonths(value.past === false ? props.events.data : props.eventPrevious.data);
 });
 let dates = props.events.data.map((event) => event.dateFrom);
@@ -104,7 +124,13 @@ uniqueMonths.forEach((month) => {
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 export default {
-    layout: AuthenticatedLayout
+    layout: AuthenticatedLayout,
+    data () {
+        return {
+            dialogm1: '',
+            dialog: false,
+        }
+    },
 }
 </script>
 <template>
@@ -222,20 +248,54 @@ export default {
                 </div>
             </div>
         </div>
+
         <div class="col-12 col-lg-12 col-xl-4 d-flex" v-if="events.data.length > 0">
             <div class="card flex-fill comman-shadow">
                 <div class="card-body">
                     <div class="calendar-info1">
                         <div class="up-come-header">
-                            <h2>Upcoming Events</h2>
+                            <h2>{{usePage().props.auth.user.lang == 'arabic'? 'المواعيد القادمة' : 'Upcoming Events'}}</h2>
                             <span><Link :href="route('calendar.overview')"><i
                                 class="feather-plus"></i></Link></span>
                         </div>
-                        <div class="filter mt-1" style="position: relative;float: right">
-<!--                            <input type="checkbox" class="mt-2" id="filter" v-model="filteringEvents.past">-->
-                            <v-checkbox label="past" v-model="filteringEvents.past"></v-checkbox>
+                        <div class="up-come-header" style="position: relative;float: right;margin-top: 3px">
+                            <span @click="dialog = true" class="feather-filter"></span>
+<!--                            <FilterDialog />-->
                         </div>
-                        <div v-for="month in uniqueMonths" :key="month.id">
+                        <v-row justify="center">
+                            <v-dialog
+                                v-model="dialog"
+                                scrollable
+                                width="auto"
+                            >
+                                <v-card>
+                                    <v-card-title>Select a Filter</v-card-title>
+                                    <v-divider></v-divider>
+                                    <v-card-text style="height: auto;">
+<!--                                                                    <input type="checkbox" class="mt-2" id="filter" v-model="filteringEvents.past">-->
+                                        <v-checkbox label="upcoming" v-model="filteringEvents.upcoming"></v-checkbox>
+                                        <v-checkbox label="week" v-model="filteringEvents.closest"></v-checkbox>
+                                        <v-checkbox label="earlier" v-model="filteringEvents.past"></v-checkbox>
+<!--                                        <v-radio-group v-model="selectedFilter">-->
+<!--                                            <v-radio label="Upcoming" value="upcoming"></v-radio>-->
+<!--                                            <v-radio label="Week" value="closest"></v-radio>-->
+<!--                                            <v-radio label="Earlier" value="past"></v-radio>-->
+<!--                                        </v-radio-group>-->
+                                    </v-card-text>
+                                    <v-divider></v-divider>
+                                    <v-card-actions>
+                                        <v-btn
+                                            color="blue-darken-1"
+                                            variant="text"
+                                            @click="dialog = false"
+                                        >
+                                            Close
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-row>
+                        <div v-for="month in uniqueMonths" :key="month.id" >
                             <div class="upcome-event-date">
                                 <h3>{{ month }}</h3>
                                 <!--                                    <span><i class="fas fa-ellipsis-h"></i></span>-->
@@ -253,22 +313,19 @@ export default {
                                                 'red': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 7,
                                                 'yellow': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) >= 7 && getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) <= 15
                                                 }"
-                                                :style="getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 1 ? 'background-color: gray; opacity: 80%' : ''">
-                                            {{getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom)}}
+                                                :style="getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 0 ? 'background-color: gray; opacity: 80%' : ''">
+                                            {{getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) === 0 ? usePage().props.auth.user.lang === 'arabic' ? 'اليوم': 'Today' : getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom)}}
+
                                             </div>
                                             <h4 style="cursor: pointer" @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
 
                                             <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' يصادف يوم '+arabicDay(event.dateFrom) :  moment(event.dateFrom).format('dddd') }}</h5>
                                         </div>
-                                        <span> {{ event.dateFrom }} {{
-                                                event.dateTo !== null ? 'to' : ''
-                                            }} {{ event.dateTo }}</span>
+                                        <span>{{ event.dateFrom }} {{event.dateTo !== null ? 'to' : '' }} {{ event.dateTo }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                 </div>
                 </div>
             </div>

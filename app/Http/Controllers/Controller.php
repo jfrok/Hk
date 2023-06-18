@@ -6,26 +6,62 @@ use App\Models\Content;
 use App\Models\Event;
 use App\Models\Project;
 use Carbon\Carbon;
+use Carbon\Traits\Week;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 
 class Controller extends BaseController
 {
     public function dashboard(Request $request)
     {
+
+
         $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
+
         $past = $request->boolean('past');
-        $events = Event::orderBy('dateFrom', $past ? 'DESC' : 'ASC')
+        $upcoming = $request->boolean('upcoming');
+        $closest = $request->boolean('closest');
+
+        if ($past === true){
+            $upcoming = false;
+            $closest = false;
+        }elseif ($upcoming === true){
+            $past = false;
+            $closest = false;
+        }elseif ($closest === true){
+            $past = false;
+            $upcoming = false;
+        }
+
+//dd($request->all());
+
+
+        $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
+        $endOfWeek = Carbon::now()->endOfWeek(Carbon::SUNDAY);
+        $thisWeek = [
+            'start' => $startOfWeek->format('Y-m-d'),
+            'end' => $endOfWeek->format('Y-m-d'),
+        ];
+        $events = Event::orderBy('dateFrom', $past ?? '' ? 'DESC' : 'ASC')
             ->where('userId', Auth::id())
-            ->when(!$past, function ($query) {
+            ->when(!$past && !$upcoming && !$closest, function ($query) {
                 return $query->where('dateFrom', '>=', Carbon::now()->format('Y-m-d'));
             })
-            ->when($past, function ($query) {
+            ->when($past && !$upcoming && !$closest, function ($query) {
                 return $query->where('dateFrom', '<', Carbon::now()->format('Y-m-d'));
+            })
+            ->when($upcoming && !$past && !$closest, function ($query) {
+                return $query->where('dateFrom', '>=', Carbon::now()->addWeek()->format('Y-m-d'));
+            })
+            ->when($closest && !$past && !$upcoming, function ($query) use ($thisWeek) {
+                return $query->where(function ($query) use ($thisWeek) {
+                    $query->whereBetween('dateFrom', [$thisWeek['start'], $thisWeek['end']]);
+                });
             })
             ->paginate(10);
         $totalEvents = Event::where('userId',Auth::id())->count();
@@ -57,7 +93,7 @@ class Controller extends BaseController
             }
         }
 
-        $translations = __('messages');
+
         return inertia('Dashboard', [
             'p' => $p,
             'count' => $count,
@@ -66,7 +102,7 @@ class Controller extends BaseController
             'events' => $events,
             'totalEvents' => $totalEvents,
             'totalProjects' => $totalProjects,
-            'translations' => $translations
+
         ]);
     }
 

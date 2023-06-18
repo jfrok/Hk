@@ -28,6 +28,10 @@ export default defineComponent({
         EventModal,
         Modal
     },
+    activated() {
+        // Enable scrolling when the component is re-activated
+        document.body.style.overflow = 'auto';
+    },
     mounted() {
         this.$nextTick(() => {
             const { props } = usePage();
