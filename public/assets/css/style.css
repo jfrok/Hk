@@ -10948,6 +10948,19 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
     top: 5px;
     left: 5px;
 }
+/*//calendar*/
+.fc-daygrid-dot-event .fc-event-title {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-weight: 700;
+    min-width: 0;
+    overflow: hidden;
+    color: gray;
+}
+.fc-direction-ltr .fc-daygrid-event .fc-event-time {
+    margin-right: 3px;
+    color: gray;
+}
 @media (max-width: 500px) {
     .fc .fc-toolbar.fc-header-toolbar {
         margin-bottom: 1.5em;

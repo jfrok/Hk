@@ -319,7 +319,7 @@ export default {
                                             </div>
                                             <h4 style="cursor: pointer" @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
 
-                                            <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' يصادف يوم '+arabicDay(event.dateFrom) :  moment(event.dateFrom).format('dddd') }}</h5>
+                                            <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' يصادف يوم '+arabicDay(event.dateFrom) : 'It falls on ' +moment(event.dateFrom).format('dddd') }}</h5>
                                         </div>
                                         <span>{{ event.dateFrom }} {{event.dateTo !== null ? 'to' : '' }} {{ event.dateTo }}</span>
                                     </div>
