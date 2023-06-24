@@ -6,6 +6,7 @@ use App\Mail\ReminderEmail;
 use App\Models\Event;
 use App\Models\Notifications;
 use App\Models\ScheduledTask;
+use App\Models\Setting;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -33,13 +34,32 @@ class SendReminderEmail extends Command
      */
     public function handle()
     {
-        $events = Event::where('dateFrom', '<=', Carbon::now()->addDays(3))->get();
+        $events = Event::where('dateFrom', '>=', Carbon::now())
+            ->orderByDesc('dateFrom')
+            ->get();
+
         foreach ($events as $event) {
-            $user = User::find($event->userId);
-            // Send reminder email for this event
-            Mail::to($user->email)->send(new ReminderEmail($event));
+                $user = User::find($event->userId);
+
+                // Retrieve user settings dynamically
+                $settings = Setting::where('userId', $user->id)->first();
+                if ($settings->sendReminders = 1) {
+
+                    $sendBefore = $settings->sendBefore;
+                    // Check if settings exist for the user
+                    if ($settings) {
+                        // Calculate the date to send reminder
+                        $reminderDate = Carbon::now()->addDays($sendBefore)->startOfDay();
+
+                        // Check if the event's date is after the reminder date
+                        if ($event->dateFrom <= $reminderDate) {
+                            // Send reminder email for this event
+                            Mail::to($user->email)->send(new ReminderEmail($event));
+                        }
+                    }
+                }else{
+                   return false;
+                }
+            }
         }
-
-
-    }
 }

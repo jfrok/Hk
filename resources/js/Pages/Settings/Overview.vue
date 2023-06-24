@@ -22,8 +22,27 @@
             <div class="card">
                 <div class="card-body">
                     <div v-if="steps[current].title == 1">
+                        <div class="container">
+                            <div class="row">
+                                <v-switch v-model="eventSettings.sendReminders" inset color="primary" label="Send remainders" />
+<!--                                <InputError class="mt-2" :message="eventSettings.errors.sendReminders" />-->
+                                <v-row v-if="eventSettings.sendReminders">
+                                    <v-col cols="12">
+                                        <v-text-field type="number" v-model="eventSettings.sendBefore" label="Before the event"></v-text-field>
+                                        <InputError class="mt-2" :message="eventSettings.errors.sendBefore" />
+                                    </v-col>
+<!--                                    <v-col cols="12">-->
+<!--                                        <v-text-field type="time" v-model="eventSettings.sendTime" label="Send time"></v-text-field>-->
+<!--                                        <InputError class="mt-2" :message="eventSettings.errors.sendTime" />-->
+<!--                                    </v-col>-->
 
-                        step 1
+                                </v-row>
+
+                            </div>
+                        </div>
+                        <v-sheet style="float: right;padding: 20px 30px">
+                            <v-btn type="button" @click="updateEvents" block class="mt-2">Apply</v-btn>
+                        </v-sheet>
                     </div>
                     <div v-if="steps[current].title == 2">
                         step 2
@@ -33,16 +52,16 @@
 
                         <!--                        <template>-->
                         <v-sheet width="300" class="mx-auto">
-                                <v-text-field
-                                    label="Rest token"
-                                    :append-icon="'mdi-refresh'"
-                                    @click:append="generateToken"
-                                    v-model="restApiToken.token"
-                                    id="token"
-                                ></v-text-field>
+                            <v-text-field
+                                label="Rest token"
+                                :append-icon="'mdi-refresh'"
+                                @click:append="generateToken"
+                                v-model="restApiToken.token"
+                                id="token"
+                            ></v-text-field>
                         </v-sheet>
                         <v-sheet>
-                            <h6>last update at {{moment(apiToken.updated_at).format('DD/MM/YYYY')}}</h6>
+                            <h6>last update at {{ moment(settings.updated_at).format('DD/MM/YYYY') }}</h6>
                         </v-sheet>
                         <!--
                                              </template>-->
@@ -55,50 +74,51 @@
                                 >
                                     <v-list
 
-                                    ><v-list-item-title>
-                                        {{apiRoute.uri}}
-                                    </v-list-item-title></v-list>
+                                    >
+                                        <v-list-item-title>
+                                            {{ apiRoute.uri }}
+                                        </v-list-item-title>
+                                    </v-list>
                                 </v-card>
                             </v-sheet>
                         </v-sheet>
 
                         <v-sheet style="float: right;padding: 20px 30px">
-                        <v-btn type="button"  @click="updateToken" block class="mt-2">Apply</v-btn>
+                            <v-btn type="button" @click="updateToken" block class="mt-2">Apply</v-btn>
                         </v-sheet>
                     </div>
                 </div>
             </div>
         </div>
-<!--        <div class="steps-action">-->
-<!--            <a-button v-if="current < steps.length - 1" type="primary" @click="next">Next</a-button>-->
-<!--            <a-button-->
-<!--                v-if="current == steps.length - 1"-->
-<!--                type="primary"-->
+        <!--        <div class="steps-action">-->
+        <!--            <a-button v-if="current < steps.length - 1" type="primary" @click="next">Next</a-button>-->
+        <!--            <a-button-->
+        <!--                v-if="current == steps.length - 1"-->
+        <!--                type="primary"-->
 
-<!--            >-->
+        <!--            >-->
 
-<!--                Done-->
-<!--            </a-button>-->
-<!--            <a-button v-if="current > 0" style="margin-left: 8px" @click="prev">Previous</a-button>-->
-<!--        </div>-->
+        <!--                Done-->
+        <!--            </a-button>-->
+        <!--            <a-button v-if="current > 0" style="margin-left: 8px" @click="prev">Previous</a-button>-->
+        <!--        </div>-->
     </div>
 </template>
 <script lang="ts">
-import {defineComponent, ref} from 'vue';
+import {defineComponent, reactive, ref, watch} from 'vue';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {useForm} from "@inertiajs/vue3";
 
 import format from "@popperjs/core/lib/utils/format";
 import moment from "moment";
+import InputError from "@/Components/InputError.vue";
 
 export default defineComponent({
     layout: AuthenticatedLayout,
-    components:{
-
-},
+    components: {InputError},
     props: {
-        apiToken: Array,
-        apiRoutes:Array,
+        settings: Array,
+        apiRoutes: Array,
 
     },
     setup(props) {
@@ -115,15 +135,27 @@ export default defineComponent({
         };
         const prev = () => {
             current.value--;
-            console.log(props.apiToken)
         };
         let restApiToken = useForm({
-             token:props.apiToken.api_token
+            token: props.settings.api_token
         })
-        let updateToken = async () =>{
-                await restApiToken.post(route('settings.updateToken'), {
+        let updateToken = async () => {
+            await restApiToken.post(route('settings.updateToken'), {})
+        }
+        let eventSettings = useForm({
+            sendReminders:props.settings.sendRemainders = 1 ? true : false,
+            sendBefore:props.settings.sendBefore,
+            sendTime:props.settings.sendAt,
+        })
+     // watch( () => eventSettings, ($eventSettings) =>{
+     //     console.log($eventSettings + ' ff')
+     //    })
 
-                })
+            let updateEvents = async () => {
+            await eventSettings.post(route('settings.eventSettings'),{
+                preserveState: true,
+                preserveScroll: true,
+            })
         }
         return {
             current,
@@ -139,11 +171,14 @@ export default defineComponent({
                 },
             ],
             restApiToken,
+            eventSettings,
             updateToken,
+            updateEvents,
             next,
             prev,
         };
     },
+
     methods: {
         format,
         moment,

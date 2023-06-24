@@ -107,6 +107,7 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     // Settings
 //Route::prefix('settings')->group(function () {
     Route::get('settings',[SettingsController::class,'settings'])->name('settings.overview');
+    Route::post('settings/update-events',[SettingsController::class,'updateEvents'])->name('settings.eventSettings');
     Route::post('settings/update-token',[SettingsController::class,'changeToken'])->name('settings.updateToken');
 //});
 });

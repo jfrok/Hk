@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Auth;
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
-        '\App\Console\Commands\SendReminderEmail',
+        \App\Console\Commands\SendReminderEmail::class,
+        \App\Console\Commands\SendExpireReminder::class,
     ];
 
     /**

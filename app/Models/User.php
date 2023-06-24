@@ -45,4 +45,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Skill::class, 'userId');
     }
+    public function userId()
+    {
+        return $this->id;
+    }
 }

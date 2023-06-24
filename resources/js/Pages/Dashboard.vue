@@ -249,7 +249,7 @@ export default {
             </div>
         </div>
 
-        <div class="col-12 col-lg-12 col-xl-4 d-flex" v-if="events.data.length > 0">
+        <div class="col-12 col-lg-12 col-xl-4 d-flex" >
             <div class="card flex-fill comman-shadow">
                 <div class="card-body">
                     <div class="calendar-info1">
@@ -258,7 +258,7 @@ export default {
                             <span><Link :href="route('calendar.overview')"><i
                                 class="feather-plus"></i></Link></span>
                         </div>
-                        <div class="up-come-header" style="position: relative;float: right;margin-top: 3px">
+                        <div class="up-come-header" style="position: relative;float: right;margin-top: 3px;">
                             <span @click="dialog = true" class="feather-filter"></span>
 <!--                            <FilterDialog />-->
                         </div>
@@ -295,7 +295,8 @@ export default {
                                 </v-card>
                             </v-dialog>
                         </v-row>
-                        <div v-for="month in uniqueMonths" :key="month.id" >
+                        <div v-if="events.data.length > 0">
+                        <div style="margin-top: 55px" v-for="month in uniqueMonths" :key="month.id" >
                             <div class="upcome-event-date">
                                 <h3>{{ month }}</h3>
                                 <!--                                    <span><i class="fas fa-ellipsis-h"></i></span>-->
@@ -326,16 +327,18 @@ export default {
                                 </div>
                             </div>
                         </div>
+                        </div>
+                        <v-alert v-else style="margin-top: 70px"
+                                 type="info"
+                                 variant="tonal"
+                        >
+                            <v-alert-title style="justify-content: center;display: flex">There is no events</v-alert-title>
+                        </v-alert>
                 </div>
                 </div>
             </div>
         </div>
-        <v-alert v-else
-                 type="info"
-                 variant="tonal"
-        >
-            <v-alert-title style="justify-content: center;display: flex">There is no Events</v-alert-title>
-        </v-alert>
+
     </div>
     <!--    </AuthenticatedLayout>-->
 </template>

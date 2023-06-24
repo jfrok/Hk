@@ -56,6 +56,9 @@
         <h1>رساله تذكير</h1>
     </div>
     <div class="body">
+        @if($user->id == 39)
+            <h1> هاذه مواعيدك ويلا دزها</h1>
+        @endif
         <h4> مرحبا , {{$user->name}} </h4>
         <h3> العنوان: {{ $event->title }} </h3>
         <h3> التاريخ: {{ $event->dateFrom }} </h3>
