@@ -110,12 +110,13 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::post('settings/update-events',[SettingsController::class,'updateEvents'])->name('settings.eventSettings');
     Route::post('settings/update-token',[SettingsController::class,'changeToken'])->name('settings.updateToken');
 //});
+    Route::fallback(function() {
+        return inertia('404');
+    });
 });
 Route::get('/test', function (){
     return view('test');
 });
-Route::fallback(function() {
-    return \inertia('404');
-});
+
 Route::get('/testApi',[\App\Http\Controllers\Controller::class,'steamApiTest'])->name('testSteamApi');
 require __DIR__ . '/auth.php';

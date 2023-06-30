@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Auth;
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
-        \App\Console\Commands\SendReminderEmail::class,
-        \App\Console\Commands\SendExpireReminder::class,
+        '\App\Console\Commands\SendReminderEmail',
+        '\App\Console\Commands\SendExpireReminder',
     ];
 
     /**
@@ -23,8 +23,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('reminders:send')->dailyAt('07:25');
-        $schedule->command('expireReminder:send')->twiceMonthly();
+        $schedule->command('reminders:send')->dailyAt('02:00')->timezone('Europe/Amsterdam');
+        $schedule->command('expireReminder:send')->twiceMonthly()->withoutOverlapping();
     }
 
     /**

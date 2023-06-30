@@ -24,7 +24,7 @@
                     <div v-if="steps[current].title == 1">
                         <div class="container">
                             <div class="row">
-                                <v-switch v-model="eventSettings.sendReminders" inset color="primary" label="Send remainders" />
+                                <v-switch  v-model="eventSettings.sendReminders" inset color="primary" label="Send remainders" />
 <!--                                <InputError class="mt-2" :message="eventSettings.errors.sendReminders" />-->
                                 <v-row v-if="eventSettings.sendReminders">
                                     <v-col cols="12">
@@ -143,7 +143,7 @@ export default defineComponent({
             await restApiToken.post(route('settings.updateToken'), {})
         }
         let eventSettings = useForm({
-            sendReminders:props.settings.sendRemainders = 1 ? true : false,
+            sendReminders:props.settings.sendRemainders == 1 ? true : false,
             sendBefore:props.settings.sendBefore,
             sendTime:props.settings.sendAt,
         })
