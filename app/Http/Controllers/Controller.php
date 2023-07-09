@@ -44,12 +44,7 @@ class Controller extends BaseController
         ];
 
         $showMore = $request->showMore;
-//        $showMoreCounter = 1;
 //
-//        if ($showMore){
-//            for ($i = 0; $i < $showMore; $i++)
-//                $showMoreCounter++;
-//        }
         $events = Event::orderBy('dateFrom', $past ?? '' ? 'DESC' : 'ASC')
             ->where('userId', Auth::id())
             ->when(!$past && !$upcoming && !$closest, function ($query) {
@@ -66,7 +61,7 @@ class Controller extends BaseController
                     $query->whereBetween('dateFrom', [$thisWeek['start'], $thisWeek['end']]);
                 });
             })
-            ->paginate($showMore?$showMore+=2:2);
+            ->paginate($showMore?$showMore:10);
         $totalEvents = Event::where('userId',Auth::id())->count();
         $totalProjects = Project::where('userId',Auth::id())->count();
 //        dd(Auth::user()->created_at->format('Y-m-d') ?? '');

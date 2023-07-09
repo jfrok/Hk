@@ -119,7 +119,7 @@ watch(() => props.events, (newEvents) => {
 });
 
 let showData = reactive({
-    showMore:0
+    showMore:10
 });
 function showMore (){
     showData.showMore += 2;
@@ -365,7 +365,7 @@ export default {
                                 </v-alert>
                             </div>
                         <div style="display: flex;justify-content: center;margin-top: 5px">
-                        <a href="javascript:void(0)" @click="showMore" methods="post" id="showMoreBtn">{{usePage().props.auth.user.lang == 'arabic'? 'اظهار المزيد':'show more'}} <i class="feather-arrow-down"></i> ({{showData.showMore != 0?showData.showMore:2}})</a>
+                        <a href="javascript:void(0)" @click="showMore" methods="post" id="showMoreBtn">{{usePage().props.auth.user.lang == 'arabic'? 'اظهار المزيد':'show more'}} <i class="feather-arrow-down"></i> (2)</a>
                         </div>
                 </div>
                 </div>
