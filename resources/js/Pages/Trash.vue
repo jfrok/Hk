@@ -72,7 +72,6 @@ function selectAll() {
     } else {
         $('.form-check-input').prop('checked',false)
     }
-    console.log(allPids)
 }
 
 let groupDeleteForm = useForm({
@@ -81,7 +80,6 @@ let groupDeleteForm = useForm({
 
 })
 watch( () => allPids,($allPids) =>{
-    console.log($allPids.value)
     groupDeleteForm.allpIds = $allPids.value
 })
 const groupDelete = () => {

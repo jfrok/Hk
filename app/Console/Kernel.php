@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('reminders:send')->dailyAt('02:00')->timezone('Europe/Amsterdam');
+        $schedule->command('reminders:send')->dailyAt('02:53')->timezone('Europe/Amsterdam');
         $schedule->command('expireReminder:send')->twiceMonthly()->withoutOverlapping();
     }
 

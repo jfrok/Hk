@@ -19,8 +19,6 @@ class Controller extends BaseController
 {
     public function dashboard(Request $request)
     {
-
-
         $projects = Project::where('userId',Auth::id())->orderBy('created_at', 'DESC')->paginate(10);
 
         $past = $request->boolean('past');
@@ -38,15 +36,20 @@ class Controller extends BaseController
             $upcoming = false;
         }
 
-//dd($request->all());
-
-
         $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
         $endOfWeek = Carbon::now()->endOfWeek(Carbon::SUNDAY);
         $thisWeek = [
             'start' => $startOfWeek->format('Y-m-d'),
             'end' => $endOfWeek->format('Y-m-d'),
         ];
+
+        $showMore = $request->showMore;
+//        $showMoreCounter = 1;
+//
+//        if ($showMore){
+//            for ($i = 0; $i < $showMore; $i++)
+//                $showMoreCounter++;
+//        }
         $events = Event::orderBy('dateFrom', $past ?? '' ? 'DESC' : 'ASC')
             ->where('userId', Auth::id())
             ->when(!$past && !$upcoming && !$closest, function ($query) {
@@ -63,7 +66,7 @@ class Controller extends BaseController
                     $query->whereBetween('dateFrom', [$thisWeek['start'], $thisWeek['end']]);
                 });
             })
-            ->paginate(10);
+            ->paginate($showMore?$showMore+=2:2);
         $totalEvents = Event::where('userId',Auth::id())->count();
         $totalProjects = Project::where('userId',Auth::id())->count();
 //        dd(Auth::user()->created_at->format('Y-m-d') ?? '');
@@ -158,4 +161,6 @@ class Controller extends BaseController
 
         }
     }
+
+
 }

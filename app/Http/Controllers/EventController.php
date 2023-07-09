@@ -31,7 +31,7 @@ class EventController extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'title' => 'required|max:2048',
+            'title' => 'required|max:248',
             'dateFrom' => 'required|max:148',
         ]);
        //  dd($request->all());
@@ -54,6 +54,10 @@ class EventController extends Controller
     }
     public function update($eId,Request $request)
     {
+        $request->validate([
+            'title' => 'required|max:248',
+            'dateFrom' => 'required|max:148',
+        ]);
        // dd($request->all());
         $update = Event::find($eId);
         $update->title = $request->title;

@@ -11,6 +11,7 @@ import {eventDetails} from "@/Pages/Calendar/TestCalendar";
 import {eventEditDetails} from "@/Pages/Calendar/EditCalendar";
 import Modal from "@/Components/Modal.vue";
 import moment from 'moment';
+import InputError from "@/Components/InputError.vue";
 
 let allEvents = []
 let dataToRender = []
@@ -23,6 +24,7 @@ export default defineComponent({
     },
     computed: {},
     components: {
+        InputError,
         FullCalendar,
         useForm,
         EventModal,
@@ -34,7 +36,7 @@ export default defineComponent({
     },
     mounted() {
         this.$nextTick(() => {
-            const { props } = usePage();
+            const {props} = usePage();
             const date = props.date ?? new Date();
             this.$refs.calendar.getApi().gotoDate(date);
         });
@@ -43,7 +45,7 @@ export default defineComponent({
         allEvents = ref([])
         const internalInstance = getCurrentInstance();
 
-        const { page } = usePage();
+        const {page} = usePage();
         const calendarRef = ref(null);
 
 
@@ -55,15 +57,15 @@ export default defineComponent({
                 : null;
             // Send the data to the server using Inertia.js
             let dropForm = useForm({
-               title:eventDropInfo.event.title,
-                timeFrom:eventDropInfo.event.extendedProps.timeFrom,
-                timeTo:eventDropInfo.event.extendedProps.timeTo,
+                title: eventDropInfo.event.title,
+                timeFrom: eventDropInfo.event.extendedProps.timeFrom,
+                timeTo: eventDropInfo.event.extendedProps.timeTo,
                 dateFrom: newStart,
-                dateTo: newEnd ,
+                dateTo: newEnd,
             })
 
             dropForm
-                .post(route('calendar.update', eventId),{
+                .post(route('calendar.update', eventId), {
                     preserveScroll: true
                 })
         };
@@ -85,10 +87,10 @@ export default defineComponent({
                 form.timeFrom = ''
                 form.timeTo = ''
             }
-            if (moment($eventDetails.value[$eventDetails.value.length - 1].end).subtract(1,"days").format('YYYY-MM-DD') == moment($eventDetails.value[$eventDetails.value.length - 1].start).format('YYYY-MM-DD')) {
+            if (moment($eventDetails.value[$eventDetails.value.length - 1].end).subtract(1, "days").format('YYYY-MM-DD') == moment($eventDetails.value[$eventDetails.value.length - 1].start).format('YYYY-MM-DD')) {
                 form.dateFrom = moment($eventDetails.value[$eventDetails.value.length - 1].start).format('YYYY-MM-DD')
                 form.dateTo = null;
-            }else {
+            } else {
                 form.dateFrom = moment($eventDetails.value[$eventDetails.value.length - 1].start).format('YYYY-MM-DD')
                 form.dateTo = moment($eventDetails.value[$eventDetails.value.length - 1].end).format('YYYY-MM-DD')
             }
@@ -122,7 +124,7 @@ export default defineComponent({
             editForm.timeTo = $endDate.event.extendedProps.timeTo
             editForm.dateFrom = $endDate.event.extendedProps.dateFrom
             editForm.dateTo = moment($endDate.event.end).format('YYYY-MM-DD')
-            editForm.post(route('calendar.update', $endDate.event.id),{
+            editForm.post(route('calendar.update', $endDate.event.id), {
                 preserveScroll: true,
                 onSuccess: () => {
 
@@ -132,6 +134,7 @@ export default defineComponent({
                 },
             })
         })
+
         function updateCalendar() {
             // Fetch updated events data from API or database
             $.get('/calendar/events', (data) => {
@@ -139,8 +142,8 @@ export default defineComponent({
                     x.start = x.timeFrom ? `${x.dateFrom}T${x.timeFrom}` : x.dateFrom;
                     x.end = x.timeTo ? `${x.dateTo}T${x.timeTo}` : x.dateTo;
                     if (!x.timeFrom) {
-                        x.start =  `${x.dateFrom}`
-                        x.end =  `${x.dateTo}`;
+                        x.start = `${x.dateFrom}`
+                        x.end = `${x.dateTo}`;
                         x.allDay = true
                     }
                     return x;
@@ -155,6 +158,7 @@ export default defineComponent({
                 calendarApi.refetchEvents(); // Update events on the calendar
             });
         }
+
         // this.$nextTick(() => {
         //     this.$refs.fullCalendar.calendar.gotoDate(new Date('2020-08-11'));
         //
@@ -198,7 +202,7 @@ export default defineComponent({
                 },
             });
         }
-        return {form, submit, update, remove, updateCalendar, editForm,handleEventDrop}
+        return {form, submit, update, remove, updateCalendar, editForm, handleEventDrop}
     },
     data() {
 
@@ -250,8 +254,8 @@ export default defineComponent({
                             x.end = x.timeTo ? `${x.dateTo}T${x.timeTo}` : x.dateTo;
                             if (!x.timeFrom) {
                                 x.displayEventTime = false
-                                x.start =  `${x.dateFrom}`
-                                x.end =  `${x.dateTo}`;
+                                x.start = `${x.dateFrom}`
+                                x.end = `${x.dateTo}`;
                                 x.allDay = true
                             }
                             return x;
@@ -269,22 +273,22 @@ export default defineComponent({
     methods: {
         handleEventRender(info) {
             const event = info.event
-console.log(info)
+            console.log(info)
             // Check if the event's title is '12a'
             if (event.timeTo === '23:59:00') {
                 event.setProp('displayEventTime', false)
             }
         },
-         getRemainingDays(dateTo) {
-    const start = new Date();
-    const end = moment(dateTo);
-    const duration = moment.duration(end.diff(start));
+        getRemainingDays(dateTo) {
+            const start = new Date();
+            const end = moment(dateTo);
+            const duration = moment.duration(end.diff(start));
 
-    const days = duration.asDays();
+            const days = duration.asDays();
 
-    return Math.ceil(days);
+            return Math.ceil(days);
 
-},
+        },
 
         openAddEventModal() {
             this.form.title = '';
@@ -312,11 +316,11 @@ console.log(info)
             eventEditDetails.value.push(clickInfo.event)
             // }
         },
-        handleEventResize(info){
+        handleEventResize(info) {
             resize.value.push(info)
         },
         handleEvents(events) {
-             console.log(events)
+            console.log(events)
             this.currentEvents = events
         },
 
@@ -327,7 +331,9 @@ console.log(info)
 </script>
 <template>
 
-    <button @click="openAddEventModal" type="button" class="btn btn-info waves-effect waves-light mt-1" data-bs-toggle="modal" data-bs-target="#con-close-modal">Add Event</button>
+    <button @click="openAddEventModal" type="button" class="btn btn-info waves-effect waves-light mt-1"
+            data-bs-toggle="modal" data-bs-target="#con-close-modal">Add Event
+    </button>
 
     <!--<Modal dialog="true"/>-->
     <!--    <button @click="">OpenModal</button>-->
@@ -349,7 +355,7 @@ console.log(info)
                                            placeholder="appointment">
                                 </div>
                             </div>
-
+                            <InputError :message="form.errors.title"/>
                         </div>
 
                         <div class="row">
@@ -422,6 +428,7 @@ console.log(info)
                                            class="form-control"
                                            placeholder="appointment">
                                 </div>
+                                <InputError class="mt-2" :message="editForm.errors.title"/>
                             </div>
                         </div>
                         <div class="row">
@@ -505,7 +512,9 @@ console.log(info)
             <div class="card">
                 <div class="card-body">
                     <div class='demo-app-main'>
-                        <FullCalendar id="calendar" ref="calendar" v-on:update-calendar="updateCalendar"  :event-render="handleEventRender" @eventDrop="handleEventDrop"  :options="calendarOptions"/>
+                        <FullCalendar id="calendar" ref="calendar" v-on:update-calendar="updateCalendar"
+                                      :event-render="handleEventRender" @eventDrop="handleEventDrop"
+                                      :options="calendarOptions"/>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <script setup>
-import {Head, router, usePage} from '@inertiajs/vue3';
+import {Head, router, useForm, usePage} from '@inertiajs/vue3';
 import Chart from "@/Components/Chart.vue";
 import {Link} from "@inertiajs/vue3";
 import {onMounted, ref} from 'vue'
@@ -38,10 +38,6 @@ let props = defineProps({
     totalEvents: Number,
     totalProjects: Number,
 })
-defineComponent({
-    layout: AuthenticatedLayout
-})
-
 function getRemainingDays(dateFrom, dateTo) {
     const start = moment(dateFrom);
     const end = moment(dateTo);
@@ -56,72 +52,90 @@ let filteringEvents = reactive({
     closest:false,
     upcoming:false
 })
-
-
-// watch(selectedFilter, (value) => {
-//     filteringEvents.value = {
-//         past: value === 'past',
-//         closest: value === 'closest',
-//         upcoming: value === 'upcoming',
-//     };
-// });
-let uniqueMonths = []; // Initialize uniqueMonths array
-
 let months = [
     'January', 'February', 'March', 'April', 'May',
     'June', 'July', 'August', 'September',
     'October', 'November', 'December'
 ];
 
-const updateUniqueMonths = (events) => {
-    let dates = events.map((event) => event.dateFrom);
-    let monthWords = dates.map((month) => {
-        return month.substring(5, 7);
-    }).map((item) => {
-        return months[parseInt(item) - 1];
+let uniqueYears = []; // Initialize uniqueYears array
+let monthsByYear = {}; // Initialize months object with years as keys
+
+const updateMonthsByYear = (events) => {
+    events.forEach((event) => {
+        const year = event.dateFrom.substring(0, 4);
+        const month = event.dateFrom.substring(5, 7);
+
+        if (!monthsByYear.hasOwnProperty(year)) {
+            monthsByYear[year] = [];
+        }
+
+        if (!monthsByYear[year].includes(month)) {
+            monthsByYear[year].push(month);
+        }
     });
 
-    uniqueMonths = [...new Set(monthWords)]; // Update uniqueMonths array
-    uniqueMonths.forEach((month) => {
-        console.log(month);
-    });
+    uniqueYears = Object.keys(monthsByYear); // Update uniqueYears array
 };
-watch(() => props.events, (newEvents) => {
-    updateUniqueMonths(newEvents.data);
-});
+
 watch (filteringEvents, (value) => {
+
     router.get(route('dashboard'), filteringEvents, {
+
         preserveScroll: true,
         preserveState: true,
+    }
 
-    });
+    );
     if (filteringEvents.past === true) {
+         uniqueYears = [];
+         monthsByYear = {};
         filteringEvents.upcoming = false;
         filteringEvents.closest = false;
     } else if (filteringEvents.upcoming === true) {
+        uniqueYears = [];
+        monthsByYear = {};
         filteringEvents.past = false;
         filteringEvents.closest = false;
     } else if (filteringEvents.closest === true) {
+        uniqueYears = [];
+        monthsByYear = {};
         filteringEvents.past = false;
         filteringEvents.upcoming = false;
+    }else {
+        uniqueYears = [];
+        monthsByYear = {};
     }
-    // updateUniqueMonths(value.past === false ? props.events.data : props.eventPrevious.data);
-});
-let dates = props.events.data.map((event) => event.dateFrom);
-
-let monthWords = dates.map((month) => {
-    return month.substring(5, 7);
-}).map((item) => {
-    return months[parseInt(item) - 1];
 });
 
-uniqueMonths = [...new Set(monthWords)]; // Update uniqueMonths array
-uniqueMonths.forEach((month) => {
-    console.log(month);
+// Call updateMonthsByYear initially with the events data
+
+updateMonthsByYear(props.events.data);
+
+
+watch(() => props.events, (newEvents) => {
+    // console.log(newEvents.data)
+    updateMonthsByYear(newEvents.data);
 });
+
+let showData = reactive({
+    showMore:0
+});
+function showMore (){
+    showData.showMore += 2;
+    console.log(showData.showMore);
+    router.get(route('dashboard'),showData,{
+     preserveScroll:true, preserveState:true,
+    }, )
+
+    // console.log(showData)
+}
+// styling function
+
 </script>
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import {router} from "@inertiajs/vue3";
 
 export default {
     layout: AuthenticatedLayout,
@@ -129,8 +143,17 @@ export default {
         return {
             dialogm1: '',
             dialog: false,
+            // showMore:2
+            // showEvents: false,
         }
+
     },
+    // methods: {
+    //     // toggleEvents() {
+    //     //     this.showEvents = !this.showEvents ? $('#events-wrapper').removeAttr('style') : false;
+    //     // },
+    //
+    // },
 }
 </script>
 <template>
@@ -295,50 +318,61 @@ export default {
                                 </v-card>
                             </v-dialog>
                         </v-row>
-                        <div v-if="events.data.length > 0">
-                        <div style="margin-top: 55px" v-for="month in uniqueMonths" :key="month.id" >
-                            <div class="upcome-event-date">
-                                <h3>{{ month }}</h3>
-                                <!--                                    <span><i class="fas fa-ellipsis-h"></i></span>-->
-                            </div>
-                            <div v-for="event in events.data"
-                                 :key="event.id">
-                                <div class="calendar-details" v-if="month == moment(event.dateFrom).format('MMMM')">
-                                    <p style="font-size: 10px" v-if="event.timeFrom !== null">{{ event.timeFrom }}
-                                        {{ event.timeTo }}</p>
-                                    <div class="calendar-box  normal-bg">
-                                        <div class="calandar-event-name">
-                                            <div class="event-square"
-                                                 :class="{
-                                                'green': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) > 15,
-                                                'red': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 7,
-                                                'yellow': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) >= 7 && getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) <= 15
-                                                }"
-                                                :style="getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 0 ? 'background-color: gray; opacity: 80%' : ''">
-                                            {{getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) === 0 ? usePage().props.auth.user.lang === 'arabic' ? 'اليوم': 'Today' : getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom)}}
+<!--                        <div v-if="showEvents" id="events-wrapper">-->
+                            <div id="events-wrapper" v-for="year in uniqueYears" :key="year" >
 
-                                            </div>
-                                            <h4 style="cursor: pointer" @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
-
-                                            <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' يصادف يوم '+arabicDay(event.dateFrom) : 'It falls on ' +moment(event.dateFrom).format('dddd') }}</h5>
-                                        </div>
-                                        <span>{{ event.dateFrom }} {{event.dateTo !== null ? 'to' : '' }} {{ event.dateTo }}</span>
-                                    </div>
+                                <div class="upcome-event-date" style="display: flex;justify-content: center;margin-top: 70px">
+                                    <h3>{{year}}</h3>
                                 </div>
+                                <div v-if="events.data.length > 0">
+
+                                    <div v-for="month in monthsByYear[year]" :key="month" style="margin-top: 55px">
+                                        <div class="upcome-event-date">
+                                            <h3>{{ moment(month).format('MMMM') }}</h3>
+                                        </div>
+
+                                        <div v-for="event in events.data"
+                                             :key="event.id">
+                                            <div class="calendar-details" v-if="month == moment(event.dateFrom).format('MM') && year == moment(event.dateFrom).format('YYYY')">
+                                                <p style="font-size: 10px" v-if="event.timeFrom !== null">{{ event.timeFrom }}
+                                                    {{ event.timeTo }}</p>
+                                                <div class="calendar-box  normal-bg">
+                                                    <div class="calandar-event-name">
+                                                        <div class="event-square"
+                                                             :class="{
+                                        'green': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) > 15,
+                                        'red': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 7,
+                                        'yellow': getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) >= 7 && getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) <= 15
+                                    }"
+                                                             :style="getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) < 0 ? 'background-color: gray; opacity: 80%' : ''">
+                                                            {{getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom) === 0 ? usePage().props.auth.user.lang === 'arabic' ? 'اليوم': 'Today' : getRemainingDays(formattedDate, event.dateTo ?? event.dateFrom)}}
+                                                        </div>
+                                                        <h4 style="cursor: pointer" @click="goToCalendar(event.dateFrom)">{{ event.title }}</h4>
+                                                        <h5>{{ usePage().props.auth.user.lang == 'arabic' ? ' يصادف يوم '+arabicDay(event.dateFrom) : 'It falls on ' +moment(event.dateFrom).format('dddd') }}</h5>
+                                                    </div>
+                                                    <span>{{ event.dateFrom }} {{event.dateTo !== null ? 'to' : '' }} {{ event.dateTo }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <v-alert v-else style="margin-top: 70px"
+                                         type="info"
+                                         variant="tonal"
+                                >
+                                    <v-alert-title style="justify-content: center;display: flex">There is no events</v-alert-title>
+                                </v-alert>
                             </div>
+                        <div style="display: flex;justify-content: center;margin-top: 5px">
+                        <a href="javascript:void(0)" @click="showMore" methods="post" id="showMoreBtn">{{usePage().props.auth.user.lang == 'arabic'? 'اظهار المزيد':'show more'}} <i class="feather-arrow-down"></i> ({{showData.showMore != 0?showData.showMore:2}})</a>
                         </div>
-                        </div>
-                        <v-alert v-else style="margin-top: 70px"
-                                 type="info"
-                                 variant="tonal"
-                        >
-                            <v-alert-title style="justify-content: center;display: flex">There is no events</v-alert-title>
-                        </v-alert>
                 </div>
                 </div>
             </div>
         </div>
 
     </div>
+<!--    </div>-->
     <!--    </AuthenticatedLayout>-->
 </template>

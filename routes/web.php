@@ -48,15 +48,6 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
     Route::get('/account/overview', [\App\Http\Controllers\UserController::class, 'accounts'])->name('account.overview');
     Route::get('/dashboard',[\App\Http\Controllers\Controller::class,'dashboard'])->name('dashboard');
     Route::post('/change-language', [\App\Http\Controllers\UserController::class,'changeLanguage']);
-    Route::get('/foo', function () {
-        $user = \App\Models\User::first();
-
-        $exitCode = \Illuminate\Support\Facades\Artisan::call('reminders:send', [
-            'user' => $user->id,
-        ]);
-
-        //
-    });
 
     /// Projects
     Route::prefix('projects')->group(function () {
