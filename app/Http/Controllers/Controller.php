@@ -45,12 +45,10 @@ class Controller extends BaseController
 
         $showMore = $request->query('showMore');
 $countNextEvent = Event::where('userId',Auth::id())->where('dateFrom','>',Carbon::now())->skip($showMore ? $showMore : 10)->take(10)->get()->count();
-//        $filters = $request->except('showMore');
-//        $url = url()->current() . '?' . http_build_query($filters);
-//        if ($showMore) {
-//            $url .= '&showMore=' . $showMore;
-//        }
+
         $eventCounter = count(Event::where('userId',Auth::id())->where('dateFrom','>=',Carbon::now())->get());
+
+
         $events = Event::orderBy('dateFrom', $past ?? '' ? 'DESC' : 'ASC')
             ->where('userId', Auth::id())
             ->when(!$past && !$upcoming && !$closest, function ($query) {
@@ -68,7 +66,11 @@ $countNextEvent = Event::where('userId',Auth::id())->where('dateFrom','>',Carbon
                 });
             })
             ->take($showMore ? $showMore : 10)->get();
+
+
         $counterTrueOrFalse = 0;
+
+
         if ($showMore >= $eventCounter){
             //dd('yes reached max');
             $counterTrueOrFalse = 1;

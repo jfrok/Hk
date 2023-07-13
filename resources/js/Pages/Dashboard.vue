@@ -81,9 +81,7 @@ const updateMonthsByYear = (events) => {
 };
 
 watch (filteringEvents, (value) => {
-
-    router.get(route('dashboard'), filteringEvents, {
-
+    router.get(route('dashboard'), {...filteringEvents,...showData}, {
         preserveScroll: true,
         preserveState: true,
     }
@@ -125,8 +123,7 @@ let showData = reactive({
 });
 function showMore (){
     showData.showMore += 2;
-    // console.log(showData.showMore);
-    router.get(route('dashboard'),showData,{
+    router.get(route('dashboard'),{...filteringEvents,...showData},{
      preserveScroll:true, preserveState:true,
     }, )
 
