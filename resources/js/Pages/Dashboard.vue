@@ -35,6 +35,8 @@ let props = defineProps({
     p: Array,
     eventCount: Array,
     count: Array,
+    counterTrueOrFalse: Number,
+    countNextEvent: Number,
     totalEvents: Number,
     totalProjects: Number,
 })
@@ -110,12 +112,12 @@ watch (filteringEvents, (value) => {
 
 // Call updateMonthsByYear initially with the events data
 
-updateMonthsByYear(props.events.data);
+updateMonthsByYear(props.events);
 
 
 watch(() => props.events, (newEvents) => {
     // console.log(newEvents.data)
-    updateMonthsByYear(newEvents.data);
+    updateMonthsByYear(newEvents);
 });
 
 let showData = reactive({
@@ -123,7 +125,7 @@ let showData = reactive({
 });
 function showMore (){
     showData.showMore += 2;
-    console.log(showData.showMore);
+    // console.log(showData.showMore);
     router.get(route('dashboard'),showData,{
      preserveScroll:true, preserveState:true,
     }, )
@@ -148,12 +150,6 @@ export default {
         }
 
     },
-    // methods: {
-    //     // toggleEvents() {
-    //     //     this.showEvents = !this.showEvents ? $('#events-wrapper').removeAttr('style') : false;
-    //     // },
-    //
-    // },
 }
 </script>
 <template>
@@ -324,14 +320,14 @@ export default {
                                 <div class="upcome-event-date" style="display: flex;justify-content: center;margin-top: 70px">
                                     <h3>{{year}}</h3>
                                 </div>
-                                <div v-if="events.data.length > 0">
+                                <div v-if="events.length > 0">
 
                                     <div v-for="month in monthsByYear[year]" :key="month" style="margin-top: 55px">
                                         <div class="upcome-event-date">
                                             <h3>{{ moment(month).format('MMMM') }}</h3>
                                         </div>
 
-                                        <div v-for="event in events.data"
+                                        <div v-for="event in events"
                                              :key="event.id">
                                             <div class="calendar-details" v-if="month == moment(event.dateFrom).format('MM') && year == moment(event.dateFrom).format('YYYY')">
                                                 <p style="font-size: 10px" v-if="event.timeFrom !== null">{{ event.timeFrom }}
@@ -364,8 +360,8 @@ export default {
                                     <v-alert-title style="justify-content: center;display: flex">There is no events</v-alert-title>
                                 </v-alert>
                             </div>
-                        <div style="display: flex;justify-content: center;margin-top: 5px">
-                        <a href="javascript:void(0)" @click="showMore" methods="post" id="showMoreBtn">{{usePage().props.auth.user.lang == 'arabic'? 'اظهار المزيد':'show more'}} <i class="feather-arrow-down"></i> (2)</a>
+                        <div style="display: flex;justify-content: center;margin-top: 5px" v-if="events.length > 9 && !counterTrueOrFalse">
+                        <a href="javascript:void(0)" @click="showMore" methods="post" id="showMoreBtn">{{usePage().props.auth.user.lang == 'arabic'? 'اظهار المزيد':'show more'}} <i class="feather-arrow-down"></i> ({{props.countNextEvent}})</a>
                         </div>
                 </div>
                 </div>

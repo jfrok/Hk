@@ -108,6 +108,6 @@ Route::middleware(['web','auth','check.subscription'])->group(function () {
 Route::get('/test', function (){
     return view('test');
 });
-
+Route::get('privacy-policy',[\App\Http\Controllers\Controller::class,'PrivacyPolicy'])->name('PrivacyPolicy');
 Route::get('/testApi',[\App\Http\Controllers\Controller::class,'steamApiTest'])->name('testSteamApi');
 require __DIR__ . '/auth.php';

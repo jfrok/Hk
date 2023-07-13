@@ -2,18 +2,18 @@
     <div>
         <a-steps v-model:current="current" type="navigation" size="small" :style="stepStyle">
             <a-step
-                title="Step 1"
+                title="Send remainders"
                 status="process"
                 description="This is a description."
             />
 
+<!--            <a-step-->
+<!--                title="Step 2"-->
+<!--                status="process"-->
+<!--                description="This is a description."-->
+<!--            />-->
             <a-step
-                title="Step 2"
-                status="process"
-                description="This is a description."
-            />
-            <a-step
-                title="Step 3"
+                title="API"
                 status="process"
                 description="Rest api token."
             />
@@ -44,11 +44,11 @@
                             <v-btn type="button" @click="updateEvents" block class="mt-2">Apply</v-btn>
                         </v-sheet>
                     </div>
-                    <div v-if="steps[current].title == 2">
-                        step 2
+<!--                    <div v-if="steps[current].title == 2">-->
+<!--                        step 2-->
 
-                    </div>
-                    <div v-if="steps[current].title == 3">
+<!--                    </div>-->
+                    <div v-if="steps[current].title == 2">
 
                         <!--                        <template>-->
                         <v-sheet width="300" class="mx-auto">

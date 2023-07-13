@@ -3,6 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Checkbox from "@/Components/Checkbox.vue";
 
 const form = useForm({
     name: '',
@@ -110,6 +111,10 @@ export default {
                                         autocomplete="new-password"
                                     />
                                     <span class="profile-views"><i class="fas fa-lock"></i></span>
+                                </div>
+                                <div>
+                                    <h7>By creating an account, you agree with our <a :href="route('PrivacyPolicy')" target="_blank">Privacy and Policy</a>.</h7>
+<!--                                <v-checkbox label="" aria-required="true"/>-->
                                 </div>
                                 <div class="forgotpass">
                                     <Link
