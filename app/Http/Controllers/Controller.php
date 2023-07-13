@@ -44,9 +44,28 @@ class Controller extends BaseController
         ];
 
         $showMore = $request->query('showMore');
-$countNextEvent = Event::where('userId',Auth::id())->where('dateFrom','>',Carbon::now())->skip($showMore ? $showMore : 10)->take(10)->get()->count();
 
-        $eventCounter = count(Event::where('userId',Auth::id())->where('dateFrom','>=',Carbon::now())->get());
+        //past keep it in mind
+        $countNextEvent = Event::where('userId',Auth::id())
+            ->when($past, function ($query){
+              return  $query->where('dateFrom','<',Carbon::now());
+
+            })
+            ->when(!$past && !$upcoming && !$closest, function ($query){
+               return $query->where('dateFrom','>',Carbon::now());
+
+            })
+            ->when($upcoming && !$past && !$closest, function ($query) {
+                return $query->where('dateFrom', '>=', Carbon::now()->addWeek()->format('Y-m-d'));
+            })
+            ->when($closest && !$past && !$upcoming, function ($query) use ($thisWeek) {
+                return $query->where(function ($query) use ($thisWeek) {
+                    $query->whereBetween('dateFrom', [$thisWeek['start'], $thisWeek['end']]);
+                });
+            })
+        ->skip($showMore ? $showMore : 10)->take(10)->get()->count();
+
+//        $eventCounter = count(Event::where('userId',Auth::id())->where('dateFrom','>=',Carbon::now())->get());
 
 
         $events = Event::orderBy('dateFrom', $past ?? '' ? 'DESC' : 'ASC')
@@ -71,7 +90,7 @@ $countNextEvent = Event::where('userId',Auth::id())->where('dateFrom','>',Carbon
         $counterTrueOrFalse = 0;
 
 
-        if ($showMore >= $eventCounter){
+        if ($showMore >= $countNextEvent){
             //dd('yes reached max');
             $counterTrueOrFalse = 1;
         }

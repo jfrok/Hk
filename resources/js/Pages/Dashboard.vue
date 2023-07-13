@@ -123,7 +123,7 @@ let showData = reactive({
 });
 function showMore (){
     showData.showMore += 2;
-    router.get(route('dashboard'),{...filteringEvents,...showData},{
+    router.get(route('dashboard'),{...showData,...filteringEvents},{
      preserveScroll:true, preserveState:true,
     }, )
 
@@ -357,7 +357,7 @@ export default {
                                     <v-alert-title style="justify-content: center;display: flex">There is no events</v-alert-title>
                                 </v-alert>
                             </div>
-                        <div style="display: flex;justify-content: center;margin-top: 5px" v-if="events.length > 9 && !counterTrueOrFalse">
+                        <div style="display: flex;justify-content: center;margin-top: 5px" v-if="props.countNextEvent != 0">
                         <a href="javascript:void(0)" @click="showMore" methods="post" id="showMoreBtn">{{usePage().props.auth.user.lang == 'arabic'? 'اظهار المزيد':'show more'}} <i class="feather-arrow-down"></i> ({{props.countNextEvent}})</a>
                         </div>
                 </div>
